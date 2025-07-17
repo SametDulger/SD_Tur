@@ -1,0 +1,46 @@
+@model SDTur.Application.DTOs.BranchDto
+
+@{
+    ViewData["Title"] = "Şube Sil";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Şube Sil</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h5>Bu şubeyi silmek istediğinizden emin misiniz?</h5>
+                    </div>
+                    
+                    <dl class="row">
+                        <dt class="col-sm-3">ID</dt>
+                        <dd class="col-sm-9">@Model.Id</dd>
+                        
+                        <dt class="col-sm-3">Şube Adı</dt>
+                        <dd class="col-sm-9">@Model.Name</dd>
+                        
+                        <dt class="col-sm-3">Adres</dt>
+                        <dd class="col-sm-9">@Model.Address</dd>
+                        
+                        <dt class="col-sm-3">Telefon</dt>
+                        <dd class="col-sm-9">@Model.Phone</dd>
+                        
+                        <dt class="col-sm-3">E-posta</dt>
+                        <dd class="col-sm-9">@Model.Email</dd>
+                    </dl>
+                </div>
+                <div class="card-footer">
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                        <a asp-action="Index" class="btn btn-secondary">İptal</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

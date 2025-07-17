@@ -1,0 +1,48 @@
+@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Sistem Logları";
+}
+
+<h1>Sistem Logları</h1>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Yeni Log</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Log Tarihi</th>
+            <th>Log Seviyesi</th>
+            <th>Kategori</th>
+            <th>İşlem</th>
+            <th>Mesaj</th>
+            <th>IP Adresi</th>
+            <th>Kullanıcı</th>
+            <th>Çalışan</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.id</td>
+                <td>@item.logDate?.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@item.logLevel</td>
+                <td>@item.category</td>
+                <td>@item.action</td>
+                <td>@item.message</td>
+                <td>@item.ipAddress</td>
+                <td>@item.userName</td>
+                <td>@item.employeeName</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.id" class="btn btn-info btn-sm">Detay</a>
+                    <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-warning btn-sm">Düzenle</a>
+                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-danger btn-sm">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> 

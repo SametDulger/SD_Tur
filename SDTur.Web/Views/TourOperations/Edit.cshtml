@@ -1,0 +1,78 @@
+@model SDTur.Application.DTOs.UpdateTourOperationDto
+
+@{
+    ViewData["Title"] = "Tur Operasyonu Düzenle";
+}
+
+<h1>Tur Operasyonu Düzenle</h1>
+<h4>@Model.OperationType - @Model.TourScheduleName</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="OperationDate" class="control-label">Operasyon Tarihi</label>
+                <input asp-for="OperationDate" class="form-control" type="datetime-local" />
+                <span asp-validation-for="OperationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OperationType" class="control-label">Operasyon Tipi</label>
+                <select asp-for="OperationType" class="form-control">
+                    <option value="BusAssignment">Otobüs Atama</option>
+                    <option value="CustomerDistribution">Müşteri Dağıtımı</option>
+                    <option value="TourStart">Tur Başlangıcı</option>
+                    <option value="TourEnd">Tur Sonu</option>
+                    <option value="Maintenance">Bakım</option>
+                    <option value="Other">Diğer</option>
+                </select>
+                <span asp-validation-for="OperationType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label">Durum</label>
+                <select asp-for="Status" class="form-control">
+                    <option value="Planned">Planlandı</option>
+                    <option value="InProgress">Devam Ediyor</option>
+                    <option value="Completed">Tamamlandı</option>
+                    <option value="Cancelled">İptal Edildi</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TourScheduleId" class="control-label">Tur Programı</label>
+                <select asp-for="TourScheduleId" class="form-control" asp-items="ViewBag.TourSchedules">
+                    <option value="">Tur Programı Seçiniz</option>
+                </select>
+                <span asp-validation-for="TourScheduleId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BusId" class="control-label">Otobüs</label>
+                <select asp-for="BusId" class="form-control" asp-items="ViewBag.Buses">
+                    <option value="">Otobüs Seçiniz</option>
+                </select>
+                <span asp-validation-for="BusId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label">Çalışan</label>
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.Employees">
+                    <option value="">Çalışan Seçiniz</option>
+                </select>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes" class="control-label">Notlar</label>
+                <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Kaydet" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

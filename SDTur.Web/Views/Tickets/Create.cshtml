@@ -1,0 +1,55 @@
+@model SDTur.Application.DTOs.CreateTicketDto
+
+@{
+    ViewData["Title"] = "Yeni Bilet Oluştur";
+}
+
+<h1>Yeni Bilet Oluştur</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="TourDate" class="control-label">Tur Tarihi</label>
+                <input asp-for="TourDate" class="form-control" type="date" />
+                <span asp-validation-for="TourDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CustomerName" class="control-label">Müşteri Adı</label>
+                <input asp-for="CustomerName" class="form-control" />
+                <span asp-validation-for="CustomerName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Nationality" class="control-label">Uyruk</label>
+                <input asp-for="Nationality" class="form-control" />
+                <span asp-validation-for="Nationality" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="RoomNumber" class="control-label">Oda Numarası</label>
+                <input asp-for="RoomNumber" class="form-control" />
+                <span asp-validation-for="RoomNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check">
+                    <input asp-for="RequiresService" class="form-check-input" />
+                    <label asp-for="RequiresService" class="form-check-label">Servis Gerekli</label>
+                </div>
+            </div>
+            <!-- Diğer alanlar buraya eklenebilir -->
+            <div class="form-group mt-3">
+                <input type="submit" value="Kaydet" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

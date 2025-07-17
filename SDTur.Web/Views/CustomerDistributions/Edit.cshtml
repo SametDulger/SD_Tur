@@ -1,0 +1,93 @@
+@model SDTur.Application.DTOs.UpdateCustomerDistributionDto
+
+@{
+    ViewData["Title"] = "Müşteri Dağıtımı Düzenle";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Müşteri Dağıtımı Düzenle</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="form-group">
+                            <label asp-for="TourScheduleId" class="control-label">Tur Programı</label>
+                            <select asp-for="TourScheduleId" class="form-control" asp-items="ViewBag.TourSchedules">
+                                <option value="">Tur Programı Seçin</option>
+                            </select>
+                            <span asp-validation-for="TourScheduleId" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="BusId" class="control-label">Otobüs</label>
+                            <select asp-for="BusId" class="form-control" asp-items="ViewBag.Buses">
+                                <option value="">Otobüs Seçin</option>
+                            </select>
+                            <span asp-validation-for="BusId" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="TicketId" class="control-label">Bilet</label>
+                            <select asp-for="TicketId" class="form-control" asp-items="ViewBag.Tickets">
+                                <option value="">Bilet Seçin</option>
+                            </select>
+                            <span asp-validation-for="TicketId" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="EmployeeId" class="control-label">Çalışan</label>
+                            <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.Employees">
+                                <option value="">Çalışan Seçin</option>
+                            </select>
+                            <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="DistributionDate" class="control-label">Dağıtım Tarihi</label>
+                            <input asp-for="DistributionDate" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="DistributionDate" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="Status" class="control-label">Durum</label>
+                            <select asp-for="Status" class="form-control">
+                                <option value="Assigned">Atandı</option>
+                                <option value="Confirmed">Onaylandı</option>
+                                <option value="Cancelled">İptal Edildi</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label asp-for="Notes" class="control-label">Notlar</label>
+                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input asp-for="IsActive" class="form-check-input" />
+                                <label asp-for="IsActive" class="form-check-label">Aktif</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="submit" value="Kaydet" class="btn btn-primary" />
+                            <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

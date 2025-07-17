@@ -1,0 +1,28 @@
+@model SDTur.Application.DTOs.TourExpenseDto
+
+@{
+    ViewData["Title"] = "Tur Gideri Detayı";
+}
+
+<h1>Tur Gideri Detayı</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Tur Programı</dt>
+        <dd class="col-sm-10">@Model.TourScheduleInfo</dd>
+        
+        <dt class="col-sm-2">Açıklama</dt>
+        <dd class="col-sm-10">@Model.Description</dd>
+        
+        <dt class="col-sm-2">Tutar</dt>
+        <dd class="col-sm-10">@Model.Amount.ToString("N2") @Model.CurrencyCode</dd>
+        
+        <dt class="col-sm-2">Gider Tarihi</dt>
+        <dd class="col-sm-10">@Model.ExpenseDate.ToString("dd.MM.yyyy")</dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+    <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+</div> 

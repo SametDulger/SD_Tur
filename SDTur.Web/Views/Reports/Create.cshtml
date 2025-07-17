@@ -1,0 +1,79 @@
+@model SDTur.Application.DTOs.CreateReportDto
+
+@{
+    ViewData["Title"] = "Yeni Rapor";
+}
+
+<h1>Yeni Rapor</h1>
+<h4>Rapor Oluştur</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ReportName" class="control-label">Rapor Adı</label>
+                <input asp-for="ReportName" class="form-control"/>
+                <span asp-validation-for="ReportName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReportType" class="control-label">Rapor Tipi</label>
+                <select asp-for="ReportType" class="form-control">
+                    <option value="SalesReport">Satış Raporu</option>
+                    <option value="TourReport">Tur Raporu</option>
+                    <option value="FinancialReport">Finansal Rapor</option>
+                    <option value="PassReport">Pas Raporu</option>
+                    <option value="EmployeeReport">Çalışan Raporu</option>
+                    <option value="BusReport">Otobüs Raporu</option>
+                    <option value="Other">Diğer</option>
+                </select>
+                <span asp-validation-for="ReportType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReportDate" class="control-label">Rapor Tarihi</label>
+                <input asp-for="ReportDate" class="form-control" type="datetime-local" />
+                <span asp-validation-for="ReportDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Parameters" class="control-label">Parametreler</label>
+                <textarea asp-for="Parameters" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Parameters" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GeneratedBy" class="control-label">Oluşturan</label>
+                <input asp-for="GeneratedBy" class="form-control"/>
+                <span asp-validation-for="GeneratedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FilePath" class="control-label">Dosya Yolu</label>
+                <input asp-for="FilePath" class="form-control"/>
+                <span asp-validation-for="FilePath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FileType" class="control-label">Dosya Tipi</label>
+                <select asp-for="FileType" class="form-control">
+                    <option value="PDF">PDF</option>
+                    <option value="Excel">Excel</option>
+                    <option value="Word">Word</option>
+                    <option value="CSV">CSV</option>
+                    <option value="Other">Diğer</option>
+                </select>
+                <span asp-validation-for="FileType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input asp-for="IsActive" class="form-check-input" />
+                    <label asp-for="IsActive" class="form-check-label">Aktif</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Oluştur" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

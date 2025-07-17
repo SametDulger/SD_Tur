@@ -1,0 +1,42 @@
+@model dynamic
+
+@{
+    ViewData["Title"] = "Otobüs Ataması Sil";
+}
+
+<h1>Otobüs Ataması Sil</h1>
+
+<h3>Bu otobüs atamasını silmek istediğinizden emin misiniz?</h3>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">ID</dt>
+        <dd class="col-sm-10">@Model.id</dd>
+        
+        <dt class="col-sm-2">Atama Tarihi</dt>
+        <dd class="col-sm-10">@Model.assignmentDate?.ToString("dd.MM.yyyy")</dd>
+        
+        <dt class="col-sm-2">Durum</dt>
+        <dd class="col-sm-10">@Model.status</dd>
+        
+        <dt class="col-sm-2">Tur Adı</dt>
+        <dd class="col-sm-10">@Model.tourName</dd>
+        
+        <dt class="col-sm-2">Tur Tarihi</dt>
+        <dd class="col-sm-10">@Model.tourDate?.ToString("dd.MM.yyyy")</dd>
+        
+        <dt class="col-sm-2">Otobüs Plakası</dt>
+        <dd class="col-sm-10">@Model.busPlateNumber</dd>
+        
+        <dt class="col-sm-2">Operasyon Sorumlusu</dt>
+        <dd class="col-sm-10">@Model.employeeName</dd>
+        
+        <dt class="col-sm-2">Notlar</dt>
+        <dd class="col-sm-10">@Model.notes</dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" name="id" value="@Model.id" />
+        <input type="submit" value="Sil" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+    </form>
+</div> 
