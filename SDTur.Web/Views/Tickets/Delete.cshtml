@@ -1,0 +1,35 @@
+@model SDTur.Application.DTOs.TicketDto
+
+@{
+    ViewData["Title"] = "Bilet Sil";
+}
+
+<h1>Bilet Sil</h1>
+
+<h3>Bu bileti silmek istediğinizden emin misiniz?</h3>
+<div>
+    <h4>Bilet Detayları</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Müşteri Adı</dt>
+        <dd class="col-sm-10">@Model.CustomerName</dd>
+        
+        <dt class="col-sm-2">Tur</dt>
+        <dd class="col-sm-10">@Model.TourName</dd>
+        
+        <dt class="col-sm-2">Tarih</dt>
+        <dd class="col-sm-10">@Model.TicketDate.ToString("dd/MM/yyyy")</dd>
+        
+        <dt class="col-sm-2">Fiyat</dt>
+        <dd class="col-sm-10">@Model.TotalAmount @Model.Currency</dd>
+        
+        <dt class="col-sm-2">Durum</dt>
+        <dd class="col-sm-10">@Model.Status</dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Sil" class="btn btn-danger" /> |
+        <a asp-action="Index">Listeye Dön</a>
+    </form>
+</div> 

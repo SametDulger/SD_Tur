@@ -1,0 +1,84 @@
+@model IEnumerable<SDTur.Application.DTOs.TicketDto>
+
+@{
+    ViewData["Title"] = "Biletler";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Biletler</h3>
+                    <div class="card-tools">
+                        <a asp-action="Create" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Yeni Bilet Ekle
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Bilet No</th>
+                                <th>Müşteri Adı</th>
+                                <th>Tur Adı</th>
+                                <th>Tur Tarihi</th>
+                                <th>Otel</th>
+                                <th>Pax</th>
+                                <th>Toplam Tutar</th>
+                                <th>Ödenen Tutar</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.TicketNumber</td>
+                                    <td>@item.CustomerName</td>
+                                    <td>@item.TourName</td>
+                                    <td>@item.TourDate.ToString("dd.MM.yyyy")</td>
+                                    <td>@item.HotelName</td>
+                                    <td>
+                                        <span class="badge badge-primary">F: @item.FullCount</span>
+                                        <span class="badge badge-warning">H: @item.HalfCount</span>
+                                        <span class="badge badge-info">G: @item.GuestCount</span>
+                                    </td>
+                                    <td>@item.TotalAmount.ToString("N2") @item.Currency</td>
+                                    <td>@item.PaidAmount.ToString("N2") @item.Currency</td>
+                                    <td>
+                                        @if (item.IsCancelled)
+                                        {
+                                            <span class="badge badge-danger">İptal</span>
+                                        }
+                                        else if (item.IsPassTicket)
+                                        {
+                                            <span class="badge badge-warning">Pas</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-success">Aktif</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Cancel" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-times"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

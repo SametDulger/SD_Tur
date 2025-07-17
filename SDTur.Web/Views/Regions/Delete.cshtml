@@ -1,0 +1,58 @@
+@model SDTur.Application.DTOs.RegionDto
+
+@{
+    ViewData["Title"] = "Bölge Sil";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Bölge Sil</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h5>Bu bölgeyi silmek istediğinizden emin misiniz?</h5>
+                    </div>
+                    
+                    <dl class="row">
+                        <dt class="col-sm-3">ID</dt>
+                        <dd class="col-sm-9">@Model.Id</dd>
+                        
+                        <dt class="col-sm-3">Bölge Adı</dt>
+                        <dd class="col-sm-9">@Model.Name</dd>
+                        
+                        <dt class="col-sm-3">Açıklama</dt>
+                        <dd class="col-sm-9">@Model.Description</dd>
+                        
+                        <dt class="col-sm-3">Kemer'e Uzaklık</dt>
+                        <dd class="col-sm-9">@Model.DistanceFromKemer km</dd>
+                        
+                        <dt class="col-sm-3">Sıra</dt>
+                        <dd class="col-sm-9">@Model.Order</dd>
+                        
+                        <dt class="col-sm-3">Durum</dt>
+                        <dd class="col-sm-9">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge badge-success">Aktif</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Pasif</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+                <div class="card-footer">
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                        <a asp-action="Index" class="btn btn-secondary">İptal</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

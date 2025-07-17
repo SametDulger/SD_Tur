@@ -1,0 +1,40 @@
+@model SDTur.Application.DTOs.PassAgreementDto
+
+@{
+    ViewData["Title"] = "Pas Anlaşması Sil";
+}
+
+<h1>Pas Anlaşması Sil</h1>
+
+<h3>Bu pas anlaşmasını silmek istediğinizden emin misiniz?</h3>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Pas Şirketi</dt>
+        <dd class="col-sm-10">@Model.PassCompanyName</dd>
+        
+        <dt class="col-sm-2">Tur</dt>
+        <dd class="col-sm-10">@Model.TourName</dd>
+        
+        <dt class="col-sm-2">Anlaşma Tarihi</dt>
+        <dd class="col-sm-10">@Model.AgreementDate.ToString("dd.MM.yyyy")</dd>
+        
+        <dt class="col-sm-2">Başlangıç Tarihi</dt>
+        <dd class="col-sm-10">@Model.StartDate.ToString("dd.MM.yyyy")</dd>
+        
+        <dt class="col-sm-2">Bitiş Tarihi</dt>
+        <dd class="col-sm-10">@Model.EndDate.ToString("dd.MM.yyyy")</dd>
+        
+        <dt class="col-sm-2">Fiyat</dt>
+        <dd class="col-sm-10">@Model.Price.ToString("N2") @Model.CurrencyCode</dd>
+        
+        <dt class="col-sm-2">Durum</dt>
+        <dd class="col-sm-10">@(Model.IsActive ? "Aktif" : "Pasif")</dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Sil" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+    </form>
+</div> 

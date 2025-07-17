@@ -1,0 +1,82 @@
+@model SDTur.Application.DTOs.CustomerDistributionDto
+
+@{
+    ViewData["Title"] = "Müşteri Dağıtımı Detayı";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Müşteri Dağıtımı Detayı</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">ID</dt>
+                        <dd class="col-sm-9">@Model.Id</dd>
+                        
+                        <dt class="col-sm-3">Tur Programı</dt>
+                        <dd class="col-sm-9">@Model.TourScheduleInfo</dd>
+                        
+                        <dt class="col-sm-3">Otobüs</dt>
+                        <dd class="col-sm-9">@Model.BusInfo</dd>
+                        
+                        <dt class="col-sm-3">Bilet</dt>
+                        <dd class="col-sm-9">@Model.TicketInfo</dd>
+                        
+                        <dt class="col-sm-3">Çalışan</dt>
+                        <dd class="col-sm-9">@Model.EmployeeName</dd>
+                        
+                        <dt class="col-sm-3">Dağıtım Tarihi</dt>
+                        <dd class="col-sm-9">@Model.DistributionDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                        
+                        <dt class="col-sm-3">Durum</dt>
+                        <dd class="col-sm-9">
+                            @switch (Model.Status)
+                            {
+                                case "Assigned":
+                                    <span class="badge badge-primary">Atandı</span>
+                                    break;
+                                case "Confirmed":
+                                    <span class="badge badge-success">Onaylandı</span>
+                                    break;
+                                case "Cancelled":
+                                    <span class="badge badge-danger">İptal Edildi</span>
+                                    break;
+                                default:
+                                    <span class="badge badge-secondary">@Model.Status</span>
+                                    break;
+                            }
+                        </dd>
+                        
+                        <dt class="col-sm-3">Notlar</dt>
+                        <dd class="col-sm-9">@Model.Notes</dd>
+                        
+                        <dt class="col-sm-3">Aktif</dt>
+                        <dd class="col-sm-9">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge badge-success">Evet</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Hayır</span>
+                            }
+                        </dd>
+                        
+                        <dt class="col-sm-3">Oluşturulma Tarihi</dt>
+                        <dd class="col-sm-9">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+                        
+                        <dt class="col-sm-3">Güncellenme Tarihi</dt>
+                        <dd class="col-sm-9">@(Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm") ?? "-")</dd>
+                    </dl>
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+                    <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

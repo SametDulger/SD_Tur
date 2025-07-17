@@ -1,0 +1,63 @@
+@model SDTur.Application.DTOs.TourScheduleDto
+
+@{
+    ViewData["Title"] = "Tur Programı Sil";
+}
+
+<h1>Tur Programı Sil</h1>
+
+<h3>Bu tur programını silmek istediğinizden emin misiniz?</h3>
+<div>
+    <h4>@Model.TourName</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TourName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TourName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TourDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TourDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsCompleted)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsCompleted)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsCancelled)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsCancelled)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalIncome)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TotalIncome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalExpense)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TotalExpense)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NetProfit)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NetProfit)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Sil" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-secondary">İptal</a>
+    </form>
+</div> 

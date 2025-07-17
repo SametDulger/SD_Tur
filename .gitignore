@@ -1,0 +1,70 @@
+# .NET build outputs
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.swp
+*.bak
+*.tmp
+*.log
+
+# Visual Studio
+.vs/
+.vscode/
+
+# Rider
+.idea/
+*.sln.iml
+
+# Build Results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# IIS Express
+.vsconfig
+
+# Database
+*.mdf
+*.ldf
+*.ndf
+*.dbmdl
+*.dbproj.schemaview
+
+# Entity Framework Migrations (optional: keep if you want to version migrations)
+#SDTur.Infrastructure/Migrations/
+
+# Publish outputs
+publish/
+
+# Others
+*.pdb
+*.cache
+*.zip
+*.nupkg
+*.snk
+*.DS_Store
+Thumbs.db
+
+# Local secrets & config
+secrets.json
+appsettings.Development.json
+SDTur.API/appsettings.Development.json
+SDTur.Web/appsettings.Development.json
+SDTur.API/Properties/launchSettings.json
+SDTur.Web/Properties/launchSettings.json
+
+# npm/yarn/pnpm
+node_modules/
+
+# wwwroot/lib (optional: ignore if using CDN or package manager for client libs)
+#SDTur.Web/wwwroot/lib/ 
