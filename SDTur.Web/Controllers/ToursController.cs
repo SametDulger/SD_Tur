@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Tour.Core;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,17 +15,38 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var tours = await _apiService.GetAsync<List<TourDto>>("api/tours");
-            return View(tours);
+            var tours = await _apiService.GetAsync<List<TourViewModel>>("api/tours");
+            var viewModels = (tours ?? new List<TourViewModel>()).Select(t => new TourViewModel
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Description = t.Description,
+                Price = t.Price,
+                TourDate = t.TourDate,
+                Capacity = t.Capacity,
+                AvailableSeats = t.AvailableSeats,
+                IsActive = t.IsActive
+            }).ToList();
+            return View(viewModels);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var tour = await _apiService.GetAsync<TourDto>($"api/tours/{id}");
-            if (tour == null)
+            var t = await _apiService.GetAsync<TourViewModel>($"api/tours/{id}");
+            if (t == null)
                 return NotFound();
-
-            return View(tour);
+            var vm = new TourViewModel
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Description = t.Description,
+                Price = t.Price,
+                TourDate = t.TourDate,
+                Capacity = t.Capacity,
+                AvailableSeats = t.AvailableSeats,
+                IsActive = t.IsActive
+            };
+            return View(vm);
         }
 
         public IActionResult Create()
@@ -35,57 +56,84 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateTourDto createDto)
+        public async Task<IActionResult> Create(TourCreateViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PostAsync<CreateTourDto, TourDto>("api/tours", createDto);
+                var dto = new TourCreateViewModel
+                {
+                    Name = vm.Name,
+                    Description = vm.Description,
+                    Price = vm.Price,
+                    TourDate = vm.TourDate,
+                    Capacity = vm.Capacity,
+                    IsActive = vm.IsActive
+                };
+                var result = await _apiService.PostAsync<TourCreateViewModel, TourViewModel>("api/tours", dto);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
-            return View(createDto);
+            return View(vm);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var tour = await _apiService.GetAsync<TourDto>($"api/tours/{id}");
-            if (tour == null)
+            var t = await _apiService.GetAsync<TourViewModel>($"api/tours/{id}");
+            if (t == null)
                 return NotFound();
-
-            var updateDto = new UpdateTourDto
+            var vm = new TourEditViewModel
             {
-                Id = tour.Id,
-                Name = tour.Name,
-                Description = tour.Description,
-                Price = tour.Price,
-                Currency = tour.Currency,
-                Duration = tour.Duration,
-                IsActive = tour.IsActive
+                Id = t.Id,
+                Name = t.Name,
+                Description = t.Description,
+                Price = t.Price,
+                TourDate = t.TourDate,
+                Capacity = t.Capacity,
+                IsActive = t.IsActive
             };
-
-            return View(updateDto);
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(UpdateTourDto updateDto)
+        public async Task<IActionResult> Edit(TourEditViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateTourDto, TourDto>($"api/tours/{updateDto.Id}", updateDto);
+                var dto = new TourEditViewModel
+                {
+                    Id = vm.Id,
+                    Name = vm.Name,
+                    Description = vm.Description,
+                    Price = vm.Price,
+                    TourDate = vm.TourDate,
+                    Capacity = vm.Capacity,
+                    IsActive = vm.IsActive
+                };
+                var result = await _apiService.PutAsync<TourEditViewModel, TourViewModel>($"api/tours/{vm.Id}", dto);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
-            return View(updateDto);
+            return View(vm);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var tour = await _apiService.GetAsync<TourDto>($"api/tours/{id}");
-            if (tour == null)
+            var t = await _apiService.GetAsync<TourViewModel>($"api/tours/{id}");
+            if (t == null)
                 return NotFound();
-
-            return View(tour);
+            var vm = new TourViewModel
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Description = t.Description,
+                Price = t.Price,
+                TourDate = t.TourDate,
+                Capacity = t.Capacity,
+                AvailableSeats = t.AvailableSeats,
+                IsActive = t.IsActive
+            };
+            return View(vm);
         }
 
         [HttpPost, ActionName("Delete")]

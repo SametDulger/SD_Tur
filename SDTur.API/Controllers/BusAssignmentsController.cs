@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
-using SDTur.Application.Services;
+using SDTur.Application.DTOs.Tour.BusAssignment;
+using SDTur.Application.Services.Tour.Interfaces;
 
 namespace SDTur.API.Controllers
 {

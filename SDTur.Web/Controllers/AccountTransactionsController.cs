@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Financial.Accounts;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var accountTransactions = await _apiService.GetAsync<List<AccountTransactionDto>>("api/accounttransactions");
+            var accountTransactions = await _apiService.GetAsync<List<AccountTransactionViewModel>>("api/accounttransactions");
             return View(accountTransactions);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var accountTransaction = await _apiService.GetAsync<AccountTransactionDto>($"api/accounttransactions/{id}");
+            var accountTransaction = await _apiService.GetAsync<AccountTransactionViewModel>($"api/accounttransactions/{id}");
             if (accountTransaction == null)
                 return NotFound();
 
@@ -35,23 +35,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AccountId,TourScheduleId,TicketId,PassCompanyId,Amount,Currency,TransactionType,Description,Reference,TransactionDate")] CreateAccountTransactionDto createAccountTransactionDto)
+        public async Task<IActionResult> Create([Bind("AccountId,TourScheduleId,TicketId,PassCompanyId,Amount,Currency,TransactionType,Description,Reference,TransactionDate")] AccountTransactionCreateViewModel AccountTransactionCreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateAccountTransactionDto, AccountTransactionDto>("api/accounttransactions", createAccountTransactionDto);
+                await _apiService.PostAsync<AccountTransactionCreateViewModel, AccountTransactionViewModel>("api/accounttransactions", AccountTransactionCreateViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createAccountTransactionDto);
+            return View(AccountTransactionCreateViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var accountTransaction = await _apiService.GetAsync<AccountTransactionDto>($"api/accounttransactions/{id}");
+            var accountTransaction = await _apiService.GetAsync<AccountTransactionViewModel>($"api/accounttransactions/{id}");
             if (accountTransaction == null)
                 return NotFound();
 
-            var updateDto = new UpdateAccountTransactionDto
+            var updateDto = new AccountTransactionEditViewModel
             {
                 Id = accountTransaction.Id,
                 AccountId = accountTransaction.AccountId,
@@ -72,14 +72,14 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateAccountTransactionDto updateDto)
+        public async Task<IActionResult> Edit(int id, AccountTransactionEditViewModel updateDto)
         {
             if (id != updateDto.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateAccountTransactionDto, AccountTransactionDto>($"api/accounttransactions/{id}", updateDto);
+                var result = await _apiService.PutAsync<AccountTransactionEditViewModel, AccountTransactionViewModel>($"api/accounttransactions/{id}", updateDto);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
@@ -88,7 +88,7 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var accountTransaction = await _apiService.GetAsync<AccountTransactionDto>($"api/accounttransactions/{id}");
+            var accountTransaction = await _apiService.GetAsync<AccountTransactionViewModel>($"api/accounttransactions/{id}");
             if (accountTransaction == null)
                 return NotFound();
 

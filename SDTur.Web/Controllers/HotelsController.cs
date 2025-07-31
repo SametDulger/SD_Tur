@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Master.Accommodation;
+using SDTur.Web.Models.Master.Locations;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +16,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var hotels = await _apiService.GetAsync<IEnumerable<HotelDto>>("api/hotels");
+            var hotels = await _apiService.GetAsync<IEnumerable<HotelViewModel>>("api/hotels");
             return View(hotels);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var hotel = await _apiService.GetAsync<HotelDto>($"api/hotels/{id}");
+            var hotel = await _apiService.GetAsync<HotelViewModel>($"api/hotels/{id}");
             if (hotel == null)
                 return NotFound();
 
@@ -30,33 +31,33 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var regions = await _apiService.GetAsync<IEnumerable<RegionDto>>("api/regions");
+            var regions = await _apiService.GetAsync<IEnumerable<RegionViewModel>>("api/regions");
             ViewBag.Regions = regions;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Address,Phone,RegionId,Order,IsActive")] CreateHotelDto createHotelDto)
+        public async Task<IActionResult> Create([Bind("Name,Address,Phone,RegionId,Order,IsActive")] HotelCreateViewModel createHotelViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateHotelDto, HotelDto>("api/hotels", createHotelDto);
+                await _apiService.PostAsync<HotelCreateViewModel, HotelViewModel>("api/hotels", createHotelViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createHotelDto);
+            return View(createHotelViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var hotel = await _apiService.GetAsync<HotelDto>($"api/hotels/{id}");
+            var hotel = await _apiService.GetAsync<HotelViewModel>($"api/hotels/{id}");
             if (hotel == null)
                 return NotFound();
 
-            var regions = await _apiService.GetAsync<IEnumerable<RegionDto>>("api/regions");
+            var regions = await _apiService.GetAsync<IEnumerable<RegionViewModel>>("api/regions");
             ViewBag.Regions = regions;
 
-            var updateDto = new UpdateHotelDto
+            var updateDto = new HotelEditViewModel
             {
                 Id = hotel.Id,
                 Name = hotel.Name,
@@ -72,26 +73,26 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateHotelDto updateHotelDto)
+        public async Task<IActionResult> Edit(int id, HotelEditViewModel HotelEditViewModel)
         {
-            if (id != updateHotelDto.Id)
+            if (id != HotelEditViewModel.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateHotelDto, HotelDto>($"api/hotels/{id}", updateHotelDto);
+                var result = await _apiService.PutAsync<HotelEditViewModel, HotelViewModel>($"api/hotels/{id}", HotelEditViewModel);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
 
-            var regions = await _apiService.GetAsync<IEnumerable<RegionDto>>("api/regions");
+            var regions = await _apiService.GetAsync<IEnumerable<RegionViewModel>>("api/regions");
             ViewBag.Regions = regions;
-            return View(updateHotelDto);
+            return View(HotelEditViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var hotel = await _apiService.GetAsync<HotelDto>($"api/hotels/{id}");
+            var hotel = await _apiService.GetAsync<HotelViewModel>($"api/hotels/{id}");
             if (hotel == null)
                 return NotFound();
 

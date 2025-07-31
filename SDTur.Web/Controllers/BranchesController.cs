@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Master.Locations;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var branches = await _apiService.GetAsync<IEnumerable<BranchDto>>("api/branches");
+            var branches = await _apiService.GetAsync<IEnumerable<BranchViewModel>>("api/branches");
             return View(branches);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var branch = await _apiService.GetAsync<BranchDto>($"api/branches/{id}");
+            var branch = await _apiService.GetAsync<BranchViewModel>($"api/branches/{id}");
             if (branch == null)
                 return NotFound();
 
@@ -35,23 +35,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Address,Phone,Email,IsActive")] CreateBranchDto createBranchDto)
+        public async Task<IActionResult> Create([Bind("Name,Address,Phone,Email,IsActive")] BranchCreateViewModel BranchCreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateBranchDto, BranchDto>("api/branches", createBranchDto);
+                await _apiService.PostAsync<BranchCreateViewModel, BranchViewModel>("api/branches", BranchCreateViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createBranchDto);
+            return View(BranchCreateViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var branch = await _apiService.GetAsync<BranchDto>($"api/branches/{id}");
+            var branch = await _apiService.GetAsync<BranchViewModel>($"api/branches/{id}");
             if (branch == null)
                 return NotFound();
 
-            var updateDto = new UpdateBranchDto
+            var updateDto = new BranchEditViewModel
             {
                 Id = branch.Id,
                 Name = branch.Name,
@@ -66,23 +66,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateBranchDto updateBranchDto)
+        public async Task<IActionResult> Edit(int id, BranchEditViewModel BranchEditViewModel)
         {
-            if (id != updateBranchDto.Id)
+            if (id != BranchEditViewModel.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateBranchDto, BranchDto>($"api/branches/{id}", updateBranchDto);
+                var result = await _apiService.PutAsync<BranchEditViewModel, BranchViewModel>($"api/branches/{id}", BranchEditViewModel);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
-            return View(updateBranchDto);
+            return View(BranchEditViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var branch = await _apiService.GetAsync<BranchDto>($"api/branches/{id}");
+            var branch = await _apiService.GetAsync<BranchViewModel>($"api/branches/{id}");
             if (branch == null)
                 return NotFound();
 

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.System.Reports;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var reports = await _apiService.GetAsync<List<ReportDto>>("api/reports");
+            var reports = await _apiService.GetAsync<List<ReportViewModel>>("api/reports");
             return View(reports);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var report = await _apiService.GetAsync<ReportDto>($"api/reports/{id}");
+            var report = await _apiService.GetAsync<ReportViewModel>($"api/reports/{id}");
             if (report == null)
                 return NotFound();
             return View(report);
@@ -34,11 +34,11 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReportName,ReportType,ReportDate,Parameters,GeneratedBy,FilePath,FileType,IsActive")] CreateReportDto createDto)
+        public async Task<IActionResult> Create([Bind("ReportName,ReportType,ReportDate,Parameters,GeneratedBy,FilePath,FileType,IsActive")] ReportCreateViewModel createDto)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateReportDto, ReportDto>("api/reports", createDto);
+                await _apiService.PostAsync<ReportCreateViewModel, ReportViewModel>("api/reports", createDto);
                 return RedirectToAction(nameof(Index));
             }
             return View(createDto);
@@ -46,11 +46,11 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var report = await _apiService.GetAsync<ReportDto>($"api/reports/{id}");
+            var report = await _apiService.GetAsync<ReportViewModel>($"api/reports/{id}");
             if (report == null)
                 return NotFound();
 
-            var updateDto = new UpdateReportDto
+            var updateDto = new ReportEditViewModel
             {
                 Id = report.Id,
                 ReportName = report.ReportName,
@@ -68,7 +68,7 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ReportName,ReportType,ReportDate,Parameters,GeneratedBy,FilePath,FileType,IsActive")] UpdateReportDto updateDto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ReportName,ReportType,ReportDate,Parameters,GeneratedBy,FilePath,FileType,IsActive")] ReportEditViewModel updateDto)
         {
             if (id != updateDto.Id)
             {
@@ -77,7 +77,7 @@ namespace SDTur.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                await _apiService.PutAsync<UpdateReportDto, ReportDto>($"api/reports/{updateDto.Id}", updateDto);
+                await _apiService.PutAsync<ReportEditViewModel, ReportViewModel>($"api/reports/{updateDto.Id}", updateDto);
                 return RedirectToAction(nameof(Index));
             }
             return View(updateDto);
@@ -85,7 +85,7 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var report = await _apiService.GetAsync<ReportDto>($"api/reports/{id}");
+            var report = await _apiService.GetAsync<ReportViewModel>($"api/reports/{id}");
             if (report == null)
                 return NotFound();
             return View(report);
@@ -102,7 +102,7 @@ namespace SDTur.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> GenerateReport(string reportType, string parameters)
         {
-            var filePath = await _apiService.PostAsync<object, string>($"api/reports/generate?reportType={reportType}&parameters={parameters}", null);
+            var filePath = await _apiService.PostAsync<object, string>($"api/reports/generate?reportType={reportType}&parameters={parameters}", new { });
             return Json(new { filePath });
         }
     }

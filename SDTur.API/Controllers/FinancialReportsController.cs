@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
-using SDTur.Application.Services;
+using SDTur.Application.DTOs.Financial.FinancialReport;
+using SDTur.Application.Services.Financial.Interfaces;
 
 namespace SDTur.API.Controllers
 {

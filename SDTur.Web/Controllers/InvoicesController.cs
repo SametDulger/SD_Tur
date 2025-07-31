@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Financial.Transactions;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var invoices = await _apiService.GetAsync<List<InvoiceDto>>("api/invoices");
+            var invoices = await _apiService.GetAsync<List<InvoiceViewModel>>("api/invoices");
             return View(invoices);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var invoice = await _apiService.GetAsync<InvoiceDto>($"api/invoices/{id}/details");
+            var invoice = await _apiService.GetAsync<InvoiceViewModel>($"api/invoices/{id}/details");
             if (invoice == null)
                 return NotFound();
 
@@ -35,23 +35,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("InvoiceNumber,InvoiceDate,PassCompanyId,TotalAmount,Currency,Status,Notes")] CreateInvoiceDto createInvoiceDto)
+        public async Task<IActionResult> Create([Bind("InvoiceNumber,InvoiceDate,PassCompanyId,TotalAmount,Currency,Status,Notes")] InvoiceCreateViewModel createInvoiceViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateInvoiceDto, InvoiceDto>("api/invoices", createInvoiceDto);
+                await _apiService.PostAsync<InvoiceCreateViewModel, InvoiceViewModel>("api/invoices", createInvoiceViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createInvoiceDto);
+            return View(createInvoiceViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var invoice = await _apiService.GetAsync<InvoiceDto>($"api/invoices/{id}");
+            var invoice = await _apiService.GetAsync<InvoiceViewModel>($"api/invoices/{id}");
             if (invoice == null)
                 return NotFound();
 
-            var updateDto = new UpdateInvoiceDto
+            var updateDto = new InvoiceEditViewModel
             {
                 Id = invoice.Id,
                 InvoiceNumber = invoice.InvoiceNumber,
@@ -69,14 +69,14 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateInvoiceDto updateDto)
+        public async Task<IActionResult> Edit(int id, InvoiceEditViewModel updateDto)
         {
             if (id != updateDto.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateInvoiceDto, InvoiceDto>($"api/invoices/{id}", updateDto);
+                var result = await _apiService.PutAsync<InvoiceEditViewModel, InvoiceViewModel>($"api/invoices/{id}", updateDto);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
@@ -85,7 +85,7 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var invoice = await _apiService.GetAsync<InvoiceDto>($"api/invoices/{id}");
+            var invoice = await _apiService.GetAsync<InvoiceViewModel>($"api/invoices/{id}");
             if (invoice == null)
                 return NotFound();
 

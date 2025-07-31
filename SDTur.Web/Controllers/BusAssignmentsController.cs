@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Tour.Operations;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var busAssignments = await _apiService.GetAsync<List<BusAssignmentDto>>("api/busassignments");
+            var busAssignments = await _apiService.GetAsync<List<BusAssignmentViewModel>>("api/busassignments");
             return View(busAssignments);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var busAssignment = await _apiService.GetAsync<BusAssignmentDto>($"api/busassignments/{id}");
+            var busAssignment = await _apiService.GetAsync<BusAssignmentViewModel>($"api/busassignments/{id}");
             if (busAssignment == null)
                 return NotFound();
             return View(busAssignment);
@@ -34,19 +34,19 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BusId,TourScheduleId,EmployeeId,AssignmentDate,Status,Notes")] CreateBusAssignmentDto createBusAssignmentDto)
+        public async Task<IActionResult> Create([Bind("BusId,TourScheduleId,EmployeeId,AssignmentDate,Status,Notes")] BusAssignmentCreateViewModel createBusAssignmentViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateBusAssignmentDto, BusAssignmentDto>("api/busassignments", createBusAssignmentDto);
+                await _apiService.PostAsync<BusAssignmentCreateViewModel, BusAssignmentViewModel>("api/busassignments", createBusAssignmentViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createBusAssignmentDto);
+            return View(createBusAssignmentViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var busAssignment = await _apiService.GetAsync<BusAssignmentDto>($"api/busassignments/{id}");
+            var busAssignment = await _apiService.GetAsync<BusAssignmentViewModel>($"api/busassignments/{id}");
             if (busAssignment == null)
                 return NotFound();
             return View(busAssignment);
@@ -54,24 +54,24 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BusId,TourScheduleId,EmployeeId,AssignmentDate,Status,Notes,IsActive")] UpdateBusAssignmentDto updateBusAssignmentDto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BusId,TourScheduleId,EmployeeId,AssignmentDate,Status,Notes,IsActive")] BusAssignmentEditViewModel updateBusAssignmentViewModel)
         {
-            if (id != updateBusAssignmentDto.Id)
+            if (id != updateBusAssignmentViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                await _apiService.PutAsync<UpdateBusAssignmentDto, BusAssignmentDto>($"api/busassignments/{id}", updateBusAssignmentDto);
+                await _apiService.PutAsync<BusAssignmentEditViewModel, BusAssignmentViewModel>($"api/busassignments/{id}", updateBusAssignmentViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(updateBusAssignmentDto);
+            return View(updateBusAssignmentViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var busAssignment = await _apiService.GetAsync<BusAssignmentDto>($"api/busassignments/{id}");
+            var busAssignment = await _apiService.GetAsync<BusAssignmentViewModel>($"api/busassignments/{id}");
             if (busAssignment == null)
                 return NotFound();
             return View(busAssignment);

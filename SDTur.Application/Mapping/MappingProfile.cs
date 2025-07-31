@@ -1,6 +1,38 @@
 using AutoMapper;
-using SDTur.Application.DTOs;
-using SDTur.Core.Entities;
+using SDTur.Application.DTOs.Financial.Account;
+using SDTur.Application.DTOs.Financial.AccountTransaction;
+using SDTur.Application.DTOs.Financial.Cash;
+using SDTur.Application.DTOs.Financial.CommissionCalculation;
+using SDTur.Application.DTOs.Financial.ExchangeRate;
+using SDTur.Application.DTOs.Financial.FinancialReport;
+using SDTur.Application.DTOs.Financial.Invoice;
+using SDTur.Application.DTOs.Financial.InvoiceDetail;
+using SDTur.Application.DTOs.Master.Branch;
+using SDTur.Application.DTOs.Master.Bus;
+using SDTur.Application.DTOs.Master.Currency;
+using SDTur.Application.DTOs.Master.Employee;
+using SDTur.Application.DTOs.Master.Hotel;
+using SDTur.Application.DTOs.Master.Nationality;
+using SDTur.Application.DTOs.Master.PassAgreement;
+using SDTur.Application.DTOs.Master.PassCompany;
+using SDTur.Application.DTOs.Master.Region;
+using SDTur.Application.DTOs.System.Report;
+using SDTur.Application.DTOs.System.SystemLog;
+using SDTur.Application.DTOs.System.User;
+using SDTur.Application.DTOs.Tour.BusAssignment;
+using SDTur.Application.DTOs.Tour.CustomerDistribution;
+using SDTur.Application.DTOs.Tour.ServiceSchedule;
+using SDTur.Application.DTOs.Tour.Ticket;
+using SDTur.Application.DTOs.Tour.Tour;
+using SDTur.Application.DTOs.Tour.TourExpense;
+using SDTur.Application.DTOs.Tour.TourIncome;
+using SDTur.Application.DTOs.Tour.TourOperation;
+using SDTur.Application.DTOs.Tour.TourReport;
+using SDTur.Application.DTOs.Tour.TourSchedule;
+using SDTur.Core.Entities.Financial;
+using SDTur.Core.Entities.Master;
+using SDTur.Core.Entities.System;
+using SDTur.Core.Entities.Tour;
 
 namespace SDTur.Application.Mapping
 {
@@ -18,11 +50,13 @@ namespace SDTur.Application.Mapping
             CreateMap<CreatePassCompanyDto, PassCompany>();
             CreateMap<UpdatePassCompanyDto, PassCompany>();
 
-            // Ticket mappings with navigation properties
-            CreateMap<Ticket, TicketDto>()
-                .ForMember(dest => dest.TourName, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Name : ""))
-                .ForMember(dest => dest.BranchName, opt => opt.MapFrom(src => src.Branch != null ? src.Branch.Name : ""))
-                .ForMember(dest => dest.HotelName, opt => opt.MapFrom(src => src.Hotel != null ? src.Hotel.Name : ""));
+            // PassAgreement mappings
+            CreateMap<PassAgreement, PassAgreementDto>();
+            CreateMap<CreatePassAgreementDto, PassAgreement>();
+            CreateMap<UpdatePassAgreementDto, PassAgreement>();
+
+            // Ticket mappings
+            CreateMap<Ticket, TicketDto>();
             CreateMap<CreateTicketDto, Ticket>();
             CreateMap<UpdateTicketDto, Ticket>();
 
@@ -32,8 +66,7 @@ namespace SDTur.Application.Mapping
             CreateMap<UpdateBranchDto, Branch>();
 
             // Employee mappings
-            CreateMap<Employee, EmployeeDto>()
-                .ForMember(dest => dest.BranchName, opt => opt.MapFrom(src => src.Branch != null ? src.Branch.Name : ""));
+            CreateMap<Employee, EmployeeDto>();
             CreateMap<CreateEmployeeDto, Employee>();
             CreateMap<UpdateEmployeeDto, Employee>();
 
@@ -43,8 +76,7 @@ namespace SDTur.Application.Mapping
             CreateMap<UpdateRegionDto, Region>();
 
             // Hotel mappings
-            CreateMap<Hotel, HotelDto>()
-                .ForMember(dest => dest.RegionName, opt => opt.MapFrom(src => src.Region != null ? src.Region.Name : ""));
+            CreateMap<Hotel, HotelDto>();
             CreateMap<CreateHotelDto, Hotel>();
             CreateMap<UpdateHotelDto, Hotel>();
 
@@ -53,16 +85,23 @@ namespace SDTur.Application.Mapping
             CreateMap<CreateBusDto, Bus>();
             CreateMap<UpdateBusDto, Bus>();
 
+            // Currency mappings
+            CreateMap<Currency, CurrencyDto>();
+            CreateMap<CreateCurrencyDto, Currency>();
+            CreateMap<UpdateCurrencyDto, Currency>();
+
+            // Nationality mappings
+            CreateMap<Nationality, NationalityDto>();
+            CreateMap<CreateNationalityDto, Nationality>();
+            CreateMap<UpdateNationalityDto, Nationality>();
+
             // TourSchedule mappings
-            CreateMap<TourSchedule, TourScheduleDto>()
-                .ForMember(dest => dest.TourName, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Name : ""));
+            CreateMap<TourSchedule, TourScheduleDto>();
             CreateMap<CreateTourScheduleDto, TourSchedule>();
             CreateMap<UpdateTourScheduleDto, TourSchedule>();
 
             // ServiceSchedule mappings
-            CreateMap<ServiceSchedule, ServiceScheduleDto>()
-                .ForMember(dest => dest.TourName, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Name : ""))
-                .ForMember(dest => dest.RegionName, opt => opt.MapFrom(src => src.Region != null ? src.Region.Name : ""));
+            CreateMap<ServiceSchedule, ServiceScheduleDto>();
             CreateMap<CreateServiceScheduleDto, ServiceSchedule>();
             CreateMap<UpdateServiceScheduleDto, ServiceSchedule>();
 
@@ -76,10 +115,22 @@ namespace SDTur.Application.Mapping
             CreateMap<CreateTourIncomeDto, TourIncome>();
             CreateMap<UpdateTourIncomeDto, TourIncome>();
 
-            // PassAgreement mappings
-            CreateMap<PassAgreement, PassAgreementDto>();
-            CreateMap<CreatePassAgreementDto, PassAgreement>();
-            CreateMap<UpdatePassAgreementDto, PassAgreement>();
+            // TourOperation mappings
+            CreateMap<TourOperation, TourOperationDto>();
+            CreateMap<CreateTourOperationDto, TourOperation>();
+            CreateMap<UpdateTourOperationDto, TourOperation>();
+
+
+
+            // Cash mappings
+            CreateMap<Cash, CashDto>();
+            CreateMap<CreateCashDto, Cash>();
+            CreateMap<UpdateCashDto, Cash>();
+
+            // Account mappings
+            CreateMap<Account, AccountDto>();
+            CreateMap<CreateAccountDto, Account>();
+            CreateMap<UpdateAccountDto, Account>();
 
             // AccountTransaction mappings
             CreateMap<AccountTransaction, AccountTransactionDto>();
@@ -91,69 +142,55 @@ namespace SDTur.Application.Mapping
             CreateMap<CreateExchangeRateDto, ExchangeRate>();
             CreateMap<UpdateExchangeRateDto, ExchangeRate>();
 
-            // Nationality mappings
-            CreateMap<Nationality, NationalityDto>();
-            CreateMap<CreateNationalityDto, Nationality>();
-            CreateMap<UpdateNationalityDto, Nationality>();
-
-            // Currency mappings
-            CreateMap<Currency, CurrencyDto>();
-            CreateMap<CreateCurrencyDto, Currency>();
-            CreateMap<UpdateCurrencyDto, Currency>();
-
             // User mappings
-            CreateMap<User, UserDto>()
-                .ForMember(dest => dest.EmployeeName, opt => opt.MapFrom(src => src.Employee != null ? $"{src.Employee.FirstName} {src.Employee.LastName}" : ""))
-                .ForMember(dest => dest.BranchName, opt => opt.MapFrom(src => src.Branch != null ? src.Branch.Name : ""));
+            CreateMap<User, UserDto>();
             CreateMap<CreateUserDto, User>();
             CreateMap<UpdateUserDto, User>();
 
             // Invoice mappings
-            CreateMap<Invoice, InvoiceDto>()
-                .ForMember(dest => dest.PassCompanyName, opt => opt.MapFrom(src => src.PassCompany != null ? src.PassCompany.Name : ""));
+            CreateMap<Invoice, InvoiceDto>();
             CreateMap<CreateInvoiceDto, Invoice>();
             CreateMap<UpdateInvoiceDto, Invoice>();
 
             // InvoiceDetail mappings
-            CreateMap<InvoiceDetail, InvoiceDetailDto>()
-                .ForMember(dest => dest.TourScheduleInfo, opt => opt.MapFrom(src => src.TourSchedule != null && src.TourSchedule.Tour != null ? $"{src.TourSchedule.Tour.Name} - {src.TourSchedule.TourDate:dd.MM.yyyy}" : ""));
+            CreateMap<InvoiceDetail, InvoiceDetailDto>();
             CreateMap<CreateInvoiceDetailDto, InvoiceDetail>();
             CreateMap<UpdateInvoiceDetailDto, InvoiceDetail>();
 
             // BusAssignment mappings
-            CreateMap<BusAssignment, BusAssignmentDto>()
-                .ForMember(dest => dest.TourName, opt => opt.MapFrom(src => src.TourSchedule != null && src.TourSchedule.Tour != null ? src.TourSchedule.Tour.Name : ""))
-                .ForMember(dest => dest.TourDate, opt => opt.MapFrom(src => src.TourSchedule != null ? src.TourSchedule.TourDate : DateTime.MinValue))
-                .ForMember(dest => dest.BusPlateNumber, opt => opt.MapFrom(src => src.Bus != null ? src.Bus.PlateNumber : ""))
-                .ForMember(dest => dest.BusModel, opt => opt.MapFrom(src => src.Bus != null ? src.Bus.Model : ""))
-                .ForMember(dest => dest.BusCapacity, opt => opt.MapFrom(src => src.Bus != null ? src.Bus.Capacity : 0));
+            CreateMap<BusAssignment, BusAssignmentDto>();
+            CreateMap<CreateBusAssignmentDto, BusAssignment>();
+            CreateMap<UpdateBusAssignmentDto, BusAssignment>();
 
             // CustomerDistribution mappings
-            CreateMap<CustomerDistribution, CustomerDistributionDto>()
-                .ForMember(dest => dest.TourName, opt => opt.MapFrom(src => src.TourSchedule != null && src.TourSchedule.Tour != null ? src.TourSchedule.Tour.Name : ""))
-                .ForMember(dest => dest.TourDate, opt => opt.MapFrom(src => src.TourSchedule != null ? src.TourSchedule.TourDate : DateTime.MinValue))
-                .ForMember(dest => dest.BusPlateNumber, opt => opt.MapFrom(src => src.Bus != null ? src.Bus.PlateNumber : ""))
-                .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Ticket != null ? src.Ticket.CustomerName : ""))
-                .ForMember(dest => dest.HotelName, opt => opt.MapFrom(src => src.Ticket != null && src.Ticket.Hotel != null ? src.Ticket.Hotel.Name : ""))
-                .ForMember(dest => dest.RegionName, opt => opt.MapFrom(src => src.Ticket != null && src.Ticket.Hotel != null && src.Ticket.Hotel.Region != null ? src.Ticket.Hotel.Region.Name : ""));
+            CreateMap<CustomerDistribution, CustomerDistributionDto>();
+            CreateMap<CreateCustomerDistributionDto, CustomerDistribution>();
+            CreateMap<UpdateCustomerDistributionDto, CustomerDistribution>();
 
             // CommissionCalculation mappings
-            CreateMap<CommissionCalculation, CommissionCalculationDto>()
-                .ForMember(dest => dest.EmployeeName, opt => opt.MapFrom(src => src.Employee != null ? $"{src.Employee.FirstName} {src.Employee.LastName}" : ""));
+            CreateMap<CommissionCalculation, CommissionCalculationDto>();
+            CreateMap<CreateCommissionCalculationDto, CommissionCalculation>();
+            CreateMap<UpdateCommissionCalculationDto, CommissionCalculation>();
 
             // TourReport mappings
-            CreateMap<TourReport, TourReportDto>()
-                .ForMember(dest => dest.TourName, opt => opt.MapFrom(src => src.TourSchedule != null && src.TourSchedule.Tour != null ? src.TourSchedule.Tour.Name : ""))
-                .ForMember(dest => dest.EmployeeName, opt => opt.MapFrom(src => src.Employee != null ? $"{src.Employee.FirstName} {src.Employee.LastName}" : ""));
+            CreateMap<TourReport, TourReportDto>();
+            CreateMap<CreateTourReportDto, TourReport>();
+            CreateMap<UpdateTourReportDto, TourReport>();
 
             // FinancialReport mappings
-            CreateMap<FinancialReport, FinancialReportDto>()
-                .ForMember(dest => dest.EmployeeName, opt => opt.MapFrom(src => src.Employee != null ? $"{src.Employee.FirstName} {src.Employee.LastName}" : ""));
+            CreateMap<FinancialReport, FinancialReportDto>();
+            CreateMap<CreateFinancialReportDto, FinancialReport>();
+            CreateMap<UpdateFinancialReportDto, FinancialReport>();
 
             // SystemLog mappings
-            CreateMap<SystemLog, SystemLogDto>()
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User != null ? src.User.Username : ""))
-                .ForMember(dest => dest.EmployeeName, opt => opt.MapFrom(src => src.Employee != null ? $"{src.Employee.FirstName} {src.Employee.LastName}" : ""));
+            CreateMap<SystemLog, SystemLogDto>();
+            CreateMap<CreateSystemLogDto, SystemLog>();
+            CreateMap<UpdateSystemLogDto, SystemLog>();
+
+            // Report mappings
+            CreateMap<Report, ReportDto>();
+            CreateMap<CreateReportDto, Report>();
+            CreateMap<UpdateReportDto, Report>();
         }
     }
 } 

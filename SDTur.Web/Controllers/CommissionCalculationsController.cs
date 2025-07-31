@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Financial.Transactions;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var commissionCalculations = await _apiService.GetAsync<List<CommissionCalculationDto>>("api/commissioncalculations");
+            var commissionCalculations = await _apiService.GetAsync<List<CommissionCalculationViewModel>>("api/commissioncalculations");
             return View(commissionCalculations);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var commissionCalculation = await _apiService.GetAsync<CommissionCalculationDto>($"api/commissioncalculations/{id}");
+            var commissionCalculation = await _apiService.GetAsync<CommissionCalculationViewModel>($"api/commissioncalculations/{id}");
             if (commissionCalculation == null)
                 return NotFound();
             return View(commissionCalculation);
@@ -34,19 +34,19 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,TourScheduleId,TicketId,CalculationDate,CommissionAmount,Currency,CommissionType,CommissionRate,Status,Notes")] CreateCommissionCalculationDto createCommissionCalculationDto)
+        public async Task<IActionResult> Create([Bind("EmployeeId,TourScheduleId,TicketId,CalculationDate,CommissionAmount,Currency,CommissionType,CommissionRate,Status,Notes")] CommissionCalculationCreateViewModel createCommissionCalculationViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateCommissionCalculationDto, CommissionCalculationDto>("api/commissioncalculations", createCommissionCalculationDto);
+                await _apiService.PostAsync<CommissionCalculationCreateViewModel, CommissionCalculationViewModel>("api/commissioncalculations", createCommissionCalculationViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createCommissionCalculationDto);
+            return View(createCommissionCalculationViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var commissionCalculation = await _apiService.GetAsync<CommissionCalculationDto>($"api/commissioncalculations/{id}");
+            var commissionCalculation = await _apiService.GetAsync<CommissionCalculationViewModel>($"api/commissioncalculations/{id}");
             if (commissionCalculation == null)
                 return NotFound();
             return View(commissionCalculation);
@@ -54,24 +54,24 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeId,TourScheduleId,TicketId,CalculationDate,CommissionAmount,Currency,CommissionType,CommissionRate,Status,Notes,IsActive")] UpdateCommissionCalculationDto updateCommissionCalculationDto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeId,TourScheduleId,TicketId,CalculationDate,CommissionAmount,Currency,CommissionType,CommissionRate,Status,Notes,IsActive")] CommissionCalculationEditViewModel updateCommissionCalculationViewModel)
         {
-            if (id != updateCommissionCalculationDto.Id)
+            if (id != updateCommissionCalculationViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                await _apiService.PutAsync<UpdateCommissionCalculationDto, CommissionCalculationDto>($"api/commissioncalculations/{id}", updateCommissionCalculationDto);
+                await _apiService.PutAsync<CommissionCalculationEditViewModel, CommissionCalculationViewModel>($"api/commissioncalculations/{id}", updateCommissionCalculationViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(updateCommissionCalculationDto);
+            return View(updateCommissionCalculationViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var commissionCalculation = await _apiService.GetAsync<CommissionCalculationDto>($"api/commissioncalculations/{id}");
+            var commissionCalculation = await _apiService.GetAsync<CommissionCalculationViewModel>($"api/commissioncalculations/{id}");
             if (commissionCalculation == null)
                 return NotFound();
             return View(commissionCalculation);

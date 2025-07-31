@@ -1,48 +1,156 @@
-@model IEnumerable<dynamic>
-
+@model IEnumerable<SystemLogViewModel>
 @{
-    ViewData["Title"] = "Sistem Logları";
+    ViewData["Title"] = "Sistem Loglar�";
 }
 
-<h1>Sistem Logları</h1>
-<p>
-    <a asp-action="Create" class="btn btn-primary">Yeni Log</a>
-</p>
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-journal-text text-primary me-2"></i>Sistem Loglar�
+                </h1>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i>Yeni Log
+                </a>
+            </div>
+        </div>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Log Tarihi</th>
-            <th>Log Seviyesi</th>
-            <th>Kategori</th>
-            <th>İşlem</th>
-            <th>Mesaj</th>
-            <th>IP Adresi</th>
-            <th>Kullanıcı</th>
-            <th>Çalışan</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.id</td>
-                <td>@item.logDate?.ToString("dd.MM.yyyy HH:mm")</td>
-                <td>@item.logLevel</td>
-                <td>@item.category</td>
-                <td>@item.action</td>
-                <td>@item.message</td>
-                <td>@item.ipAddress</td>
-                <td>@item.userName</td>
-                <td>@item.employeeName</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.id" class="btn btn-info btn-sm">Detay</a>
-                    <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-warning btn-sm">Düzenle</a>
-                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-danger btn-sm">Sil</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table> 
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-list-ul me-2"></i>Log Listesi
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" id="searchInput" class="form-control" placeholder="Log ara...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>
+                                        <i class="bi bi-journal-text me-1"></i>Log Seviyesi
+                                    </th>
+                                    <th>
+                                        <i class="bi bi-message me-1"></i>Mesaj
+                                    </th>
+                                    <th>
+                                        <i class="bi bi-gear me-1"></i>Kaynak
+                                    </th>
+                                    <th>
+                                        <i class="bi bi-person me-1"></i>Kullan�c�
+                                    </th>
+                                    <th>
+                                        <i class="bi bi-calendar me-1"></i>Tarih
+                                    </th>
+                                    <th class="text-end">
+                                        <i class="bi bi-gear me-1"></i>��lemler
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var log in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @{
+                                                var badgeClass = log.LogLevel switch
+                                                {
+                                                    "Error" => "bg-danger",
+                                                    "Warning" => "bg-warning",
+                                                    "Info" => "bg-info",
+                                                    "Debug" => "bg-secondary",
+                                                    _ => "bg-primary"
+                                                };
+                                            }
+                                            <span class="badge @badgeClass fs-6">
+                                                <i class="bi bi-journal-text me-1"></i>@log.LogLevel
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-light rounded-circle p-2 me-2">
+                                                    <i class="bi bi-message text-muted"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-semibold">@log.Message</div>
+                                                    @if (!string.IsNullOrEmpty(log.Exception))
+                                                    {
+                                                        <small class="text-danger">@log.Exception</small>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary fs-6">
+                                                <i class="bi bi-gear me-1"></i>@log.Source
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div class="fw-semibold">@log.UserName</div>
+                                                <small class="text-muted">@log.UserId</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div class="fw-semibold">@log.LogDate.ToString("dd.MM.yyyy")</div>
+                                                <small class="text-muted">@log.LogDate.ToString("HH:mm:ss")</small>
+                                            </div>
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="btn-group" role="group">
+                                                <a asp-action="Details" asp-route-id="@log.Id" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a asp-action="Edit" asp-route-id="@log.Id" class="btn btn-sm btn-outline-warning">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@log.Id" class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const tableRows = document.querySelectorAll('tbody tr');
+            
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

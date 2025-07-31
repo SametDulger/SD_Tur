@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Financial.Cash;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var cashTransactions = await _apiService.GetAsync<List<CashDto>>("api/cash");
+            var cashTransactions = await _apiService.GetAsync<List<CashViewModel>>("api/cash");
             return View(cashTransactions);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var cashTransaction = await _apiService.GetAsync<CashDto>($"api/cash/{id}");
+            var cashTransaction = await _apiService.GetAsync<CashViewModel>($"api/cash/{id}");
             if (cashTransaction == null)
                 return NotFound();
             return View(cashTransaction);
@@ -34,11 +34,11 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateCashDto createDto)
+        public async Task<IActionResult> Create(CashCreateViewModel createDto)
         {
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PostAsync<CreateCashDto, CashDto>("api/cash", createDto);
+                var result = await _apiService.PostAsync<CashCreateViewModel, CashViewModel>("api/cash", createDto);
                 return RedirectToAction(nameof(Index));
             }
             return View(createDto);
@@ -46,11 +46,11 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var cashTransaction = await _apiService.GetAsync<CashDto>($"api/cash/{id}");
+            var cashTransaction = await _apiService.GetAsync<CashViewModel>($"api/cash/{id}");
             if (cashTransaction == null)
                 return NotFound();
 
-            var updateDto = new UpdateCashDto
+            var updateDto = new CashEditViewModel
             {
                 Id = cashTransaction.Id,
                 TransactionDate = cashTransaction.TransactionDate,
@@ -71,11 +71,11 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(UpdateCashDto updateDto)
+        public async Task<IActionResult> Edit(CashEditViewModel updateDto)
         {
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateCashDto, CashDto>($"api/cash/{updateDto.Id}", updateDto);
+                var result = await _apiService.PutAsync<CashEditViewModel, CashViewModel>($"api/cash/{updateDto.Id}", updateDto);
                 return RedirectToAction(nameof(Index));
             }
             return View(updateDto);
@@ -83,7 +83,7 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var cashTransaction = await _apiService.GetAsync<CashDto>($"api/cash/{id}");
+            var cashTransaction = await _apiService.GetAsync<CashViewModel>($"api/cash/{id}");
             if (cashTransaction == null)
                 return NotFound();
             return View(cashTransaction);

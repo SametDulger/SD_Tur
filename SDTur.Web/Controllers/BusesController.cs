@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Master.Transport;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var buses = await _apiService.GetAsync<IEnumerable<BusDto>>("api/buses");
+            var buses = await _apiService.GetAsync<IEnumerable<BusViewModel>>("api/buses");
             return View(buses);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var bus = await _apiService.GetAsync<BusDto>($"api/buses/{id}");
+            var bus = await _apiService.GetAsync<BusViewModel>($"api/buses/{id}");
             if (bus == null)
                 return NotFound();
 
@@ -35,23 +35,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlateNumber,Capacity,Model,DriverName,DriverPhone,IsOwned,IsActive")] CreateBusDto createBusDto)
+        public async Task<IActionResult> Create([Bind("PlateNumber,Capacity,Model,DriverName,DriverPhone,IsOwned,IsActive")] BusCreateViewModel BusCreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateBusDto, BusDto>("api/buses", createBusDto);
+                await _apiService.PostAsync<BusCreateViewModel, BusViewModel>("api/buses", BusCreateViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createBusDto);
+            return View(BusCreateViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var bus = await _apiService.GetAsync<BusDto>($"api/buses/{id}");
+            var bus = await _apiService.GetAsync<BusViewModel>($"api/buses/{id}");
             if (bus == null)
                 return NotFound();
 
-            var updateDto = new UpdateBusDto
+            var updateDto = new BusEditViewModel
             {
                 Id = bus.Id,
                 PlateNumber = bus.PlateNumber,
@@ -68,23 +68,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateBusDto updateBusDto)
+        public async Task<IActionResult> Edit(int id, BusEditViewModel BusEditViewModel)
         {
-            if (id != updateBusDto.Id)
+            if (id != BusEditViewModel.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateBusDto, BusDto>($"api/buses/{id}", updateBusDto);
+                var result = await _apiService.PutAsync<BusEditViewModel, BusViewModel>($"api/buses/{id}", BusEditViewModel);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
-            return View(updateBusDto);
+            return View(BusEditViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var bus = await _apiService.GetAsync<BusDto>($"api/buses/{id}");
+            var bus = await _apiService.GetAsync<BusViewModel>($"api/buses/{id}");
             if (bus == null)
                 return NotFound();
 

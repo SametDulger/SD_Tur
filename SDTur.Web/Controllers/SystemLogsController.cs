@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.System.Logs;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var systemLogs = await _apiService.GetAsync<List<SystemLogDto>>("api/systemlogs");
+            var systemLogs = await _apiService.GetAsync<List<SystemLogViewModel>>("api/systemlogs");
             return View(systemLogs);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var systemLog = await _apiService.GetAsync<SystemLogDto>($"api/systemlogs/{id}");
+            var systemLog = await _apiService.GetAsync<SystemLogViewModel>($"api/systemlogs/{id}");
             if (systemLog == null)
                 return NotFound();
             return View(systemLog);
@@ -34,19 +34,19 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LogLevel,Category,Action,Message,Details,IpAddress,UserAgent,UserId,EmployeeId")] CreateSystemLogDto createSystemLogDto)
+        public async Task<IActionResult> Create([Bind("LogLevel,Category,Action,Message,Details,IpAddress,UserAgent,UserId,EmployeeId")] SystemLogCreateViewModel createSystemLogViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateSystemLogDto, SystemLogDto>("api/systemlogs", createSystemLogDto);
+                await _apiService.PostAsync<SystemLogCreateViewModel, SystemLogViewModel>("api/systemlogs", createSystemLogViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createSystemLogDto);
+            return View(createSystemLogViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var systemLog = await _apiService.GetAsync<SystemLogDto>($"api/systemlogs/{id}");
+            var systemLog = await _apiService.GetAsync<SystemLogViewModel>($"api/systemlogs/{id}");
             if (systemLog == null)
                 return NotFound();
             return View(systemLog);
@@ -54,24 +54,24 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LogLevel,Category,Action,Message,Details,IpAddress,UserAgent,UserId,EmployeeId,IsActive")] UpdateSystemLogDto updateSystemLogDto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,LogLevel,Category,Action,Message,Details,IpAddress,UserAgent,UserId,EmployeeId,IsActive")] SystemLogEditViewModel SystemLogEditViewModel)
         {
-            if (id != updateSystemLogDto.Id)
+            if (id != SystemLogEditViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                await _apiService.PutAsync<UpdateSystemLogDto, SystemLogDto>($"api/systemlogs/{id}", updateSystemLogDto);
+                await _apiService.PutAsync<SystemLogEditViewModel, SystemLogViewModel>($"api/systemlogs/{id}", SystemLogEditViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(updateSystemLogDto);
+            return View(SystemLogEditViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var systemLog = await _apiService.GetAsync<SystemLogDto>($"api/systemlogs/{id}");
+            var systemLog = await _apiService.GetAsync<SystemLogViewModel>($"api/systemlogs/{id}");
             if (systemLog == null)
                 return NotFound();
             return View(systemLog);

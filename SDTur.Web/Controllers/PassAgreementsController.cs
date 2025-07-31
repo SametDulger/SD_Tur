@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Master.Pass;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var passAgreements = await _apiService.GetAsync<List<PassAgreementDto>>("api/passagreements");
+            var passAgreements = await _apiService.GetAsync<List<PassAgreementViewModel>>("api/passagreements");
             return View(passAgreements);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var passAgreement = await _apiService.GetAsync<PassAgreementDto>($"api/passagreements/{id}");
+            var passAgreement = await _apiService.GetAsync<PassAgreementViewModel>($"api/passagreements/{id}");
             if (passAgreement == null)
                 return NotFound();
 
@@ -35,11 +35,11 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PassCompanyId,TourId,OutgoingFullPrice,OutgoingHalfPrice,IncomingFullPrice,IncomingHalfPrice,Currency")] CreatePassAgreementDto createDto)
+        public async Task<IActionResult> Create([Bind("PassCompanyId,TourId,OutgoingFullPrice,OutgoingHalfPrice,IncomingFullPrice,IncomingHalfPrice,Currency")] PassAgreementCreateViewModel createDto)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreatePassAgreementDto, PassAgreementDto>("api/passagreements", createDto);
+                await _apiService.PostAsync<PassAgreementCreateViewModel, PassAgreementViewModel>("api/passagreements", createDto);
                 return RedirectToAction(nameof(Index));
             }
             return View(createDto);
@@ -47,11 +47,11 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var passAgreement = await _apiService.GetAsync<PassAgreementDto>($"api/passagreements/{id}");
+            var passAgreement = await _apiService.GetAsync<PassAgreementViewModel>($"api/passagreements/{id}");
             if (passAgreement == null)
                 return NotFound();
 
-            var updateDto = new UpdatePassAgreementDto
+            var updateDto = new PassAgreementEditViewModel
             {
                 Id = passAgreement.Id,
                 PassCompanyId = passAgreement.PassCompanyId,
@@ -69,14 +69,14 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PassCompanyId,TourId,OutgoingFullPrice,OutgoingHalfPrice,IncomingFullPrice,IncomingHalfPrice,Currency,IsActive")] UpdatePassAgreementDto updateDto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,PassCompanyId,TourId,OutgoingFullPrice,OutgoingHalfPrice,IncomingFullPrice,IncomingHalfPrice,Currency,IsActive")] PassAgreementEditViewModel updateDto)
         {
             if (id != updateDto.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                await _apiService.PutAsync<UpdatePassAgreementDto, PassAgreementDto>($"api/passagreements/{id}", updateDto);
+                await _apiService.PutAsync<PassAgreementEditViewModel, PassAgreementViewModel>($"api/passagreements/{id}", updateDto);
                 return RedirectToAction(nameof(Index));
             }
             return View(updateDto);
@@ -84,7 +84,7 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var passAgreement = await _apiService.GetAsync<PassAgreementDto>($"api/passagreements/{id}");
+            var passAgreement = await _apiService.GetAsync<PassAgreementViewModel>($"api/passagreements/{id}");
             if (passAgreement == null)
                 return NotFound();
 

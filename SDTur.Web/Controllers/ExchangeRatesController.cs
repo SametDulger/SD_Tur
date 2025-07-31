@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Financial.Transactions;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var exchangeRates = await _apiService.GetAsync<List<ExchangeRateDto>>("api/exchangerates");
+            var exchangeRates = await _apiService.GetAsync<List<ExchangeRateViewModel>>("api/exchangerates");
             return View(exchangeRates);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var exchangeRate = await _apiService.GetAsync<ExchangeRateDto>($"api/exchangerates/{id}");
+            var exchangeRate = await _apiService.GetAsync<ExchangeRateViewModel>($"api/exchangerates/{id}");
             if (exchangeRate == null)
                 return NotFound();
 
@@ -35,23 +35,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FromCurrency,ToCurrency,Rate,RateDate,Date")] CreateExchangeRateDto createExchangeRateDto)
+        public async Task<IActionResult> Create([Bind("FromCurrency,ToCurrency,Rate,RateDate,Date")] ExchangeRateCreateViewModel createExchangeRateViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateExchangeRateDto, ExchangeRateDto>("api/exchangerates", createExchangeRateDto);
+                await _apiService.PostAsync<ExchangeRateCreateViewModel, ExchangeRateViewModel>("api/exchangerates", createExchangeRateViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createExchangeRateDto);
+            return View(createExchangeRateViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var exchangeRate = await _apiService.GetAsync<ExchangeRateDto>($"api/exchangerates/{id}");
+            var exchangeRate = await _apiService.GetAsync<ExchangeRateViewModel>($"api/exchangerates/{id}");
             if (exchangeRate == null)
                 return NotFound();
 
-            var updateDto = new UpdateExchangeRateDto
+            var updateDto = new ExchangeRateEditViewModel
             {
                 Id = exchangeRate.Id,
                 FromCurrency = exchangeRate.FromCurrency,
@@ -67,14 +67,14 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FromCurrency,ToCurrency,Rate,RateDate,Date,IsActive")] UpdateExchangeRateDto updateDto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FromCurrency,ToCurrency,Rate,RateDate,Date,IsActive")] ExchangeRateEditViewModel updateDto)
         {
             if (id != updateDto.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                await _apiService.PutAsync<UpdateExchangeRateDto, ExchangeRateDto>($"api/exchangerates/{id}", updateDto);
+                await _apiService.PutAsync<ExchangeRateEditViewModel, ExchangeRateViewModel>($"api/exchangerates/{id}", updateDto);
                 return RedirectToAction(nameof(Index));
             }
             return View(updateDto);
@@ -82,7 +82,7 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var exchangeRate = await _apiService.GetAsync<ExchangeRateDto>($"api/exchangerates/{id}");
+            var exchangeRate = await _apiService.GetAsync<ExchangeRateViewModel>($"api/exchangerates/{id}");
             if (exchangeRate == null)
                 return NotFound();
 

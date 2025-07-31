@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Financial.Accounts;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var accounts = await _apiService.GetAsync<List<AccountDto>>("api/accounts");
+            var accounts = await _apiService.GetAsync<List<AccountViewModel>>("api/accounts");
             return View(accounts);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var account = await _apiService.GetAsync<AccountDto>($"api/accounts/{id}/with-transactions");
+            var account = await _apiService.GetAsync<AccountViewModel>($"api/accounts/{id}/with-transactions");
             if (account == null)
                 return NotFound();
             return View(account);
@@ -34,23 +34,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateAccountDto createDto)
+        public async Task<IActionResult> Create(AccountCreateViewModel createViewModel)
         {
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PostAsync<CreateAccountDto, AccountDto>("api/accounts", createDto);
+                var result = await _apiService.PostAsync<AccountCreateViewModel, AccountViewModel>("api/accounts", createViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createDto);
+            return View(createViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var account = await _apiService.GetAsync<AccountDto>($"api/accounts/{id}");
+            var account = await _apiService.GetAsync<AccountViewModel>($"api/accounts/{id}");
             if (account == null)
                 return NotFound();
 
-            var updateDto = new UpdateAccountDto
+            var updateViewModel = new AccountEditViewModel
             {
                 Id = account.Id,
                 AccountNumber = account.AccountNumber,
@@ -65,24 +65,24 @@ namespace SDTur.Web.Controllers
                 IsActive = account.IsActive
             };
 
-            return View(updateDto);
+            return View(updateViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(UpdateAccountDto updateDto)
+        public async Task<IActionResult> Edit(AccountEditViewModel updateViewModel)
         {
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateAccountDto, AccountDto>($"api/accounts/{updateDto.Id}", updateDto);
+                var result = await _apiService.PutAsync<AccountEditViewModel, AccountViewModel>($"api/accounts/{updateViewModel.Id}", updateViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(updateDto);
+            return View(updateViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var account = await _apiService.GetAsync<AccountDto>($"api/accounts/{id}");
+            var account = await _apiService.GetAsync<AccountViewModel>($"api/accounts/{id}");
             if (account == null)
                 return NotFound();
             return View(account);

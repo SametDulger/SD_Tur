@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.System.Users;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var users = await _apiService.GetAsync<List<UserDto>>("api/users");
+            var users = await _apiService.GetAsync<List<UserViewModel>>("api/users");
             return View(users);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var user = await _apiService.GetAsync<UserDto>($"api/users/{id}");
+            var user = await _apiService.GetAsync<UserViewModel>($"api/users/{id}");
             if (user == null)
                 return NotFound();
 
@@ -35,23 +35,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Username,Password,FirstName,LastName,Email,Phone,EmployeeId,BranchId,Role,IsActive")] CreateUserDto createUserDto)
+        public async Task<IActionResult> Create([Bind("Username,Password,FirstName,LastName,Email,Phone,EmployeeId,BranchId,Role,IsActive")] UserCreateViewModel UserCreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateUserDto, UserDto>("api/users", createUserDto);
+                await _apiService.PostAsync<UserCreateViewModel, UserViewModel>("api/users", UserCreateViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createUserDto);
+            return View(UserCreateViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var user = await _apiService.GetAsync<UserDto>($"api/users/{id}");
+            var user = await _apiService.GetAsync<UserViewModel>($"api/users/{id}");
             if (user == null)
                 return NotFound();
 
-            var updateDto = new UpdateUserDto
+            var updateDto = new UserEditViewModel
             {
                 Id = user.Id,
                 Username = user.Username,
@@ -70,14 +70,14 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateUserDto updateDto)
+        public async Task<IActionResult> Edit(int id, UserEditViewModel updateDto)
         {
             if (id != updateDto.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateUserDto, UserDto>($"api/users/{id}", updateDto);
+                var result = await _apiService.PutAsync<UserEditViewModel, UserViewModel>($"api/users/{id}", updateDto);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
@@ -86,7 +86,7 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var user = await _apiService.GetAsync<UserDto>($"api/users/{id}");
+            var user = await _apiService.GetAsync<UserViewModel>($"api/users/{id}");
             if (user == null)
                 return NotFound();
 

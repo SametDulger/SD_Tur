@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Financial.Reports;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var financialReports = await _apiService.GetAsync<List<FinancialReportDto>>("api/financialreports");
+            var financialReports = await _apiService.GetAsync<List<FinancialReportViewModel>>("api/financialreports");
             return View(financialReports);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var financialReport = await _apiService.GetAsync<FinancialReportDto>($"api/financialreports/{id}");
+            var financialReport = await _apiService.GetAsync<FinancialReportViewModel>($"api/financialreports/{id}");
             if (financialReport == null)
                 return NotFound();
             return View(financialReport);
@@ -34,19 +34,19 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReportType,ReportDate,StartDate,EndDate,TotalIncome,TotalExpense,NetProfit,Currency,ReportData,Status,EmployeeId")] CreateFinancialReportDto createFinancialReportDto)
+        public async Task<IActionResult> Create([Bind("ReportType,ReportDate,StartDate,EndDate,TotalIncome,TotalExpense,NetProfit,Currency,ReportData,Status,EmployeeId")] FinancialReportCreateViewModel createFinancialReportViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateFinancialReportDto, FinancialReportDto>("api/financialreports", createFinancialReportDto);
+                await _apiService.PostAsync<FinancialReportCreateViewModel, FinancialReportViewModel>("api/financialreports", createFinancialReportViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createFinancialReportDto);
+            return View(createFinancialReportViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var financialReport = await _apiService.GetAsync<FinancialReportDto>($"api/financialreports/{id}");
+            var financialReport = await _apiService.GetAsync<FinancialReportViewModel>($"api/financialreports/{id}");
             if (financialReport == null)
                 return NotFound();
             return View(financialReport);
@@ -54,24 +54,24 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ReportType,ReportDate,StartDate,EndDate,TotalIncome,TotalExpense,NetProfit,Currency,ReportData,Status,EmployeeId,IsActive")] UpdateFinancialReportDto updateFinancialReportDto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ReportType,ReportDate,StartDate,EndDate,TotalIncome,TotalExpense,NetProfit,Currency,ReportData,Status,EmployeeId,IsActive")] FinancialReportEditViewModel updateFinancialReportViewModel)
         {
-            if (id != updateFinancialReportDto.Id)
+            if (id != updateFinancialReportViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                await _apiService.PutAsync<UpdateFinancialReportDto, FinancialReportDto>($"api/financialreports/{id}", updateFinancialReportDto);
+                await _apiService.PutAsync<FinancialReportEditViewModel, FinancialReportViewModel>($"api/financialreports/{id}", updateFinancialReportViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(updateFinancialReportDto);
+            return View(updateFinancialReportViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var financialReport = await _apiService.GetAsync<FinancialReportDto>($"api/financialreports/{id}");
+            var financialReport = await _apiService.GetAsync<FinancialReportViewModel>($"api/financialreports/{id}");
             if (financialReport == null)
                 return NotFound();
             return View(financialReport);

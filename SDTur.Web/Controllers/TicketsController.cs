@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Tour.Operations;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -35,14 +35,14 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateTicketDto createTicketDto)
+        public async Task<IActionResult> Create(TicketCreateViewModel TicketCreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.CreateTicketAsync(createTicketDto);
+                await _apiService.CreateTicketAsync(TicketCreateViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createTicketDto);
+            return View(TicketCreateViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -51,21 +51,12 @@ namespace SDTur.Web.Controllers
             if (ticket == null)
                 return NotFound();
 
-            var updateDto = new UpdateTicketDto
+            var updateDto = new TicketEditViewModel
             {
                 Id = ticket.Id,
                 CustomerName = ticket.CustomerName,
-                Nationality = ticket.Nationality,
-                RoomNumber = ticket.RoomNumber,
-                RequiresService = ticket.RequiresService,
-                FullCount = ticket.FullCount,
-                HalfCount = ticket.HalfCount,
-                GuestCount = ticket.GuestCount,
-                TotalAmount = ticket.TotalAmount,
-                PaidAmount = ticket.PaidAmount,
-                Currency = ticket.Currency,
-                Notes = ticket.Notes,
-                HotelId = ticket.HotelId
+                CustomerEmail = ticket.CustomerEmail,
+                CustomerPhone = ticket.CustomerPhone
             };
 
             return View(updateDto);
@@ -73,17 +64,17 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateTicketDto updateTicketDto)
+        public async Task<IActionResult> Edit(int id, TicketEditViewModel updateTicketViewModel)
         {
-            if (id != updateTicketDto.Id)
+            if (id != updateTicketViewModel.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                await _apiService.UpdateTicketAsync(updateTicketDto);
+                await _apiService.UpdateTicketAsync(updateTicketViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(updateTicketDto);
+            return View(updateTicketViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -120,7 +111,7 @@ namespace SDTur.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Search()
+        public IActionResult Search()
         {
             return View();
         }

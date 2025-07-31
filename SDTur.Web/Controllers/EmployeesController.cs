@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Master.People;
+using SDTur.Web.Models.Master.Locations;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +16,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var employees = await _apiService.GetAsync<IEnumerable<EmployeeDto>>("api/employees");
+            var employees = await _apiService.GetAsync<IEnumerable<EmployeeViewModel>>("api/employees");
             return View(employees);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var employee = await _apiService.GetAsync<EmployeeDto>($"api/employees/{id}");
+            var employee = await _apiService.GetAsync<EmployeeViewModel>($"api/employees/{id}");
             if (employee == null)
                 return NotFound();
 
@@ -30,33 +31,33 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var branches = await _apiService.GetAsync<IEnumerable<BranchDto>>("api/branches");
+            var branches = await _apiService.GetAsync<IEnumerable<BranchViewModel>>("api/branches");
             ViewBag.Branches = branches;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Email,Phone,Position,Salary,CurrencyId,HireDate,CommissionRate,BranchId,IsActive")] CreateEmployeeDto createEmployeeDto)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Email,Phone,Position,Salary,CurrencyId,HireDate,CommissionRate,BranchId,IsActive")] EmployeeCreateViewModel createEmployeeViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateEmployeeDto, EmployeeDto>("api/employees", createEmployeeDto);
+                await _apiService.PostAsync<EmployeeCreateViewModel, EmployeeViewModel>("api/employees", createEmployeeViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createEmployeeDto);
+            return View(createEmployeeViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var employee = await _apiService.GetAsync<EmployeeDto>($"api/employees/{id}");
+            var employee = await _apiService.GetAsync<EmployeeViewModel>($"api/employees/{id}");
             if (employee == null)
                 return NotFound();
 
-            var branches = await _apiService.GetAsync<IEnumerable<BranchDto>>("api/branches");
+            var branches = await _apiService.GetAsync<IEnumerable<BranchViewModel>>("api/branches");
             ViewBag.Branches = branches;
 
-            var updateDto = new UpdateEmployeeDto
+            var updateDto = new EmployeeEditViewModel
             {
                 Id = employee.Id,
                 FirstName = employee.FirstName,
@@ -77,26 +78,26 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateEmployeeDto updateEmployeeDto)
+        public async Task<IActionResult> Edit(int id, EmployeeEditViewModel EmployeeEditViewModel)
         {
-            if (id != updateEmployeeDto.Id)
+            if (id != EmployeeEditViewModel.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateEmployeeDto, EmployeeDto>($"api/employees/{id}", updateEmployeeDto);
+                var result = await _apiService.PutAsync<EmployeeEditViewModel, EmployeeViewModel>($"api/employees/{id}", EmployeeEditViewModel);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
 
-            var branches = await _apiService.GetAsync<IEnumerable<BranchDto>>("api/branches");
+            var branches = await _apiService.GetAsync<IEnumerable<BranchViewModel>>("api/branches");
             ViewBag.Branches = branches;
-            return View(updateEmployeeDto);
+            return View(EmployeeEditViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var employee = await _apiService.GetAsync<EmployeeDto>($"api/employees/{id}");
+            var employee = await _apiService.GetAsync<EmployeeViewModel>($"api/employees/{id}");
             if (employee == null)
                 return NotFound();
 

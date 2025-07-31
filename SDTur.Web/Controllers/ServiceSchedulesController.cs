@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Tour.Operations;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var serviceSchedules = await _apiService.GetAsync<List<ServiceScheduleDto>>("api/serviceschedules");
+            var serviceSchedules = await _apiService.GetAsync<List<ServiceScheduleViewModel>>("api/serviceschedules");
             return View(serviceSchedules);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var serviceSchedule = await _apiService.GetAsync<ServiceScheduleDto>($"api/serviceschedules/{id}");
+            var serviceSchedule = await _apiService.GetAsync<ServiceScheduleViewModel>($"api/serviceschedules/{id}");
             if (serviceSchedule == null)
                 return NotFound();
 
@@ -35,23 +35,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ServiceDate,ServiceTime,TourId,RegionId,IsActive")] CreateServiceScheduleDto createServiceScheduleDto)
+        public async Task<IActionResult> Create([Bind("ServiceDate,ServiceTime,TourId,RegionId,IsActive")] ServiceScheduleCreateViewModel createServiceScheduleViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateServiceScheduleDto, ServiceScheduleDto>("api/serviceschedules", createServiceScheduleDto);
+                await _apiService.PostAsync<ServiceScheduleCreateViewModel, ServiceScheduleViewModel>("api/serviceschedules", createServiceScheduleViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createServiceScheduleDto);
+            return View(createServiceScheduleViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var serviceSchedule = await _apiService.GetAsync<ServiceScheduleDto>($"api/serviceschedules/{id}");
+            var serviceSchedule = await _apiService.GetAsync<ServiceScheduleViewModel>($"api/serviceschedules/{id}");
             if (serviceSchedule == null)
                 return NotFound();
 
-            var updateDto = new UpdateServiceScheduleDto
+            var updateDto = new ServiceScheduleEditViewModel
             {
                 Id = serviceSchedule.Id,
                 TourId = serviceSchedule.TourId,
@@ -65,14 +65,14 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateServiceScheduleDto updateDto)
+        public async Task<IActionResult> Edit(int id, ServiceScheduleEditViewModel updateDto)
         {
             if (id != updateDto.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateServiceScheduleDto, ServiceScheduleDto>($"api/serviceschedules/{id}", updateDto);
+                var result = await _apiService.PutAsync<ServiceScheduleEditViewModel, ServiceScheduleViewModel>($"api/serviceschedules/{id}", updateDto);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
@@ -81,7 +81,7 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var serviceSchedule = await _apiService.GetAsync<ServiceScheduleDto>($"api/serviceschedules/{id}");
+            var serviceSchedule = await _apiService.GetAsync<ServiceScheduleViewModel>($"api/serviceschedules/{id}");
             if (serviceSchedule == null)
                 return NotFound();
 

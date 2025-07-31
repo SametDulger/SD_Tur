@@ -1,101 +1,142 @@
-@model SDTur.Application.DTOs.CreateCommissionCalculationDto
-
+@model SDTur.Web.Models.Financial.Transactions.CommissionCalculationCreateViewModel
 @{
-    ViewData["Title"] = "Yeni Komisyon HesaplamasÄ±";
+    ViewData["Title"] = "Yeni Komisyon Hesaplama";
 }
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Yeni Komisyon HesaplamasÄ± Ekle</h3>
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-plus-circle text-primary me-2"></i>Yeni Komisyon Hesaplama
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-calculator me-2"></i>Hesaplama Bilgileri
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
                         
-                        <div class="form-group">
-                            <label asp-for="EmployeeId" class="control-label">Ã‡alÄ±ÅŸan</label>
-                            <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.Employees">
-                                <option value="">Ã‡alÄ±ÅŸan SeÃ§in</option>
-                            </select>
-                            <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="CalculationType" class="form-label">
+                                    <i class="bi bi-tag me-1"></i>Hesaplama Türü
+                                </label>
+                                <select asp-for="CalculationType" class="form-select">
+                                    <option value="">Hesaplama türü seçiniz</option>
+                                    <option value="Satýþ Komisyonu">Satýþ Komisyonu</option>
+                                    <option value="Acenta Komisyonu">Acenta Komisyonu</option>
+                                    <option value="Rehber Komisyonu">Rehber Komisyonu</option>
+                                    <option value="Diðer">Diðer</option>
+                                </select>
+                                <span asp-validation-for="CalculationType" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="StartDate" class="form-label">
+                                    <i class="bi bi-calendar-check me-1"></i>Baþlangýç Tarihi
+                                </label>
+                                <input asp-for="StartDate" type="datetime-local" class="form-control">
+                                <span asp-validation-for="StartDate" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="EndDate" class="form-label">
+                                    <i class="bi bi-calendar-x me-1"></i>Bitiþ Tarihi
+                                </label>
+                                <input asp-for="EndDate" type="datetime-local" class="form-control">
+                                <span asp-validation-for="EndDate" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="TotalAmount" class="form-label">
+                                    <i class="bi bi-currency-dollar me-1"></i>Toplam Tutar
+                                </label>
+                                <div class="input-group">
+                                    <input asp-for="TotalAmount" type="number" step="0.01" class="form-control" placeholder="0.00">
+                                    <span class="input-group-text">?</span>
+                                </div>
+                                <span asp-validation-for="TotalAmount" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="CommissionRate" class="form-label">
+                                    <i class="bi bi-percent me-1"></i>Komisyon Oraný (%)
+                                </label>
+                                <input asp-for="CommissionRate" type="number" step="0.01" class="form-control" placeholder="0.00">
+                                <span asp-validation-for="CommissionRate" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="CommissionAmount" class="form-label">
+                                    <i class="bi bi-calculator me-1"></i>Komisyon Tutarý
+                                </label>
+                                <div class="input-group">
+                                    <input asp-for="CommissionAmount" type="number" step="0.01" class="form-control" placeholder="0.00">
+                                    <span class="input-group-text">?</span>
+                                </div>
+                                <span asp-validation-for="CommissionAmount" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="Currency" class="form-label">
+                                    <i class="bi bi-currency-exchange me-1"></i>Para Birimi
+                                </label>
+                                <select asp-for="Currency" class="form-select">
+                                    <option value="">Para birimi seçiniz</option>
+                                    <option value="TRY">Türk Lirasý (?)</option>
+                                    <option value="USD">Amerikan Dolarý ($)</option>
+                                    <option value="EUR">Euro (€)</option>
+                                    <option value="GBP">Ýngiliz Sterlini (£)</option>
+                                </select>
+                                <span asp-validation-for="Currency" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="Status" class="form-label">
+                                    <i class="bi bi-info-circle me-1"></i>Durum
+                                </label>
+                                <select asp-for="Status" class="form-select">
+                                    <option value="">Durum seçiniz</option>
+                                    <option value="Hesaplanýyor">Hesaplanýyor</option>
+                                    <option value="Hesaplandý">Hesaplandý</option>
+                                    <option value="Ýptal">Ýptal</option>
+                                </select>
+                                <span asp-validation-for="Status" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label">
+                                    <i class="bi bi-file-text me-1"></i>Açýklama
+                                </label>
+                                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Hesaplama açýklamasý giriniz"></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label asp-for="TicketId" class="control-label">Bilet</label>
-                            <select asp-for="TicketId" class="form-control" asp-items="ViewBag.Tickets">
-                                <option value="">Bilet SeÃ§in</option>
-                            </select>
-                            <span asp-validation-for="TicketId" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label asp-for="TourScheduleId" class="control-label">Tur ProgramÄ±</label>
-                            <select asp-for="TourScheduleId" class="form-control" asp-items="ViewBag.TourSchedules">
-                                <option value="">Tur ProgramÄ± SeÃ§in</option>
-                            </select>
-                            <span asp-validation-for="TourScheduleId" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label asp-for="CommissionAmount" class="control-label">Komisyon TutarÄ±</label>
-                            <input asp-for="CommissionAmount" class="form-control" type="number" step="0.01" />
-                            <span asp-validation-for="CommissionAmount" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label asp-for="CommissionRate" class="control-label">Komisyon OranÄ± (%)</label>
-                            <input asp-for="CommissionRate" class="form-control" type="number" step="0.01" />
-                            <span asp-validation-for="CommissionRate" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label asp-for="Currency" class="control-label">Para Birimi</label>
-                            <select asp-for="Currency" class="form-control">
-                                <option value="USD">USD</option>
-                                <option value="EUR">EUR</option>
-                                <option value="TRY">TRY</option>
-                            </select>
-                            <span asp-validation-for="Currency" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label asp-for="CommissionType" class="control-label">Komisyon Tipi</label>
-                            <select asp-for="CommissionType" class="form-control">
-                                <option value="Percentage">YÃ¼zde</option>
-                                <option value="Fixed">Sabit</option>
-                            </select>
-                            <span asp-validation-for="CommissionType" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label asp-for="CalculationDate" class="control-label">Hesaplama Tarihi</label>
-                            <input asp-for="CalculationDate" class="form-control" type="date" />
-                            <span asp-validation-for="CalculationDate" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label asp-for="Status" class="control-label">Durum</label>
-                            <select asp-for="Status" class="form-control">
-                                <option value="Pending">Beklemede</option>
-                                <option value="Approved">OnaylandÄ±</option>
-                                <option value="Paid">Ã–dendi</option>
-                                <option value="Rejected">Reddedildi</option>
-                            </select>
-                            <span asp-validation-for="Status" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label asp-for="Notes" class="control-label">Notlar</label>
-                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
-                            <span asp-validation-for="Notes" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <input type="submit" value="Kaydet" class="btn btn-primary" />
-                            <a asp-action="Index" class="btn btn-secondary">Geri DÃ¶n</a>
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <button type="reset" class="btn btn-outline-secondary">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Sýfýrla
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-check-circle me-2"></i>Kaydet
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -106,4 +147,16 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-} 
+    
+    <script>
+        $(document).ready(function() {
+            // Otomatik komisyon tutarý hesaplama
+            $('#TotalAmount, #CommissionRate').on('input', function() {
+                var totalAmount = parseFloat($('#TotalAmount').val()) || 0;
+                var commissionRate = parseFloat($('#CommissionRate').val()) || 0;
+                var commissionAmount = (totalAmount * commissionRate) / 100;
+                $('#CommissionAmount').val(commissionAmount.toFixed(2));
+            });
+        });
+    </script>
+}

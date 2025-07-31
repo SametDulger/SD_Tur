@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Master.Locations;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var regions = await _apiService.GetAsync<IEnumerable<RegionDto>>("api/regions");
+            var regions = await _apiService.GetAsync<IEnumerable<RegionViewModel>>("api/regions");
             return View(regions);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var region = await _apiService.GetAsync<RegionDto>($"api/regions/{id}");
+            var region = await _apiService.GetAsync<RegionViewModel>($"api/regions/{id}");
             if (region == null)
                 return NotFound();
 
@@ -35,23 +35,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,DistanceFromKemer,Order,IsActive")] CreateRegionDto createRegionDto)
+        public async Task<IActionResult> Create([Bind("Name,Description,DistanceFromKemer,Order,IsActive")] RegionCreateViewModel RegionCreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateRegionDto, RegionDto>("api/regions", createRegionDto);
+                await _apiService.PostAsync<RegionCreateViewModel, RegionViewModel>("api/regions", RegionCreateViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createRegionDto);
+            return View(RegionCreateViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var region = await _apiService.GetAsync<RegionDto>($"api/regions/{id}");
+            var region = await _apiService.GetAsync<RegionViewModel>($"api/regions/{id}");
             if (region == null)
                 return NotFound();
 
-            var updateDto = new UpdateRegionDto
+            var updateDto = new RegionEditViewModel
             {
                 Id = region.Id,
                 Name = region.Name,
@@ -66,23 +66,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateRegionDto updateRegionDto)
+        public async Task<IActionResult> Edit(int id, RegionEditViewModel RegionEditViewModel)
         {
-            if (id != updateRegionDto.Id)
+            if (id != RegionEditViewModel.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateRegionDto, RegionDto>($"api/regions/{id}", updateRegionDto);
+                var result = await _apiService.PutAsync<RegionEditViewModel, RegionViewModel>($"api/regions/{id}", RegionEditViewModel);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
-            return View(updateRegionDto);
+            return View(RegionEditViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var region = await _apiService.GetAsync<RegionDto>($"api/regions/{id}");
+            var region = await _apiService.GetAsync<RegionViewModel>($"api/regions/{id}");
             if (region == null)
                 return NotFound();
 

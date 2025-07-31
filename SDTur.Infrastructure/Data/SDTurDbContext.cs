@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using SDTur.Core.Entities;
+using SDTur.Core.Entities.Financial;
+using SDTur.Core.Entities.Master;
+using SDTur.Core.Entities.System;
+using SDTur.Core.Entities.Tour;
 
 namespace SDTur.Infrastructure.Data
 {

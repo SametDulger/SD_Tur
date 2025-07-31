@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
-using SDTur.Application.Services;
+using SDTur.Application.DTOs.System.Report;
+using SDTur.Application.Services.System.Interfaces;
 
 namespace SDTur.API.Controllers
 {

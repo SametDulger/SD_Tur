@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Master.Pass;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var passCompanies = await _apiService.GetAsync<List<PassCompanyDto>>("api/passcompanies");
+            var passCompanies = await _apiService.GetAsync<List<PassCompanyViewModel>>("api/passcompanies");
             return View(passCompanies);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var passCompany = await _apiService.GetAsync<PassCompanyDto>($"api/passcompanies/{id}");
+            var passCompany = await _apiService.GetAsync<PassCompanyViewModel>($"api/passcompanies/{id}");
             if (passCompany == null)
                 return NotFound();
 
@@ -35,23 +35,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,ContactPerson,Phone,Email,Address,IsActive")] CreatePassCompanyDto createPassCompanyDto)
+        public async Task<IActionResult> Create([Bind("Name,ContactPerson,Phone,Email,Address,IsActive")] PassCompanyCreateViewModel PassCompanyCreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreatePassCompanyDto, PassCompanyDto>("api/passcompanies", createPassCompanyDto);
+                await _apiService.PostAsync<PassCompanyCreateViewModel, PassCompanyViewModel>("api/passcompanies", PassCompanyCreateViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createPassCompanyDto);
+            return View(PassCompanyCreateViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var passCompany = await _apiService.GetAsync<PassCompanyDto>($"api/passcompanies/{id}");
+            var passCompany = await _apiService.GetAsync<PassCompanyViewModel>($"api/passcompanies/{id}");
             if (passCompany == null)
                 return NotFound();
 
-            var updateDto = new UpdatePassCompanyDto
+            var updateDto = new PassCompanyEditViewModel
             {
                 Id = passCompany.Id,
                 Name = passCompany.Name,
@@ -67,14 +67,14 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdatePassCompanyDto updateDto)
+        public async Task<IActionResult> Edit(int id, PassCompanyEditViewModel updateDto)
         {
             if (id != updateDto.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdatePassCompanyDto, PassCompanyDto>($"api/passcompanies/{id}", updateDto);
+                var result = await _apiService.PutAsync<PassCompanyEditViewModel, PassCompanyViewModel>($"api/passcompanies/{id}", updateDto);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
@@ -83,7 +83,7 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var passCompany = await _apiService.GetAsync<PassCompanyDto>($"api/passcompanies/{id}");
+            var passCompany = await _apiService.GetAsync<PassCompanyViewModel>($"api/passcompanies/{id}");
             if (passCompany == null)
                 return NotFound();
 

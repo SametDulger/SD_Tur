@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Master.References;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var currencies = await _apiService.GetAsync<List<CurrencyDto>>("api/currencies");
+            var currencies = await _apiService.GetAsync<List<CurrencyViewModel>>("api/currencies");
             return View(currencies);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var currency = await _apiService.GetAsync<CurrencyDto>($"api/currencies/{id}");
+            var currency = await _apiService.GetAsync<CurrencyViewModel>($"api/currencies/{id}");
             if (currency == null)
                 return NotFound();
 
@@ -35,23 +35,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Code,Name,Symbol,IsActive")] CreateCurrencyDto createCurrencyDto)
+        public async Task<IActionResult> Create([Bind("Code,Name,Symbol,IsActive")] CurrencyCreateViewModel createCurrencyViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateCurrencyDto, CurrencyDto>("api/currencies", createCurrencyDto);
+                await _apiService.PostAsync<CurrencyCreateViewModel, CurrencyViewModel>("api/currencies", createCurrencyViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createCurrencyDto);
+            return View(createCurrencyViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var currency = await _apiService.GetAsync<CurrencyDto>($"api/currencies/{id}");
+            var currency = await _apiService.GetAsync<CurrencyViewModel>($"api/currencies/{id}");
             if (currency == null)
                 return NotFound();
 
-            var updateDto = new UpdateCurrencyDto
+            var updateDto = new CurrencyEditViewModel
             {
                 Id = currency.Id,
                 Name = currency.Name,
@@ -65,14 +65,14 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateCurrencyDto updateDto)
+        public async Task<IActionResult> Edit(int id, CurrencyEditViewModel updateDto)
         {
             if (id != updateDto.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateCurrencyDto, CurrencyDto>($"api/currencies/{id}", updateDto);
+                var result = await _apiService.PutAsync<CurrencyEditViewModel, CurrencyViewModel>($"api/currencies/{id}", updateDto);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
@@ -81,7 +81,7 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var currency = await _apiService.GetAsync<CurrencyDto>($"api/currencies/{id}");
+            var currency = await _apiService.GetAsync<CurrencyViewModel>($"api/currencies/{id}");
             if (currency == null)
                 return NotFound();
 

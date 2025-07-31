@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Tour.Core;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var tourSchedules = await _apiService.GetAsync<List<TourScheduleDto>>("api/tourschedules");
+            var tourSchedules = await _apiService.GetAsync<List<TourScheduleViewModel>>("api/tourschedules");
             return View(tourSchedules);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var tourSchedule = await _apiService.GetAsync<TourScheduleDto>($"api/tourschedules/{id}");
+            var tourSchedule = await _apiService.GetAsync<TourScheduleViewModel>($"api/tourschedules/{id}");
             if (tourSchedule == null)
                 return NotFound();
 
@@ -30,36 +30,36 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var tours = await _apiService.GetAsync<List<TourDto>>("api/tours");
+            var tours = await _apiService.GetAsync<List<TourViewModel>>("api/tours");
             ViewBag.Tours = tours;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TourId,TourDate,IsCompleted,IsCancelled,TotalIncome,TotalExpense,NetProfit,Notes")] CreateTourScheduleDto createDto)
+        public async Task<IActionResult> Create([Bind("TourId,TourDate,IsCompleted,IsCancelled,TotalIncome,TotalExpense,NetProfit,Notes")] TourScheduleCreateViewModel createDto)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateTourScheduleDto, TourScheduleDto>("api/tourschedules", createDto);
+                await _apiService.PostAsync<TourScheduleCreateViewModel, TourScheduleViewModel>("api/tourschedules", createDto);
                 return RedirectToAction(nameof(Index));
             }
             
-            var tours = await _apiService.GetAsync<List<TourDto>>("api/tours");
+            var tours = await _apiService.GetAsync<List<TourViewModel>>("api/tours");
             ViewBag.Tours = tours;
             return View(createDto);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var tourSchedule = await _apiService.GetAsync<TourScheduleDto>($"api/tourschedules/{id}");
+            var tourSchedule = await _apiService.GetAsync<TourScheduleViewModel>($"api/tourschedules/{id}");
             if (tourSchedule == null)
                 return NotFound();
 
-            var tours = await _apiService.GetAsync<List<TourDto>>("api/tours");
+            var tours = await _apiService.GetAsync<List<TourViewModel>>("api/tours");
             ViewBag.Tours = tours;
 
-            var updateDto = new UpdateTourScheduleDto
+            var updateDto = new TourScheduleEditViewModel
             {
                 Id = tourSchedule.Id,
                 TourId = tourSchedule.TourId,
@@ -77,7 +77,7 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TourId,TourDate,IsCompleted,IsCancelled,TotalIncome,TotalExpense,NetProfit,Notes")] UpdateTourScheduleDto updateDto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TourId,TourDate,IsCompleted,IsCancelled,TotalIncome,TotalExpense,NetProfit,Notes")] TourScheduleEditViewModel updateDto)
         {
             if (id != updateDto.Id)
             {
@@ -86,18 +86,18 @@ namespace SDTur.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                await _apiService.PutAsync<UpdateTourScheduleDto, TourScheduleDto>($"api/tourschedules/{updateDto.Id}", updateDto);
+                await _apiService.PutAsync<TourScheduleEditViewModel, TourScheduleViewModel>($"api/tourschedules/{updateDto.Id}", updateDto);
                 return RedirectToAction(nameof(Index));
             }
             
-            var tours = await _apiService.GetAsync<List<TourDto>>("api/tours");
+            var tours = await _apiService.GetAsync<List<TourViewModel>>("api/tours");
             ViewBag.Tours = tours;
             return View(updateDto);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var tourSchedule = await _apiService.GetAsync<TourScheduleDto>($"api/tourschedules/{id}");
+            var tourSchedule = await _apiService.GetAsync<TourScheduleViewModel>($"api/tourschedules/{id}");
             if (tourSchedule == null)
                 return NotFound();
 

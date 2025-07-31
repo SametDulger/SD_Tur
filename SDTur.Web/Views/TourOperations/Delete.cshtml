@@ -1,63 +1,163 @@
-@model SDTur.Application.DTOs.TourOperationDto
-
+@model SDTur.Web.Models.Tour.Core.TourOperationViewModel
 @{
     ViewData["Title"] = "Tur Operasyonu Sil";
 }
 
-<h1>Tur Operasyonu Sil</h1>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-trash text-danger me-2"></i>Tur Operasyonu Sil
+            </h1>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+            </a>
+        </div>
+    </div>
+</div>
 
-<h3>Bu operasyonu silmek istediÄŸinizden emin misiniz?</h3>
-<div>
-    <h4>Operasyon Bilgileri</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TourScheduleName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TourScheduleName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.BusPlateNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.BusPlateNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EmployeeName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EmployeeName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Amount)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Amount)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Currency)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Currency)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.OperationDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.OperationDate)
-        </dd>
-    </dl>
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme Onayý
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                    </h6>
+                    <p class="mb-0">Bu operasyon kaydýný silmek istediðinizden emin misiniz? Bu iþlem geri alýnamaz.</p>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-airplane me-1"></i>Tur
+                        </label>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                <i class="bi bi-airplane text-primary"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold">@Model.TourName</div>
+                                <small class="text-muted">@Model.Description</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-gear me-1"></i>Operasyon Türü
+                        </label>
+                        <div>
+                            <span class="badge bg-info bg-opacity-75 fs-6">@Model.OperationType</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-person me-1"></i>Çalýþan
+                        </label>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
+                                <i class="bi bi-person text-success"></i>
+                            </div>
+                            <span class="fw-semibold">@Model.EmployeeName</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-calendar me-1"></i>Operasyon Tarihi
+                        </label>
+                        <div class="h6 mb-0">@Model.OperationDate.ToString("dd MMMM yyyy HH:mm")</div>
+                        <small class="text-muted">@Model.OperationDate.ToString("dddd")</small>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-currency-dollar me-1"></i>Maliyet
+                        </label>
+                        <div class="h4 fw-bold text-warning mb-0">
+                            @Model.Cost.ToString("C")
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-flag me-1"></i>Durum
+                        </label>
+                        <div>
+                            @if (Model.IsCompleted)
+                            {
+                                <span class="badge bg-success fs-6">
+                                    <i class="bi bi-check-circle me-1"></i>Tamamlandý
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning fs-6">
+                                    <i class="bi bi-clock me-1"></i>Devam Ediyor
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Notes))
+                {
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-text-paragraph me-1"></i>Notlar
+                        </label>
+                        <div class="p-3 bg-light rounded">
+                            @Model.Notes
+                        </div>
+                    </div>
+                }
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-2"></i>Ýptal
+                        </a>
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bu kaydý silmek istediðinizden emin misiniz?')">
+                            <i class="bi bi-trash me-2"></i>Sil
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Sil" class="btn btn-danger" /> |
-        <a asp-action="Index" class="btn btn-secondary">Listeye DÃ¶n</a>
-    </form>
-</div> 
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-info-circle me-2"></i>Bilgi
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarý
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Bu iþlem geri alýnamaz</li>
+                        <li>Operasyon kaydý kalýcý olarak silinecektir</li>
+                        <li>Ýlgili raporlar etkilenebilir</li>
+                        <li>Silme iþlemi öncesi yedek almanýz önerilir</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

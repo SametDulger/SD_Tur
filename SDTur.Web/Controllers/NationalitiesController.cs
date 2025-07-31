@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Application.DTOs;
+using SDTur.Web.Models.Master.References;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,13 +15,13 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var nationalities = await _apiService.GetAsync<List<NationalityDto>>("api/nationalities");
+            var nationalities = await _apiService.GetAsync<List<NationalityViewModel>>("api/nationalities");
             return View(nationalities);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var nationality = await _apiService.GetAsync<NationalityDto>($"api/nationalities/{id}");
+            var nationality = await _apiService.GetAsync<NationalityViewModel>($"api/nationalities/{id}");
             if (nationality == null)
                 return NotFound();
 
@@ -35,23 +35,23 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Code,IsActive")] CreateNationalityDto createNationalityDto)
+        public async Task<IActionResult> Create([Bind("Name,Code,IsActive")] NationalityCreateViewModel NationalityCreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _apiService.PostAsync<CreateNationalityDto, NationalityDto>("api/nationalities", createNationalityDto);
+                await _apiService.PostAsync<NationalityCreateViewModel, NationalityViewModel>("api/nationalities", NationalityCreateViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(createNationalityDto);
+            return View(NationalityCreateViewModel);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var nationality = await _apiService.GetAsync<NationalityDto>($"api/nationalities/{id}");
+            var nationality = await _apiService.GetAsync<NationalityViewModel>($"api/nationalities/{id}");
             if (nationality == null)
                 return NotFound();
 
-            var updateDto = new UpdateNationalityDto
+            var updateDto = new NationalityEditViewModel
             {
                 Id = nationality.Id,
                 Name = nationality.Name,
@@ -64,14 +64,14 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateNationalityDto updateDto)
+        public async Task<IActionResult> Edit(int id, NationalityEditViewModel updateDto)
         {
             if (id != updateDto.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<UpdateNationalityDto, NationalityDto>($"api/nationalities/{id}", updateDto);
+                var result = await _apiService.PutAsync<NationalityEditViewModel, NationalityViewModel>($"api/nationalities/{id}", updateDto);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
@@ -80,7 +80,7 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var nationality = await _apiService.GetAsync<NationalityDto>($"api/nationalities/{id}");
+            var nationality = await _apiService.GetAsync<NationalityViewModel>($"api/nationalities/{id}");
             if (nationality == null)
                 return NotFound();
 
