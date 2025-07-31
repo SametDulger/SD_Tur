@@ -1,36 +1,39 @@
-# .NET build outputs
+# .NET Core
 bin/
 obj/
-
-# User-specific files
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
 *.userprefs
-*.swp
-*.bak
-*.tmp
-*.log
-
-# Visual Studio
-.vs/
-.vscode/
-
-# Rider
-.idea/
-*.sln.iml
 
 # Build Results
 [Dd]ebug/
 [Rr]elease/
 x64/
 x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
 
-# ASP.NET Scaffolding
+# Visual Studio
+.vs/
+.vscode/
+*.swp
+*.bak
+*.tmp
+*.log
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# ASP.NET Core
 ScaffoldingReadMe.txt
-
-# IIS Express
 .vsconfig
 
 # Database
@@ -39,14 +42,20 @@ ScaffoldingReadMe.txt
 *.ndf
 *.dbmdl
 *.dbproj.schemaview
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
 
-# Entity Framework Migrations (optional: keep if you want to version migrations)
-#SDTur.Infrastructure/Migrations/
+# Entity Framework
+**/Migrations/*
 
-# Publish outputs
+# Publish
 publish/
+*.publishproj
 
-# Others
+# Files
 *.pdb
 *.cache
 *.zip
@@ -55,16 +64,27 @@ publish/
 *.DS_Store
 Thumbs.db
 
-# Local secrets & config
-secrets.json
+# Configuration Files
+appsettings.json
 appsettings.Development.json
-SDTur.API/appsettings.Development.json
-SDTur.Web/appsettings.Development.json
-SDTur.API/Properties/launchSettings.json
-SDTur.Web/Properties/launchSettings.json
+appsettings.Production.json
+secrets.json
 
-# npm/yarn/pnpm
-node_modules/
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# wwwroot/lib (optional: ignore if using CDN or package manager for client libs)
-#SDTur.Web/wwwroot/lib/ 
+# Logs
+logs/
+*.log
+
+# Coverage Directory
+coverage/
+*.lcov
+
+# Temporary Files
+*.tmp
+*.temp 

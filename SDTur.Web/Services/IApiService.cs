@@ -1,24 +1,26 @@
-using SDTur.Application.DTOs;
+using SDTur.Web.Models;
+using SDTur.Web.Models.Tour.Core;
+using SDTur.Web.Models.Tour.Operations;
 
 namespace SDTur.Web.Services
 {
     public interface IApiService
     {
-        Task<IEnumerable<TourDto>> GetToursAsync();
-        Task<IEnumerable<TourDto>> GetActiveToursAsync();
-        Task<TourDto> GetTourByIdAsync(int id);
-        Task<TourDto> CreateTourAsync(CreateTourDto createTourDto);
-        Task<TourDto> UpdateTourAsync(UpdateTourDto updateTourDto);
+        Task<IEnumerable<TourViewModel>> GetToursAsync();
+        Task<IEnumerable<TourViewModel>> GetActiveToursAsync();
+        Task<TourViewModel> GetTourByIdAsync(int id);
+        Task<TourViewModel> CreateTourAsync(TourCreateViewModel createTourViewModel);
+        Task<TourViewModel> UpdateTourAsync(TourEditViewModel updateTourViewModel);
         Task DeleteTourAsync(int id);
 
-        Task<IEnumerable<TicketDto>> GetTicketsAsync();
-        Task<TicketDto> GetTicketByIdAsync(int id);
-        Task<TicketDto> GetTicketByNumberAsync(string ticketNumber);
-        Task<IEnumerable<TicketDto>> GetTicketsByTourDateAsync(DateTime tourDate);
-        Task<IEnumerable<TicketDto>> GetTicketsByBranchAsync(int branchId);
-        Task<IEnumerable<TicketDto>> GetPassTicketsAsync();
-        Task<TicketDto> CreateTicketAsync(CreateTicketDto createTicketDto);
-        Task<TicketDto> UpdateTicketAsync(UpdateTicketDto updateTicketDto);
+        Task<IEnumerable<TicketViewModel>> GetTicketsAsync();
+        Task<TicketViewModel> GetTicketByIdAsync(int id);
+        Task<TicketViewModel> GetTicketByNumberAsync(string ticketNumber);
+        Task<IEnumerable<TicketViewModel>> GetTicketsByTourDateAsync(DateTime tourDate);
+        Task<IEnumerable<TicketViewModel>> GetTicketsByBranchAsync(int branchId);
+        Task<IEnumerable<TicketViewModel>> GetPassTicketsAsync();
+        Task<TicketViewModel> CreateTicketAsync(TicketCreateViewModel createTicketViewModel);
+        Task<TicketViewModel> UpdateTicketAsync(TicketEditViewModel updateTicketViewModel);
         Task DeleteTicketAsync(int id);
         Task CancelTicketAsync(int id);
         Task<string> GenerateTicketNumberAsync();

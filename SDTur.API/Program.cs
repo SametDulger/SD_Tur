@@ -1,7 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using SDTur.Application.Mapping;
-using SDTur.Application.Services;
-using SDTur.Core.Interfaces;
+using SDTur.Application.Services.Financial.Interfaces;
+using SDTur.Application.Services.Master.Interfaces;
+using SDTur.Application.Services.System.Interfaces;
+using SDTur.Application.Services.Tour.Interfaces;
+using SDTur.Application.Services.Financial.Implementations;
+using SDTur.Application.Services.Master.Implementations;
+using SDTur.Application.Services.System.Implementations;
+using SDTur.Application.Services.Tour.Implementations;
+using SDTur.Core.Interfaces.Core;
 using SDTur.Infrastructure.Data;
 using SDTur.Infrastructure.UnitOfWork;
 
@@ -52,6 +59,7 @@ builder.Services.AddScoped<ICommissionCalculationService, CommissionCalculationS
 builder.Services.AddScoped<ITourReportService, TourReportService>();
 builder.Services.AddScoped<IFinancialReportService, FinancialReportService>();
 builder.Services.AddScoped<ISystemLogService, SystemLogService>();
+builder.Services.AddScoped<IInvoiceDetailService, InvoiceDetailService>();
 
 // CORS
 builder.Services.AddCors(options =>

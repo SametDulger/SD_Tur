@@ -1,8 +1,16 @@
 using System;
 using System.Threading.Tasks;
-using SDTur.Core.Interfaces;
+using SDTur.Core.Interfaces.Core;
+using SDTur.Core.Interfaces.Financial;
+using SDTur.Core.Interfaces.Master;
+using SDTur.Core.Interfaces.System;
+using SDTur.Core.Interfaces.Tour;
 using SDTur.Infrastructure.Data;
-using SDTur.Infrastructure.Repositories;
+using SDTur.Infrastructure.Repositories.Core;
+using SDTur.Infrastructure.Repositories.Financial;
+using SDTur.Infrastructure.Repositories.Master;
+using SDTur.Infrastructure.Repositories.System;
+using SDTur.Infrastructure.Repositories.Tour;
 
 namespace SDTur.Infrastructure.UnitOfWork
 {
@@ -38,6 +46,7 @@ namespace SDTur.Infrastructure.UnitOfWork
         private ITourReportRepository? _tourReports;
         private IFinancialReportRepository? _financialReports;
         private ISystemLogRepository? _systemLogs;
+        private IInvoiceDetailRepository? _invoiceDetails;
 
         public UnitOfWork(SDTurDbContext context)
         {
@@ -73,6 +82,7 @@ namespace SDTur.Infrastructure.UnitOfWork
         public ITourReportRepository TourReports => _tourReports ??= new TourReportRepository(_context);
         public IFinancialReportRepository FinancialReports => _financialReports ??= new FinancialReportRepository(_context);
         public ISystemLogRepository SystemLogs => _systemLogs ??= new SystemLogRepository(_context);
+        public IInvoiceDetailRepository InvoiceDetails => _invoiceDetails ??= new InvoiceDetailRepository(_context);
 
         public async Task<int> SaveChangesAsync()
         {
