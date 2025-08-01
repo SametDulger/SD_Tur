@@ -80,6 +80,7 @@ secrets.json
 # Logs
 logs/
 *.log
+!**/Models/System/Logs/
 
 # Coverage Directory
 coverage/
