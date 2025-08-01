@@ -1,0 +1,188 @@
+@model SDTur.Web.Models.Financial.Transactions.InvoiceViewModel
+@{
+    ViewData["Title"] = "Fatura Detayı";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-eye text-primary me-2"></i>Fatura Detayı
+                </h1>
+                <div class="btn-group" role="group">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="bi bi-pencil me-2"></i>Düzenle
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Fatura Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-hash me-1"></i>Fatura Numarası
+                            </label>
+                            <div class="h5 mb-0 text-primary">@Model.InvoiceNumber</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-person me-1"></i>Müşteri
+                            </label>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-info bg-opacity-10 rounded-circle p-2 me-2">
+                                    <i class="bi bi-person text-info"></i>
+                                </div>
+                                <span class="fw-semibold">@Model.CustomerName</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-currency-exchange me-1"></i>Toplam Tutar
+                            </label>
+                            <div class="h4 mb-0 text-primary">@Model.TotalAmount.ToString("C")</div>
+                            <small class="text-muted">@Model.Currency</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-check-circle me-1"></i>Ödeme Durumu
+                            </label>
+                            <div>
+                                @if (Model.IsPaid)
+                                {
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-check-circle me-1"></i>Ödendi
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning fs-6">
+                                        <i class="bi bi-clock me-1"></i>Beklemede
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-calendar me-1"></i>Fatura Tarihi
+                            </label>
+                            <div class="h6 mb-0">@Model.InvoiceDate.ToString("dd MMMM yyyy")</div>
+                            <small class="text-muted">@Model.InvoiceDate.ToString("dddd")</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-calendar-check me-1"></i>Vade Tarihi
+                            </label>
+                            <div class="h6 mb-0">@Model.DueDate.ToString("dd MMMM yyyy")</div>
+                            <small class="text-muted">@Model.DueDate.ToString("dddd")</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-tag me-1"></i>Durum
+                            </label>
+                            <div>
+                                <span class="badge bg-secondary fs-6">@Model.Status</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-toggle-on me-1"></i>Aktiflik
+                            </label>
+                            <div>
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6">
+                                        <i class="bi bi-toggle-off me-1"></i>Pasif
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label class="form-label fw-semibold text-muted">
+                                    <i class="bi bi-text-paragraph me-1"></i>Açıklama
+                                </label>
+                                <div class="p-3 bg-light rounded">
+                                    @Model.Description
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label class="form-label fw-semibold text-muted">
+                                    <i class="bi bi-sticky me-1"></i>Notlar
+                                </label>
+                                <div class="p-3 bg-light rounded">
+                                    @Model.Notes
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Fatura Detayları
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Fatura numarası ve müşteri bilgileri</li>
+                            <li>Toplam tutar ve para birimi</li>
+                            <li>Fatura ve vade tarihleri</li>
+                            <li>Ödeme durumu takibi</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

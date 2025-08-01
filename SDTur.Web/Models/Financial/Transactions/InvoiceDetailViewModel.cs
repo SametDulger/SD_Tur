@@ -10,10 +10,10 @@ namespace SDTur.Web.Models.Financial.Transactions
         public int InvoiceId { get; set; }
 
         [Display(Name = "Ürün/Hizmet Adı")]
-        public string ProductName { get; set; }
+        public string ProductName { get; set; } = string.Empty;
 
         [Display(Name = "Açıklama")]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [Display(Name = "Miktar")]
         public int Quantity { get; set; }
@@ -41,5 +41,23 @@ namespace SDTur.Web.Models.Financial.Transactions
 
         [Display(Name = "Aktif")]
         public bool IsActive { get; set; }
+        
+        [Display(Name = "Fatura Numarası")]
+        public string InvoiceNumber { get; set; } = string.Empty;
+        
+        [Display(Name = "Ürün Kodu")]
+        public string ProductCode { get; set; } = string.Empty;
+        
+        [Display(Name = "Birim")]
+        public string Unit { get; set; } = string.Empty;
+        
+        [Display(Name = "KDV Oranı")]
+        public decimal VatRate { get; set; }
+        
+        [Display(Name = "KDV Tutarı")]
+        public decimal VatAmount { get; set; }
+        
+        [Display(Name = "Toplam Tutar")]
+        public decimal TotalAmount { get; set; }
     }
 } 

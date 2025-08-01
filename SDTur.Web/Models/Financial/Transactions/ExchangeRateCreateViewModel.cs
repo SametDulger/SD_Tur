@@ -4,28 +4,17 @@ namespace SDTur.Web.Models.Financial.Transactions
 {
     public class ExchangeRateCreateViewModel
     {
-        [Required(ErrorMessage = "Tarih zorunludur")]
-        [Display(Name = "Tarih")]
-        public DateTime Date { get; set; }
-
-        [Required(ErrorMessage = "Kaynak para birimi zorunludur")]
-        [Display(Name = "Kaynak Para Birimi")]
-        public string SourceCurrency { get; set; }
-
-        [Required(ErrorMessage = "Hedef para birimi zorunludur")]
-        [Display(Name = "Hedef Para Birimi")]
-        public string TargetCurrency { get; set; }
-
-        [Required(ErrorMessage = "Döviz kuru zorunludur")]
-        [Display(Name = "Döviz Kuru")]
-        [Range(0, double.MaxValue, ErrorMessage = "Döviz kuru 0'dan büyük olmalıdır")]
+        [Required]
+        public string FromCurrency { get; set; } = string.Empty;
+        [Required]
+        public string ToCurrency { get; set; } = string.Empty;
+        [Required]
         public decimal Rate { get; set; }
-
-        [Display(Name = "Açıklama")]
-        [StringLength(500, ErrorMessage = "Açıklama en fazla 500 karakter olabilir")]
-        public string Description { get; set; }
-
-        [Display(Name = "Aktif")]
+        [Required]
+        public DateTime EffectiveDate { get; set; }
+        public string Description { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
+        public DateTime Date { get; set; }
+        public DateTime RateDate { get; set; }
     }
 }

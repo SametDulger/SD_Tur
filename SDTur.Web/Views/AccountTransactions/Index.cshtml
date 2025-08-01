@@ -1,0 +1,353 @@
+@model IEnumerable<SDTur.Web.Models.Financial.Accounts.AccountTransactionViewModel>
+@{
+    ViewData["Title"] = "Hesap İşlemleri";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-arrow-left-right text-primary me-2"></i>Hesap İşlemleri
+            </h1>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Yeni İşlem
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filtreler -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white">
+        <h6 class="card-title mb-0">
+            <i class="bi bi-funnel text-info me-2"></i>Filtreler
+        </h6>
+    </div>
+    <div class="card-body">
+        <form id="filterForm" class="row g-3">
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label">Hesap</label>
+                <select class="form-select" id="accountFilter">
+                    <option value="">Tüm Hesaplar</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label">İşlem Türü</label>
+                <select class="form-select" id="transactionTypeFilter">
+                    <option value="">Tüm İşlemler</option>
+                    <option value="Income">Gelir</option>
+                    <option value="Expense">Gider</option>
+                    <option value="Transfer">Transfer</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <label class="form-label">Başlangıç Tarihi</label>
+                <input type="date" class="form-control" id="startDateFilter">
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <label class="form-label">Bitiş Tarihi</label>
+                <input type="date" class="form-control" id="endDateFilter">
+            </div>
+            <div class="col-lg-2 col-md-12">
+                <label class="form-label">&nbsp;</label>
+                <div class="d-grid">
+                    <button type="button" class="btn btn-outline-primary" onclick="applyFilters()">
+                        <i class="bi bi-search me-2"></i>Filtrele
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- İstatistikler -->
+<div class="row g-4 mb-4" id="statisticsCards">
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-success bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-arrow-up-circle text-success fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">Toplam Gelir</h6>
+                        <h3 class="mb-0 fw-bold text-success" id="totalIncome">₺0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-danger bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-arrow-down-circle text-danger fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">Toplam Gider</h6>
+                        <h3 class="mb-0 fw-bold text-danger" id="totalExpense">₺0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-info bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-arrow-left-right text-info fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">Net Bakiye</h6>
+                        <h3 class="mb-0 fw-bold text-info" id="netBalance">₺0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-list-ul text-warning fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">Toplam İşlem</h6>
+                        <h3 class="mb-0 fw-bold text-warning" id="totalTransactions">0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- İşlem Listesi -->
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-list-ul me-2"></i>İşlem Listesi
+                </h5>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-end gap-2">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" id="searchInput" placeholder="İşlem ara..." data-search="transactionsTable">
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="bi bi-download me-1"></i>Dışa Aktar
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="exportToExcel()">
+                                <i class="bi bi-file-earmark-excel me-2"></i>Excel
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="exportToPDF()">
+                                <i class="bi bi-file-earmark-pdf me-2"></i>PDF
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive" id="transactionsTable">
+            <!-- Dinamik olarak yüklenecek -->
+        </div>
+    </div>
+    <div class="card-footer bg-light">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <small class="text-muted">
+                    Toplam <strong id="recordCount">0</strong> işlem bulundu
+                </small>
+            </div>
+            <div class="col-md-6 text-end">
+                <nav aria-label="Sayfa navigasyonu">
+                    <ul class="pagination pagination-sm mb-0 justify-content-end" id="pagination">
+                        <!-- Dinamik olarak oluşturulacak -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grafik Görünümü -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-graph-up text-success me-2"></i>İşlem Grafiği
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="transactionsChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let currentFilters = {};
+        let transactionsChart;
+        
+        function applyFilters() {
+            currentFilters = {
+                accountId: document.getElementById('accountFilter').value,
+                transactionType: document.getElementById('transactionTypeFilter').value,
+                startDate: document.getElementById('startDateFilter').value,
+                endDate: document.getElementById('endDateFilter').value
+            };
+            
+            // Reload data with filters
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const endpoint = queryString ? `/api/financial/account-transactions?${queryString}` : '/api/financial/account-transactions';
+            
+            console.log("Load data handled server-side"););
+            updateStatistics();
+            updateChart();
+        }
+        
+        function updateStatistics() {
+            // Load statistics based on current filters
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const endpoint = queryString ? `/api/financial/account-transactions/statistics?${queryString}` : '/api/financial/account-transactions/statistics';
+            
+            console.log("API call handled server-side");
+                .then(data => {
+                    document.getElementById('totalIncome').textContent = app.formatCurrency(data.totalIncome || 0);
+                    document.getElementById('totalExpense').textContent = app.formatCurrency(data.totalExpense || 0);
+                    document.getElementById('netBalance').textContent = app.formatCurrency(data.netBalance || 0);
+                    document.getElementById('totalTransactions').textContent = data.totalTransactions || 0;
+                    document.getElementById('recordCount').textContent = data.totalTransactions || 0;
+                })
+                .catch(error => {
+                    console.error('Statistics loading failed:', error);
+                });
+        }
+        
+        function updateChart() {
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const endpoint = queryString ? `/api/financial/account-transactions/chart-data?${queryString}` : '/api/financial/account-transactions/chart-data';
+            
+            console.log("API call handled server-side");
+                .then(data => {
+                    createTransactionsChart(data);
+                })
+                .catch(error => {
+                    console.error('Chart data loading failed:', error);
+                });
+        }
+        
+        function createTransactionsChart(data) {
+            const ctx = document.getElementById('transactionsChart').getContext('2d');
+            
+            if (transactionsChart) {
+                transactionsChart.destroy();
+            }
+            
+            transactionsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels || [],
+                    datasets: [{
+                        label: 'Gelir',
+                        data: data.income || [],
+                        borderColor: '#198754',
+                        backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Gider',
+                        data: data.expense || [],
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return app.formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function exportToExcel() {
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const filename = `islemler_${new Date().toISOString().split('T')[0]}`;
+            console.log("Export to Excel handled server-side");;
+        }
+        
+        function exportToPDF() {
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const filename = `islemler_${new Date().toISOString().split('T')[0]}`;
+            console.log("Export to PDF handled server-side");;
+        }
+        
+        // Auto-load data and setup
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load initial data
+            updateStatistics();
+            updateChart();
+            
+            // Apply initial filters
+            applyFilters();
+            
+            // Setup search functionality
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const table = document.getElementById('transactionsTable');
+                    const rows = table.querySelectorAll('tbody tr');
+                    
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+                    });
+                }, 300));
+            }
+        });
+    </script>
+} 

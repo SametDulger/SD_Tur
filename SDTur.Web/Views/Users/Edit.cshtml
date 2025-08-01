@@ -1,0 +1,160 @@
+@model SDTur.Web.Models.System.Users.UserEditViewModel
+@{
+    ViewData["Title"] = "Kullanıcı Düzenle";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-pencil text-primary me-2"></i>Kullanıcı Düzenle
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-form me-2"></i>Kullanıcı Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Username" class="form-label fw-semibold">
+                                    <i class="bi bi-person me-1"></i>Kullanıcı Adı <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Username" class="form-control" placeholder="Kullanıcı adı..." required />
+                                <span asp-validation-for="Username" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Email" class="form-label fw-semibold">
+                                    <i class="bi bi-envelope me-1"></i>E-posta <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresi..." required />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstName" class="form-label fw-semibold">
+                                    <i class="bi bi-person-badge me-1"></i>Ad <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="FirstName" class="form-control" placeholder="Ad..." required />
+                                <span asp-validation-for="FirstName" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastName" class="form-label fw-semibold">
+                                    <i class="bi bi-person-badge me-1"></i>Soyad <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="LastName" class="form-control" placeholder="Soyad..." required />
+                                <span asp-validation-for="LastName" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Phone" class="form-label fw-semibold">
+                                    <i class="bi bi-telephone me-1"></i>Telefon
+                                </label>
+                                <input asp-for="Phone" class="form-control" placeholder="Telefon numarası..." />
+                                <span asp-validation-for="Phone" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Role" class="form-label fw-semibold">
+                                    <i class="bi bi-shield me-1"></i>Rol <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Role" class="form-select" required>
+                                    <option value="">Rol seçiniz...</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="User">User</option>
+                                    <option value="Guest">Guest</option>
+                                </select>
+                                <span asp-validation-for="Role" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="EmployeeId" class="form-label fw-semibold">
+                                    <i class="bi bi-person-badge me-1"></i>Çalışan ID
+                                </label>
+                                <input asp-for="EmployeeId" type="number" class="form-control" placeholder="Çalışan ID..." />
+                                <span asp-validation-for="EmployeeId" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="BranchId" class="form-label fw-semibold">
+                                    <i class="bi bi-building me-1"></i>Şube ID
+                                </label>
+                                <input asp-for="BranchId" type="number" class="form-control" placeholder="Şube ID..." />
+                                <span asp-validation-for="BranchId" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActiveSwitch">
+                                    <label class="form-check-label fw-semibold" for="isActiveSwitch">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </label>
+                                </div>
+                                <small class="text-muted">Bu kullanıcının aktif olduğunu işaretleyin</small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>İptal
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-check-circle me-2"></i>Güncelle
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Kullanıcı Düzenleme
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Kullanıcı adı ve e-posta bilgilerini güncelleyin</li>
+                            <li>Ad soyad ve telefon bilgilerini düzenleyin</li>
+                            <li>Rol ve aktiflik durumunu değiştirebilirsiniz</li>
+                            <li>Çalışan ve şube ID'lerini güncelleyin</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

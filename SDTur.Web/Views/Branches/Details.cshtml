@@ -1,0 +1,145 @@
+@model SDTur.Web.Models.Master.Locations.BranchViewModel
+@{
+    ViewData["Title"] = "Şube Detayı";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-eye text-primary me-2"></i>Şube Detayı
+                </h1>
+                <div class="btn-group" role="group">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="bi bi-pencil me-2"></i>Düzenle
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Şube Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-building me-1"></i>Şube Adı
+                            </label>
+                            <div class="h5 mb-0 text-primary">@Model.Name</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-person me-1"></i>Müdür
+                            </label>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-info bg-opacity-10 rounded-circle p-2 me-2">
+                                    <i class="bi bi-person text-info"></i>
+                                </div>
+                                <span class="fw-semibold">@Model.Manager</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-telephone me-1"></i>Telefon
+                            </label>
+                            <div class="h6 mb-0">
+                                <a href="tel:@Model.Phone" class="text-decoration-none">@Model.Phone</a>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-envelope me-1"></i>E-posta
+                            </label>
+                            <div class="h6 mb-0">
+                                <a href="mailto:@Model.Email" class="text-decoration-none">@Model.Email</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-calendar me-1"></i>Oluşturulma Tarihi
+                            </label>
+                            <div class="h6 mb-0">@Model.CreatedDate.ToString("dd MMMM yyyy")</div>
+                            <small class="text-muted">@Model.CreatedDate.ToString("dddd")</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-toggle-on me-1"></i>Durum
+                            </label>
+                            <div>
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6">
+                                        <i class="bi bi-toggle-off me-1"></i>Pasif
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Address))
+                    {
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label class="form-label fw-semibold text-muted">
+                                    <i class="bi bi-geo-alt me-1"></i>Adres
+                                </label>
+                                <div class="p-3 bg-light rounded">
+                                    @Model.Address
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Şube Bilgileri
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Şube adı ve müdür bilgileri</li>
+                            <li>İletişim bilgileri (telefon, e-posta)</li>
+                            <li>Adres bilgileri</li>
+                            <li>Oluşturulma tarihi ve durum</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

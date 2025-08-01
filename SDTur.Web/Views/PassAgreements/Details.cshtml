@@ -1,0 +1,178 @@
+@model SDTur.Web.Models.Master.Pass.PassAgreementViewModel
+@{
+    ViewData["Title"] = "Pas Anlaþmasý Detayý";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-eye text-primary me-2"></i>Pas Anlaþmasý Detayý
+                </h1>
+                <div class="btn-group" role="group">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="bi bi-pencil me-2"></i>Düzenle
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Anlaþma Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-hash me-1"></i>Anlaþma Numarasý
+                            </label>
+                            <div class="h5 mb-0 text-primary">@Model.AgreementNumber</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-building me-1"></i>Pas Þirketi
+                            </label>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                    <i class="bi bi-building text-primary"></i>
+                                </div>
+                                <span class="fw-semibold">@Model.PassCompanyName</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-calendar me-1"></i>Baþlangýç Tarihi
+                            </label>
+                            <div class="h6 mb-0">@Model.StartDate.ToString("dd MMMM yyyy")</div>
+                            <small class="text-muted">@Model.StartDate.ToString("dddd")</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-calendar me-1"></i>Bitiþ Tarihi
+                            </label>
+                            <div class="h6 mb-0">@Model.EndDate.ToString("dd MMMM yyyy")</div>
+                            <small class="text-muted">@Model.EndDate.ToString("dddd")</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-percent me-1"></i>Komisyon Oraný
+                            </label>
+                            <div>
+                                <span class="badge bg-info fs-6">
+                                    <i class="bi bi-percent me-1"></i>%@Model.CommissionRate
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-toggle-on me-1"></i>Durum
+                            </label>
+                            <div>
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6">
+                                        <i class="bi bi-toggle-off me-1"></i>Pasif
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-currency-exchange me-1"></i>Gidiþ Tam Fiyat
+                            </label>
+                            <div class="h4 mb-0 text-success">@Model.OutgoingFullPrice @Model.Currency</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-currency-exchange me-1"></i>Gidiþ Yarým Fiyat
+                            </label>
+                            <div class="h4 mb-0 text-info">@Model.OutgoingHalfPrice @Model.Currency</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-currency-exchange me-1"></i>Dönüþ Tam Fiyat
+                            </label>
+                            <div class="h4 mb-0 text-success">@Model.IncomingFullPrice @Model.Currency</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-currency-exchange me-1"></i>Dönüþ Yarým Fiyat
+                            </label>
+                            <div class="h4 mb-0 text-info">@Model.IncomingHalfPrice @Model.Currency</div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Terms))
+                    {
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label class="form-label fw-semibold text-muted">
+                                    <i class="bi bi-file-text me-1"></i>Anlaþma Þartlarý
+                                </label>
+                                <div class="p-3 bg-light rounded">
+                                    @Model.Terms
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Pas Anlaþmasý Bilgileri
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Anlaþma numarasý ve pas þirketi</li>
+                            <li>Tarih aralýðý ve komisyon oraný</li>
+                            <li>Gidiþ-dönüþ fiyatlarý</li>
+                            <li>Anlaþma þartlarý ve durum</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

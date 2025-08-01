@@ -1,0 +1,141 @@
+@model CashViewModel
+@{
+    ViewData["Title"] = "Nakit İşlemi Sil";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-trash text-danger me-2"></i>Nakit İşlemi Sil
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme Onayı
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                        </h6>
+                        <p class="mb-0">Bu nakit işlemini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-cash-coin me-1"></i>Nakit Tipi
+                            </label>
+                            <div>
+                                <span class="badge bg-primary fs-6">@Model.CashType</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-tag me-1"></i>İşlem Tipi
+                            </label>
+                            <div>
+                                <span class="badge bg-secondary fs-6">@Model.TransactionType</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-currency-exchange me-1"></i>Tutar
+                            </label>
+                            <div class="h4 mb-0 text-primary">@Model.Amount.ToString("C")</div>
+                            <small class="text-muted">@Model.Currency</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-calendar me-1"></i>İşlem Tarihi
+                            </label>
+                            <div class="h6 mb-0">@Model.TransactionDate.ToString("dd MMMM yyyy")</div>
+                            <small class="text-muted">@Model.TransactionDate.ToString("dddd")</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-receipt me-1"></i>Makbuz Numarası
+                            </label>
+                            <div class="h6 mb-0">@Model.ReceiptNumber</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-check-circle me-1"></i>Durum
+                            </label>
+                            <div>
+                                @if (Model.IsApproved)
+                                {
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-check-circle me-1"></i>Onaylandı
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning fs-6">
+                                        <i class="bi bi-clock me-1"></i>Beklemede
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>İptal
+                            </a>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bu kaydı silmek istediğinizden emin misiniz?')">
+                                <i class="bi bi-trash me-2"></i>Sil
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarı
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Bu işlem geri alınamaz</li>
+                            <li>Nakit işlemi kalıcı olarak silinecektir</li>
+                            <li>İlgili finansal kayıtlar etkilenebilir</li>
+                            <li>Silme işlemi öncesi yedek almanız önerilir</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

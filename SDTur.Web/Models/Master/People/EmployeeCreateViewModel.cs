@@ -6,25 +6,34 @@ namespace SDTur.Web.Models.Master.People
     {
         [Required]
         public string FirstName { get; set; } = string.Empty;
+        
         [Required]
         public string LastName { get; set; } = string.Empty;
+        
         [Required]
-        [EmailAddress]
         public string Email { get; set; } = string.Empty;
-        [Required]
+        
         public string Phone { get; set; } = string.Empty;
-        [Required]
-        public string Position { get; set; } = string.Empty;
-        [Required]
-        public int BranchId { get; set; }
+        
         [Required]
         public DateTime HireDate { get; set; }
+        
+        [Required]
+        public string Position { get; set; } = string.Empty;
+        
+        public int? BranchId { get; set; }
+        
+        [Display(Name = "Para Birimi")]
+        public int? CurrencyId { get; set; }
+        
         [Required]
         public decimal Salary { get; set; }
-        [Required]
-        public int CurrencyId { get; set; }
-        [Required]
+        
+        [Display(Name = "Komisyon Oranı")]
         public decimal CommissionRate { get; set; }
+        
+        public string Address { get; set; } = string.Empty;
+        
         public bool IsActive { get; set; } = true;
     }
 } 

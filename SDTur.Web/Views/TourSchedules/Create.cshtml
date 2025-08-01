@@ -1,0 +1,175 @@
+@model TourScheduleCreateViewModel
+@{
+    ViewData["Title"] = "Yeni Tur Programı";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-plus-circle text-primary me-2"></i>Yeni Tur Programı
+            </h1>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-form me-2"></i>Program Bilgileri
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="TourId" class="form-label fw-semibold">
+                                <i class="bi bi-airplane me-1"></i>Tur
+                            </label>
+                            <select asp-for="TourId" class="form-select" id="tourSelect">
+                                <option value="">Tur seçiniz...</option>
+                            </select>
+                            <span asp-validation-for="TourId" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="TourDate" class="form-label fw-semibold">
+                                <i class="bi bi-calendar me-1"></i>Tur Tarihi
+                            </label>
+                            <input asp-for="TourDate" class="form-control" type="date">
+                            <span asp-validation-for="TourDate" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="TotalIncome" class="form-label fw-semibold">
+                                <i class="bi bi-currency-dollar me-1"></i>Toplam Gelir
+                            </label>
+                            <div class="input-group">
+                                <input asp-for="TotalIncome" class="form-control" type="number" step="0.01" placeholder="0.00">
+                                <span class="input-group-text">₺</span>
+                            </div>
+                            <span asp-validation-for="TotalIncome" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="TotalExpense" class="form-label fw-semibold">
+                                <i class="bi bi-cash-stack me-1"></i>Toplam Gider
+                            </label>
+                            <div class="input-group">
+                                <input asp-for="TotalExpense" class="form-control" type="number" step="0.01" placeholder="0.00">
+                                <span class="input-group-text">₺</span>
+                            </div>
+                            <span asp-validation-for="TotalExpense" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-check-circle me-1"></i>Tamamlanma Durumu
+                            </label>
+                            <div class="form-check form-switch mt-2">
+                                <input asp-for="IsCompleted" class="form-check-input" type="checkbox">
+                                <label asp-for="IsCompleted" class="form-check-label">
+                                    Tur tamamlandı
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-x-circle me-1"></i>İptal Durumu
+                            </label>
+                            <div class="form-check form-switch mt-2">
+                                <input asp-for="IsCancelled" class="form-check-input" type="checkbox">
+                                <label asp-for="IsCancelled" class="form-check-label">
+                                    Tur iptal edildi
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Notes" class="form-label fw-semibold">
+                            <i class="bi bi-text-paragraph me-1"></i>Notlar
+                        </label>
+                        <textarea asp-for="Notes" class="form-control" rows="3" 
+                                  placeholder="Tur programı ile ilgili notlar giriniz..."></textarea>
+                        <span asp-validation-for="Notes" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-2"></i>İptal
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Kaydet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-info-circle me-2"></i>Bilgi
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-lightbulb me-2"></i>Önemli Notlar
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Tüm alanlar doğru şekilde doldurulmalıdır</li>
+                        <li>Tur tarihi gelecek bir tarih olmalıdır</li>
+                        <li>Tur seçimi zorunludur</li>
+                        <li>Gelir ve gider tutarları pozitif olmalıdır</li>
+                        <li>Tamamlanma ve iptal durumu aynı anda seçilemez</li>
+                        <li>Notlar alanı opsiyoneldir</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Load tours dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTours();
+        });
+
+        async function loadTours() {
+            try {
+                const response = await fetch('/api/tours');
+                const tours = await response.json();
+                const select = document.getElementById('tourSelect');
+                
+                tours.forEach(tour => {
+                    const option = document.createElement('option');
+                    option.value = tour.id;
+                    option.textContent = tour.name;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Turlar yüklenirken hata oluştu:', error);
+            }
+        }
+    </script>
+    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

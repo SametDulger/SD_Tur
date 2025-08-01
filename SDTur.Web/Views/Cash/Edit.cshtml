@@ -1,0 +1,199 @@
+@model CashEditViewModel
+@{
+    ViewData["Title"] = "Nakit İşlemi Düzenle";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-pencil text-primary me-2"></i>Nakit İşlemi Düzenle
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-form me-2"></i>Nakit İşlemi Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="CashType" class="form-label fw-semibold">
+                                    <i class="bi bi-cash-coin me-1"></i>Nakit Tipi <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="CashType" class="form-select" required>
+                                    <option value="">Nakit tipi seçiniz...</option>
+                                    <option value="Giriş">Giriş</option>
+                                    <option value="Çıkış">Çıkış</option>
+                                    <option value="Transfer">Transfer</option>
+                                    <option value="Ödeme">Ödeme</option>
+                                    <option value="Tahsilat">Tahsilat</option>
+                                    <option value="Diğer">Diğer</option>
+                                </select>
+                                <span asp-validation-for="CashType" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="TransactionType" class="form-label fw-semibold">
+                                    <i class="bi bi-tag me-1"></i>İşlem Tipi <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="TransactionType" class="form-select" required>
+                                    <option value="">İşlem tipi seçiniz...</option>
+                                    <option value="Gelir">Gelir</option>
+                                    <option value="Gider">Gider</option>
+                                    <option value="Transfer">Transfer</option>
+                                    <option value="Ödeme">Ödeme</option>
+                                    <option value="Tahsilat">Tahsilat</option>
+                                    <option value="Diğer">Diğer</option>
+                                </select>
+                                <span asp-validation-for="TransactionType" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Amount" class="form-label fw-semibold">
+                                    <i class="bi bi-currency-exchange me-1"></i>Tutar <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Amount" type="number" step="0.01" class="form-control" placeholder="0.00" required />
+                                <span asp-validation-for="Amount" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Currency" class="form-label fw-semibold">
+                                    <i class="bi bi-currency-exchange me-1"></i>Para Birimi <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Currency" class="form-select" required>
+                                    <option value="">Para birimi seçiniz...</option>
+                                    <option value="TRY">Türk Lirası (TRY)</option>
+                                    <option value="USD">Amerikan Doları (USD)</option>
+                                    <option value="EUR">Euro (EUR)</option>
+                                    <option value="GBP">İngiliz Sterlini (GBP)</option>
+                                    <option value="RUB">Rus Rublesi (RUB)</option>
+                                </select>
+                                <span asp-validation-for="Currency" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="TransactionDate" class="form-label fw-semibold">
+                                    <i class="bi bi-calendar me-1"></i>İşlem Tarihi <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="TransactionDate" type="datetime-local" class="form-control" required />
+                                <span asp-validation-for="TransactionDate" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ReceiptNumber" class="form-label fw-semibold">
+                                    <i class="bi bi-receipt me-1"></i>Makbuz Numarası
+                                </label>
+                                <input asp-for="ReceiptNumber" class="form-control" placeholder="Makbuz numarası..." />
+                                <span asp-validation-for="ReceiptNumber" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Category" class="form-label fw-semibold">
+                                    <i class="bi bi-tag me-1"></i>Kategori
+                                </label>
+                                <input asp-for="Category" class="form-control" placeholder="Kategori..." />
+                                <span asp-validation-for="Category" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsApproved" class="form-check-input" type="checkbox" id="isApprovedSwitch">
+                                    <label class="form-check-label fw-semibold" for="isApprovedSwitch">
+                                        <i class="bi bi-check-circle me-1"></i>Onaylandı
+                                    </label>
+                                </div>
+                                <small class="text-muted">Bu işlemin onaylandığını işaretleyin</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsAutomatic" class="form-check-input" type="checkbox" id="isAutomaticSwitch">
+                                    <label class="form-check-label fw-semibold" for="isAutomaticSwitch">
+                                        <i class="bi bi-robot me-1"></i>Otomatik İşlem
+                                    </label>
+                                </div>
+                                <small class="text-muted">Bu işlemin otomatik olduğunu işaretleyin</small>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActiveSwitch">
+                                    <label class="form-check-label fw-semibold" for="isActiveSwitch">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </label>
+                                </div>
+                                <small class="text-muted">Bu işlemin aktif olduğunu işaretleyin</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label asp-for="Description" class="form-label fw-semibold">
+                                    <i class="bi bi-text-paragraph me-1"></i>Açıklama
+                                </label>
+                                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Nakit işlemi hakkında açıklama..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>İptal
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-check-circle me-2"></i>Güncelle
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Nakit İşlemi Düzenleme
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Nakit işlem bilgilerini güncelleyin</li>
+                            <li>Nakit tipi ve işlem tipini değiştirebilirsiniz</li>
+                            <li>Tutar, para birimi ve tarih bilgilerini düzenleyin</li>
+                            <li>Onay ve aktiflik durumunu güncelleyin</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,164 @@
+@model BusEditViewModel
+@{
+    ViewData["Title"] = "Otobüs Düzenle";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-pencil text-primary me-2"></i>Otobüs Düzenle
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-form me-2"></i>Otobüs Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PlateNumber" class="form-label fw-semibold">
+                                    <i class="bi bi-hash me-1"></i>Plaka <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="PlateNumber" class="form-control" placeholder="34 ABC 123" required />
+                                <span asp-validation-for="PlateNumber" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Year" class="form-label fw-semibold">
+                                    <i class="bi bi-calendar me-1"></i>Model Yýlý <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Year" type="number" min="1900" max="@DateTime.Now.Year" class="form-control" placeholder="2023" required />
+                                <span asp-validation-for="Year" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Brand" class="form-label fw-semibold">
+                                    <i class="bi bi-car-front me-1"></i>Marka <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Brand" class="form-control" placeholder="Mercedes, MAN, Iveco..." required />
+                                <span asp-validation-for="Brand" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Model" class="form-label fw-semibold">
+                                    <i class="bi bi-car-front me-1"></i>Model <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Model" class="form-control" placeholder="Sprinter, Travego, Conecto..." required />
+                                <span asp-validation-for="Model" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Capacity" class="form-label fw-semibold">
+                                    <i class="bi bi-people me-1"></i>Kapasite <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Capacity" type="number" min="1" max="100" class="form-control" placeholder="45" required />
+                                <span asp-validation-for="Capacity" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastMaintenance" class="form-label fw-semibold">
+                                    <i class="bi bi-tools me-1"></i>Son Bakým Tarihi
+                                </label>
+                                <input asp-for="LastMaintenance" type="date" class="form-control" />
+                                <span asp-validation-for="LastMaintenance" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DriverName" class="form-label fw-semibold">
+                                    <i class="bi bi-person me-1"></i>Sürücü Adý
+                                </label>
+                                <input asp-for="DriverName" class="form-control" placeholder="Sürücü adý..." />
+                                <span asp-validation-for="DriverName" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DriverPhone" class="form-label fw-semibold">
+                                    <i class="bi bi-telephone me-1"></i>Sürücü Telefonu
+                                </label>
+                                <input asp-for="DriverPhone" class="form-control" placeholder="0555 123 45 67" />
+                                <span asp-validation-for="DriverPhone" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsOwned" class="form-check-input" type="checkbox" id="isOwnedSwitch">
+                                    <label class="form-check-label fw-semibold" for="isOwnedSwitch">
+                                        <i class="bi bi-house me-1"></i>Kendi Otobüsümüz
+                                    </label>
+                                </div>
+                                <small class="text-muted">Bu otobüsün þirkete ait olduðunu iþaretleyin</small>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActiveSwitch">
+                                    <label class="form-check-label fw-semibold" for="isActiveSwitch">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </label>
+                                </div>
+                                <small class="text-muted">Bu otobüsün aktif olduðunu iþaretleyin</small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-check-circle me-2"></i>Güncelle
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Otobüs Düzenleme
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Plaka ve model yýlý bilgilerini güncelleyin</li>
+                            <li>Marka ve model bilgilerini düzenleyin</li>
+                            <li>Kapasite ve bakým tarihini deðiþtirebilirsiniz</li>
+                            <li>Sürücü bilgilerini güncelleyin</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

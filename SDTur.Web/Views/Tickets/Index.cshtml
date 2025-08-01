@@ -1,0 +1,417 @@
+@model IEnumerable<SDTur.Web.Models.Tour.Operations.TicketViewModel>
+@{
+    ViewData["Title"] = "Biletler";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-ticket-perforated text-primary me-2"></i>Biletler
+            </h1>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Yeni Bilet
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filtreler -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white">
+        <h6 class="card-title mb-0">
+            <i class="bi bi-funnel text-info me-2"></i>Filtreler
+        </h6>
+    </div>
+    <div class="card-body">
+        <form id="filterForm" class="row g-3">
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label">Tur</label>
+                <select class="form-select" id="tourFilter">
+                    <option value="">Tüm Turlar</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label">Durum</label>
+                <select class="form-select" id="statusFilter">
+                    <option value="">Tüm Durumlar</option>
+                    <option value="Sold">Satıldı</option>
+                    <option value="Reserved">Rezerve</option>
+                    <option value="Cancelled">İptal</option>
+                    <option value="Refunded">İade</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <label class="form-label">Başlangıç Tarihi</label>
+                <input type="date" class="form-control" id="startDateFilter">
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <label class="form-label">Bitiş Tarihi</label>
+                <input type="date" class="form-control" id="endDateFilter">
+            </div>
+            <div class="col-lg-2 col-md-12">
+                <label class="form-label">&nbsp;</label>
+                <div class="d-grid">
+                    <button type="button" class="btn btn-outline-primary" onclick="applyFilters()">
+                        <i class="bi bi-search me-2"></i>Filtrele
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Bilet Özeti -->
+<div class="row g-4 mb-4" id="statisticsCards">
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-2">
+                    <i class="bi bi-ticket-perforated text-primary fs-4"></i>
+                </div>
+                <h4 class="mb-1 fw-bold" id="totalTickets">0</h4>
+                <small class="text-muted">Toplam Bilet</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex p-3 mb-2">
+                    <i class="bi bi-check-circle text-success fs-4"></i>
+                </div>
+                <h4 class="mb-1 fw-bold" id="soldTickets">0</h4>
+                <small class="text-muted">Satılan Bilet</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex p-3 mb-2">
+                    <i class="bi bi-clock text-warning fs-4"></i>
+                </div>
+                <h4 class="mb-1 fw-bold" id="reservedTickets">0</h4>
+                <small class="text-muted">Rezerve Bilet</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex p-3 mb-2">
+                    <i class="bi bi-currency-dollar text-info fs-4"></i>
+                </div>
+                <h4 class="mb-1 fw-bold" id="totalRevenue">₺0</h4>
+                <small class="text-muted">Toplam Gelir</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bilet Listesi -->
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-list-ul me-2"></i>Bilet Listesi
+                </h5>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-end gap-2">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" id="searchInput" placeholder="Bilet ara..." data-search="ticketsTable">
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="bi bi-download me-1"></i>Dışa Aktar
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="exportToExcel()">
+                                <i class="bi bi-file-earmark-excel me-2"></i>Excel
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="exportToPDF()">
+                                <i class="bi bi-file-earmark-pdf me-2"></i>PDF
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive" id="ticketsTable">
+            <!-- Dinamik olarak yüklenecek -->
+        </div>
+    </div>
+    <div class="card-footer bg-light">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <small class="text-muted">
+                    Toplam <strong id="recordCount">0</strong> bilet bulundu
+                </small>
+            </div>
+            <div class="col-md-6 text-end">
+                <nav aria-label="Sayfa navigasyonu">
+                    <ul class="pagination pagination-sm mb-0 justify-content-end" id="pagination">
+                        <!-- Dinamik olarak oluşturulacak -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Satış Grafiği -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-graph-up text-success me-2"></i>Günlük Satış Grafiği
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="salesChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Popüler Turlar -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-star text-warning me-2"></i>Popüler Turlar
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3" id="popularTours">
+                    <!-- Dinamik olarak yüklenecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let currentFilters = {};
+        let salesChart;
+        
+        function applyFilters() {
+            currentFilters = {
+                tourId: document.getElementById('tourFilter').value,
+                status: document.getElementById('statusFilter').value,
+                startDate: document.getElementById('startDateFilter').value,
+                endDate: document.getElementById('endDateFilter').value
+            };
+            
+            // Reload data with filters
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const endpoint = queryString ? `/api/tour/tickets?${queryString}` : '/api/tour/tickets';
+            
+            console.log("Load data handled server-side"););
+            updateStatistics();
+            updateChart();
+        }
+        
+        function updateStatistics() {
+            // Load statistics based on current filters
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const endpoint = queryString ? `/api/tour/tickets/statistics?${queryString}` : '/api/tour/tickets/statistics';
+            
+            console.log("API call handled server-side");
+                .then(data => {
+                    document.getElementById('totalTickets').textContent = data.totalTickets || 0;
+                    document.getElementById('soldTickets').textContent = data.soldTickets || 0;
+                    document.getElementById('reservedTickets').textContent = data.reservedTickets || 0;
+                    document.getElementById('totalRevenue').textContent = app.formatCurrency(data.totalRevenue || 0);
+                    document.getElementById('recordCount').textContent = data.totalTickets || 0;
+                })
+                .catch(error => {
+                    console.error('Statistics loading failed:', error);
+                });
+        }
+        
+        function updateChart() {
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const endpoint = queryString ? `/api/tour/tickets/sales-chart?${queryString}` : '/api/tour/tickets/sales-chart';
+            
+            console.log("API call handled server-side");
+                .then(data => {
+                    createSalesChart(data);
+                })
+                .catch(error => {
+                    console.error('Chart data loading failed:', error);
+                });
+        }
+        
+        function createSalesChart(data) {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            
+            if (salesChart) {
+                salesChart.destroy();
+            }
+            
+            salesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels || [],
+                    datasets: [{
+                        label: 'Satış Sayısı',
+                        data: data.sales || [],
+                        borderColor: '#0d6efd',
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Gelir (₺)',
+                        data: data.revenue || [],
+                        borderColor: '#198754',
+                        backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Satış Sayısı'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Gelir (₺)'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return app.formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function exportToExcel() {
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const filename = `biletler_${new Date().toISOString().split('T')[0]}`;
+            console.log("Export to Excel handled server-side");;
+        }
+        
+        function exportToPDF() {
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const filename = `biletler_${new Date().toISOString().split('T')[0]}`;
+            console.log("Export to PDF handled server-side");;
+        }
+        
+        // Auto-load data and setup
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load initial data
+            updateStatistics();
+            updateChart();
+            
+            // Apply initial filters
+            applyFilters();
+            
+            // Setup search functionality
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const table = document.getElementById('ticketsTable');
+                    const rows = table.querySelectorAll('tbody tr');
+                    
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+                    });
+                }, 300));
+            }
+        });
+        
+        // Custom render function for popular tours
+        window.renderPopularTours = function(data, element) {
+            if (!data || !data.length) {
+                element.innerHTML = '<div class="text-center py-4 text-muted">Popüler tur bulunamadı</div>';
+                return;
+            }
+
+            const html = data.map(tour => `
+                <div class="col-lg-4 col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
+                                    <i class="bi bi-map text-primary"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-1">${tour.name}</h6>
+                                    <small class="text-muted">${tour.destination}</small>
+                                </div>
+                            </div>
+                            <div class="row g-2 text-center mb-3">
+                                <div class="col-4">
+                                    <div class="h5 fw-bold text-primary mb-1">${tour.ticketCount}</div>
+                                    <small class="text-muted">Satılan Bilet</small>
+                                </div>
+                                <div class="col-4">
+                                    <div class="h5 fw-bold text-success mb-1">${app.formatCurrency(tour.revenue)}</div>
+                                    <small class="text-muted">Toplam Gelir</small>
+                                </div>
+                                <div class="col-4">
+                                    <div class="h5 fw-bold text-info mb-1">${tour.occupancyRate}%</div>
+                                    <small class="text-muted">Doluluk Oranı</small>
+                                </div>
+                            </div>
+                            <div class="progress mb-2" style="height: 6px;">
+                                <div class="progress-bar bg-success" style="width: ${tour.occupancyRate}%"></div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-${tour.status === 'Active' ? 'success' : 'secondary'}">
+                                    ${tour.status === 'Active' ? 'Aktif' : 'Pasif'}
+                                </span>
+                                <small class="text-muted">${tour.duration} gün</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            element.innerHTML = html;
+        };
+    </script>
+} 

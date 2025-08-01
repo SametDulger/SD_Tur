@@ -1,0 +1,129 @@
+@model SDTur.Web.Models.Financial.Transactions.InvoiceDetailViewModel
+@{
+    ViewData["Title"] = "Fatura Detayý";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-receipt text-primary me-2"></i>Fatura Detayý
+                </h1>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+                        <i class="bi bi-pencil me-2"></i>Düzenle
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Detay Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Fatura Numarasý</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="fw-semibold text-primary">@Model.InvoiceNumber</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Ürün/Hizmet Adý</label>
+                            <div class="p-2 bg-light rounded">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                        <i class="bi bi-box text-primary"></i>
+                                    </div>
+                                    <span class="fw-semibold">@Model.ProductName</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Ürün Kodu</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="badge bg-outline-secondary">@Model.ProductCode</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Miktar</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="badge bg-light text-dark">@Model.Quantity @Model.Unit</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Birim Fiyat</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="fw-bold text-success">@Model.UnitPrice.ToString("C")</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">KDV Oraný</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="badge bg-outline-warning">%@Model.VatRate</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">KDV Tutarý</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="fw-bold text-warning">@Model.VatAmount.ToString("C")</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Toplam Tutar</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="fw-bold text-primary fs-4">@Model.TotalAmount.ToString("C")</span>
+                            </div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Description))
+                        {
+                            <div class="col-12">
+                                <label class="form-label fw-semibold text-muted">Açýklama</label>
+                                <div class="p-2 bg-light rounded">
+                                    <p class="mb-0">@Model.Description</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-calculator me-2"></i>Hesaplama Özeti
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Ara Toplam:</span>
+                        <span class="fw-bold text-success">@((Model.Quantity * Model.UnitPrice).ToString("C"))</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">KDV (@Model.VatRate%):</span>
+                        <span class="fw-bold text-warning">@Model.VatAmount.ToString("C")</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold">Genel Toplam:</span>
+                        <span class="fw-bold text-primary fs-4">
+                            @Model.TotalAmount.ToString("C")
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

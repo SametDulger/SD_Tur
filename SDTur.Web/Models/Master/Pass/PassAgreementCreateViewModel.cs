@@ -14,6 +14,7 @@ namespace SDTur.Web.Models.Master.Pass
         public DateTime EndDate { get; set; }
         [Required]
         public decimal CommissionRate { get; set; }
+        public string Description { get; set; } = string.Empty;
         public string Terms { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
     }

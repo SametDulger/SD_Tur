@@ -11,9 +11,15 @@ namespace SDTur.Web.Models.Financial.Accounts
         [Required]
         public decimal Amount { get; set; }
         [Required]
-        public DateTime TransactionDate { get; set; }
+        public string Currency { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        [Required]
+        public DateTime TransactionDate { get; set; }
         public string ReferenceNumber { get; set; } = string.Empty;
-        public bool IsApproved { get; set; } = false;
+        public int? RelatedTransactionId { get; set; }
+        public int? TransferAccountId { get; set; }
+        public int? CurrencyId { get; set; }
+        public string Category { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = true;
     }
 } 

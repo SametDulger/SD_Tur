@@ -1,0 +1,157 @@
+@model SDTur.Web.Models.System.Users.UserCreateViewModel
+@{
+    ViewData["Title"] = "Yeni Kullanıcı";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-person-plus text-primary me-2"></i>Yeni Kullanıcı
+            </h1>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-plus-circle text-success me-2"></i>Kullanıcı Bilgileri
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" method="post" data-validate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="FirstName" class="form-label">
+                                <i class="bi bi-person me-1"></i>Ad
+                            </label>
+                            <input asp-for="FirstName" class="form-control" placeholder="Adınızı giriniz" required>
+                            <span asp-validation-for="FirstName" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="LastName" class="form-label">
+                                <i class="bi bi-person me-1"></i>Soyad
+                            </label>
+                            <input asp-for="LastName" class="form-control" placeholder="Soyadınızı giriniz" required>
+                            <span asp-validation-for="LastName" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="Username" class="form-label">
+                                <i class="bi bi-person-badge me-1"></i>Kullanıcı Adı
+                            </label>
+                            <input asp-for="Username" class="form-control" placeholder="Kullanıcı adını giriniz" required>
+                            <span asp-validation-for="Username" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label">
+                                <i class="bi bi-envelope me-1"></i>E-posta
+                            </label>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresini giriniz" required>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="Password" class="form-label">
+                                <i class="bi bi-lock me-1"></i>Şifre
+                            </label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Şifre giriniz" required>
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="ConfirmPassword" class="form-label">
+                                <i class="bi bi-lock me-1"></i>Şifre Tekrar
+                            </label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Şifreyi tekrar giriniz" required>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="BranchId" class="form-label">
+                                <i class="bi bi-building me-1"></i>Şube
+                            </label>
+                            <select asp-for="BranchId" class="form-select">
+                                <option value="">Şube seçiniz (opsiyonel)</option>
+                            </select>
+                            <span asp-validation-for="BranchId" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="Phone" class="form-label">
+                                <i class="bi bi-telephone me-1"></i>Telefon
+                            </label>
+                            <input asp-for="Phone" class="form-control" placeholder="Telefon numarası">
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label asp-for="Address" class="form-label">
+                                <i class="bi bi-geo-alt me-1"></i>Adres
+                            </label>
+                            <textarea asp-for="Address" class="form-control" rows="3" placeholder="Adres bilgisi"></textarea>
+                            <span asp-validation-for="Address" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label asp-for="Notes" class="form-label">
+                                <i class="bi bi-text-paragraph me-1"></i>Notlar
+                            </label>
+                            <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Kullanıcı notları"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input asp-for="IsActive" class="form-check-input" type="checkbox" checked>
+                                <label asp-for="IsActive" class="form-check-label">
+                                    <i class="bi bi-check-circle me-1"></i>Aktif Kullanıcı
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-2"></i>İptal
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Kaydet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Bilgi -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-lightbulb text-warning me-2"></i>Bilgi
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info small">
+                    <ul class="mb-0">
+                        <li>Kullanıcı adı benzersiz olmalıdır</li>
+                        <li>E-posta adresi geçerli olmalıdır</li>
+                        <li>Şifre güvenlik kurallarına uymalıdır</li>
+                        <li>Şube seçimi opsiyoneldir</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

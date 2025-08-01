@@ -37,7 +37,7 @@ namespace SDTur.Web.Services
             return JsonSerializer.Deserialize<IEnumerable<TourViewModel>>(content, _jsonOptions) ?? new List<TourViewModel>();
         }
 
-        public async Task<TourViewModel> GetTourByIdAsync(int id)
+        public async Task<TourViewModel?> GetTourByIdAsync(int id)
         {
             var response = await _httpClient.GetAsync($"api/tours/{id}");
             if (response.IsSuccessStatusCode)
@@ -55,7 +55,7 @@ namespace SDTur.Web.Services
             var response = await _httpClient.PostAsync("api/tours", content);
             response.EnsureSuccessStatusCode();
             var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TourViewModel>(responseContent, _jsonOptions);
+            return JsonSerializer.Deserialize<TourViewModel>(responseContent, _jsonOptions)!;
         }
 
         public async Task<TourViewModel> UpdateTourAsync(TourEditViewModel updateTourViewModel)
@@ -65,7 +65,7 @@ namespace SDTur.Web.Services
             var response = await _httpClient.PutAsync($"api/tours/{updateTourViewModel.Id}", content);
             response.EnsureSuccessStatusCode();
             var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TourViewModel>(responseContent, _jsonOptions);
+            return JsonSerializer.Deserialize<TourViewModel>(responseContent, _jsonOptions)!;
         }
 
         public async Task DeleteTourAsync(int id)
@@ -83,7 +83,7 @@ namespace SDTur.Web.Services
             return JsonSerializer.Deserialize<IEnumerable<TicketViewModel>>(content, _jsonOptions) ?? new List<TicketViewModel>();
         }
 
-        public async Task<TicketViewModel> GetTicketByIdAsync(int id)
+        public async Task<TicketViewModel?> GetTicketByIdAsync(int id)
         {
             var response = await _httpClient.GetAsync($"api/tickets/{id}");
             if (response.IsSuccessStatusCode)
@@ -94,7 +94,7 @@ namespace SDTur.Web.Services
             return null;
         }
 
-        public async Task<TicketViewModel> GetTicketByNumberAsync(string ticketNumber)
+        public async Task<TicketViewModel?> GetTicketByNumberAsync(string ticketNumber)
         {
             var response = await _httpClient.GetAsync($"api/tickets/number/{ticketNumber}");
             if (response.IsSuccessStatusCode)
@@ -136,7 +136,7 @@ namespace SDTur.Web.Services
             var response = await _httpClient.PostAsync("api/tickets", content);
             response.EnsureSuccessStatusCode();
             var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TicketViewModel>(responseContent, _jsonOptions);
+            return JsonSerializer.Deserialize<TicketViewModel>(responseContent, _jsonOptions)!;
         }
 
         public async Task<TicketViewModel> UpdateTicketAsync(TicketEditViewModel updateTicketViewModel)
@@ -146,7 +146,7 @@ namespace SDTur.Web.Services
             var response = await _httpClient.PutAsync($"api/tickets/{updateTicketViewModel.Id}", content);
             response.EnsureSuccessStatusCode();
             var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TicketViewModel>(responseContent, _jsonOptions);
+            return JsonSerializer.Deserialize<TicketViewModel>(responseContent, _jsonOptions)!;
         }
 
         public async Task DeleteTicketAsync(int id)
@@ -168,7 +168,7 @@ namespace SDTur.Web.Services
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<T> GetAsync<T>(string url)
+        public async Task<T?> GetAsync<T>(string url)
         {
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -176,7 +176,7 @@ namespace SDTur.Web.Services
             return JsonSerializer.Deserialize<T>(content, _jsonOptions);
         }
 
-        public async Task<TResponse> PostAsync<TRequest, TResponse>(string url, TRequest data)
+        public async Task<TResponse?> PostAsync<TRequest, TResponse>(string url, TRequest data)
         {
             var json = JsonSerializer.Serialize(data, _jsonOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -186,7 +186,7 @@ namespace SDTur.Web.Services
             return JsonSerializer.Deserialize<TResponse>(responseContent, _jsonOptions);
         }
 
-        public async Task<TResponse> PutAsync<TRequest, TResponse>(string url, TRequest data)
+        public async Task<TResponse?> PutAsync<TRequest, TResponse>(string url, TRequest data)
         {
             var json = JsonSerializer.Serialize(data, _jsonOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
