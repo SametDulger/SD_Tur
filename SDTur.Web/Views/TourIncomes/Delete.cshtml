@@ -1,0 +1,161 @@
+@model SDTur.Web.Models.Tour.Financial.TourIncomeViewModel
+@{
+    ViewData["Title"] = "Tur Geliri Sil";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-trash text-danger me-2"></i>Tur Geliri Sil
+            </h1>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme Onayý
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                    </h6>
+                    <p class="mb-0">Bu gelir kaydýný silmek istediðinizden emin misiniz? Bu iþlem geri alýnamaz.</p>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-airplane me-1"></i>Tur
+                        </label>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                <i class="bi bi-airplane text-primary"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold">@Model.TourName</div>
+                                <small class="text-muted">@Model.Category</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-tag me-1"></i>Gelir Türü
+                        </label>
+                        <div>
+                            <span class="badge bg-info bg-opacity-75 fs-6">@Model.IncomeType</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-currency-dollar me-1"></i>Tutar
+                        </label>
+                        <div class="h4 fw-bold text-success mb-0">
+                            @Model.Amount.ToString("C")
+                        </div>
+                        <small class="text-muted">@Model.Currency</small>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-calendar me-1"></i>Gelir Tarihi
+                        </label>
+                        <div class="h6 mb-0">@Model.IncomeDate.ToString("dd MMMM yyyy")</div>
+                        <small class="text-muted">@Model.IncomeDate.ToString("dddd")</small>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-credit-card me-1"></i>Ödeme Yöntemi
+                        </label>
+                        <div>
+                            <span class="badge bg-light text-dark fs-6">@Model.PaymentMethod</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-check-circle me-1"></i>Tahsilat Durumu
+                        </label>
+                        <div>
+                            @if (Model.IsReceived)
+                            {
+                                <span class="badge bg-success fs-6">
+                                    <i class="bi bi-check-circle me-1"></i>Tahsil Edildi
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning fs-6">
+                                    <i class="bi bi-clock me-1"></i>Beklemede
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            <i class="bi bi-text-paragraph me-1"></i>Açýklama
+                        </label>
+                        <div class="p-3 bg-light rounded">
+                            @Model.Description
+                        </div>
+                    </div>
+                }
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-2"></i>Ýptal
+                        </a>
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bu kaydý silmek istediðinizden emin misiniz?')">
+                            <i class="bi bi-trash me-2"></i>Sil
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-info-circle me-2"></i>Bilgi
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarý
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Bu iþlem geri alýnamaz</li>
+                        <li>Gelir kaydý kalýcý olarak silinecektir</li>
+                        <li>Ýlgili finansal raporlar etkilenebilir</li>
+                        <li>Silme iþlemi öncesi yedek almanýz önerilir</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

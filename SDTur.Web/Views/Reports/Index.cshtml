@@ -1,0 +1,134 @@
+@model IEnumerable<SDTur.Web.Models.System.Reports.ReportViewModel>
+@{
+    ViewData["Title"] = "Raporlar";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-file-earmark-text text-primary me-2"></i>Raporlar
+            </h1>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Yeni Rapor
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-list-ul me-2"></i>Rapor Listesi
+                </h5>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0">
+                        <i class="bi bi-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" id="searchInput" placeholder="Rapor ara...">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="reportsTable">
+                <thead>
+                    <tr>
+                        <th>Rapor Adı</th>
+                        <th>Tür</th>
+                        <th>Oluşturan</th>
+                        <th>Oluşturma Tarihi</th>
+                        <th>Durum</th>
+                        <th class="text-end">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                        <i class="bi bi-file-earmark-text text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold">@item.ReportName</div>
+                                        <small class="text-muted">@item.Description</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark">@item.ReportType</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-outline-secondary">@item.CreatedBy</span>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span class="fw-semibold">@item.CreatedDate.ToString("dd MMM")</span>
+                                    <small class="text-muted">@item.CreatedDate.ToString("HH:mm")</small>
+                                </div>
+                            </td>
+                            <td>
+                                @if (item.Status == "Tamamlandı")
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle me-1"></i>@item.Status
+                                    </span>
+                                }
+                                else if (item.Status == "İşleniyor")
+                                {
+                                    <span class="badge bg-warning">
+                                        <i class="bi bi-clock me-1"></i>@item.Status
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        <i class="bi bi-x-circle me-1"></i>@item.Status
+                                    </span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a asp-action="Details" asp-route-id="@item.Id" 
+                                       class="btn btn-outline-info" title="Detay">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" 
+                                       class="btn btn-outline-primary" title="Düzenle">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" 
+                                       class="btn btn-outline-danger" title="Sil">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const table = document.getElementById('reportsTable');
+            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            
+            for (let row of rows) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            }
+        });
+    </script>
+} 

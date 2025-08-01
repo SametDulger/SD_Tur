@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SDTur.Web.Models.Tour.Operations
 {
-    public class CreateCustomerDistributionViewModel
+    public class CustomerDistributionCreateViewModel
     {
         [Required]
         public int TourId { get; set; }

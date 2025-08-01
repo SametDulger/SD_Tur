@@ -1,0 +1,188 @@
+@model HotelViewModel
+@{
+    ViewData["Title"] = "Otel Sil";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-trash text-danger me-2"></i>Otel Sil
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme Onayý
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                        </h6>
+                        <p class="mb-0">Bu oteli silmek istediðinizden emin misiniz? Bu iþlem geri alýnamaz.</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-building me-1"></i>Otel Adý
+                            </label>
+                            <div class="h5 mb-0 text-primary">@Model.Name</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-star me-1"></i>Yýldýz Sayýsý
+                            </label>
+                            <div class="d-flex align-items-center">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= Model.StarRating)
+                                    {
+                                        <i class="bi bi-star-fill text-warning me-1"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-star text-muted me-1"></i>
+                                    }
+                                }
+                                <span class="badge bg-warning ms-2">@Model.StarRating Yýldýz</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-telephone me-1"></i>Telefon
+                            </label>
+                            <div class="h6 mb-0">@Model.Phone</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-envelope me-1"></i>E-posta
+                            </label>
+                            <div class="h6 mb-0">@Model.Email</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-person me-1"></i>Ýletiþim Kiþisi
+                            </label>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-info bg-opacity-10 rounded-circle p-2 me-2">
+                                    <i class="bi bi-person text-info"></i>
+                                </div>
+                                <span class="fw-semibold">@Model.ContactPerson</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-geo-alt me-1"></i>Bölge
+                            </label>
+                            <div>
+                                <span class="badge bg-info fs-6">
+                                    <i class="bi bi-geo-alt me-1"></i>@Model.RegionId
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-calendar me-1"></i>Oluþturulma Tarihi
+                            </label>
+                            <div class="h6 mb-0">@Model.CreatedDate.ToString("dd MMMM yyyy")</div>
+                            <small class="text-muted">@Model.CreatedDate.ToString("dddd")</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-toggle-on me-1"></i>Durum
+                            </label>
+                            <div>
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6">
+                                        <i class="bi bi-toggle-off me-1"></i>Pasif
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Address))
+                    {
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label class="form-label fw-semibold text-muted">
+                                    <i class="bi bi-geo-alt me-1"></i>Adres
+                                </label>
+                                <div class="p-3 bg-light rounded">
+                                    @Model.Address
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                            </a>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bu kaydý silmek istediðinizden emin misiniz?')">
+                                <i class="bi bi-trash me-2"></i>Sil
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarý
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Bu iþlem geri alýnamaz</li>
+                            <li>Otel kalýcý olarak silinecektir</li>
+                            <li>Ýlgili kayýtlar etkilenebilir</li>
+                            <li>Silme iþlemi öncesi yedek almanýz önerilir</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

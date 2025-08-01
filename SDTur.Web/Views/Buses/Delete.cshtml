@@ -1,0 +1,172 @@
+@model BusViewModel
+@{
+    ViewData["Title"] = "Otobüs Sil";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-trash text-danger me-2"></i>Otobüs Sil
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme Onayý
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                        </h6>
+                        <p class="mb-0">Bu otobüsü silmek istediðinizden emin misiniz? Bu iþlem geri alýnamaz.</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-hash me-1"></i>Plaka
+                            </label>
+                            <div class="h5 mb-0 text-primary">@Model.PlateNumber</div>
+                            <small class="text-muted">@Model.Year Model</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-car-front me-1"></i>Marka/Model
+                            </label>
+                            <div class="h6 mb-0">@Model.Brand</div>
+                            <small class="text-muted">@Model.Model</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-people me-1"></i>Kapasite
+                            </label>
+                            <div>
+                                <span class="badge bg-info fs-6">
+                                    <i class="bi bi-people me-1"></i>@Model.Capacity Kiþi
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-tools me-1"></i>Son Bakým
+                            </label>
+                            <div class="h6 mb-0">@Model.LastMaintenance.ToString("dd MMMM yyyy")</div>
+                            <small class="text-muted">@Model.LastMaintenance.ToString("dddd")</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-person me-1"></i>Sürücü
+                            </label>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
+                                    <i class="bi bi-person text-success"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">@Model.DriverName</div>
+                                    <small class="text-muted">@Model.DriverPhone</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-toggle-on me-1"></i>Durum
+                            </label>
+                            <div>
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6">
+                                        <i class="bi bi-toggle-off me-1"></i>Pasif
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-house me-1"></i>Mülkiyet
+                            </label>
+                            <div>
+                                @if (Model.IsOwned)
+                                {
+                                    <span class="badge bg-primary fs-6">
+                                        <i class="bi bi-house me-1"></i>Kendi Otobüsümüz
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning fs-6">
+                                        <i class="bi bi-building me-1"></i>Kiralýk
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                            </a>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bu kaydý silmek istediðinizden emin misiniz?')">
+                                <i class="bi bi-trash me-2"></i>Sil
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarý
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Bu iþlem geri alýnamaz</li>
+                            <li>Otobüs kalýcý olarak silinecektir</li>
+                            <li>Ýlgili kayýtlar etkilenebilir</li>
+                            <li>Silme iþlemi öncesi yedek almanýz önerilir</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,145 @@
+@model RegionViewModel
+@{
+    ViewData["Title"] = "Bölge Detayý";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-eye text-primary me-2"></i>Bölge Detayý
+                </h1>
+                <div class="btn-group" role="group">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="bi bi-pencil me-2"></i>Düzenle
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bölge Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-geo-alt me-1"></i>Bölge Adý
+                            </label>
+                            <div class="h5 mb-0 text-primary">@Model.Name</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-flag me-1"></i>Ülke
+                            </label>
+                            <div>
+                                <span class="badge bg-info fs-6">
+                                    <i class="bi bi-flag me-1"></i>@Model.Country
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-arrow-right me-1"></i>Kemer'e Uzaklýk
+                            </label>
+                            <div class="h4 mb-0 text-success">@Model.DistanceFromKemer km</div>
+                            <small class="text-muted">Kemer'den uzaklýk</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-sort-numeric-up me-1"></i>Sýralama
+                            </label>
+                            <div>
+                                <span class="badge bg-secondary fs-6">
+                                    <i class="bi bi-sort-numeric-up me-1"></i>@Model.Order
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-calendar me-1"></i>Oluþturulma Tarihi
+                            </label>
+                            <div class="h6 mb-0">@Model.CreatedDate.ToString("dd MMMM yyyy")</div>
+                            <small class="text-muted">@Model.CreatedDate.ToString("dddd")</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-toggle-on me-1"></i>Durum
+                            </label>
+                            <div>
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6">
+                                        <i class="bi bi-toggle-off me-1"></i>Pasif
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label class="form-label fw-semibold text-muted">
+                                    <i class="bi bi-file-text me-1"></i>Açýklama
+                                </label>
+                                <div class="p-3 bg-light rounded">
+                                    @Model.Description
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Bölge Bilgileri
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Bölge adý ve ülke bilgileri</li>
+                            <li>Kemer'e olan uzaklýk</li>
+                            <li>Sýralama ve oluþturulma tarihi</li>
+                            <li>Açýklama ve aktiflik durumu</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

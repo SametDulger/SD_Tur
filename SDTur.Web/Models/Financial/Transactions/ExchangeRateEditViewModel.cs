@@ -4,42 +4,19 @@ namespace SDTur.Web.Models.Financial.Transactions
 {
     public class ExchangeRateEditViewModel
     {
+        [Required]
         public int Id { get; set; }
-
-        [Required(ErrorMessage = "Tarih zorunludur")]
-        [Display(Name = "Tarih")]
-        public DateTime Date { get; set; }
-
-        [Required(ErrorMessage = "Kaynak para birimi zorunludur")]
-        [Display(Name = "Kaynak Para Birimi")]
-        public string SourceCurrency { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Hedef para birimi zorunludur")]
-        [Display(Name = "Hedef Para Birimi")]
-        public string TargetCurrency { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Kaynak para birimi zorunludur")]
-        [Display(Name = "Kaynak Para Birimi")]
+        [Required]
         public string FromCurrency { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Hedef para birimi zorunludur")]
-        [Display(Name = "Hedef Para Birimi")]
+        [Required]
         public string ToCurrency { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Döviz kuru zorunludur")]
-        [Display(Name = "Döviz Kuru")]
-        [Range(0, double.MaxValue, ErrorMessage = "Döviz kuru 0'dan büyük olmalıdır")]
+        [Required]
         public decimal Rate { get; set; }
-
-        [Required(ErrorMessage = "Kur tarihi zorunludur")]
-        [Display(Name = "Kur Tarihi")]
+        [Required]
+        public DateTime EffectiveDate { get; set; }
         public DateTime RateDate { get; set; }
-
-        [Display(Name = "Açıklama")]
-        [StringLength(500, ErrorMessage = "Açıklama en fazla 500 karakter olabilir")]
+        public DateTime Date { get; set; }
         public string Description { get; set; } = string.Empty;
-
-        [Display(Name = "Aktif")]
         public bool IsActive { get; set; }
     }
 }

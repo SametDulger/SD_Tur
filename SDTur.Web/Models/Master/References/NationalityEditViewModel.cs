@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SDTur.Web.Models.Master.References
 {
-    public class UpdateNationalityViewModel
+    public class NationalityEditViewModel
     {
         [Required]
         public int Id { get; set; }

@@ -1,0 +1,213 @@
+@model SDTur.Web.Models.Financial.Accounts.AccountViewModel
+@{
+    ViewData["Title"] = "Hesap Sil";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-exclamation-triangle text-danger me-2"></i>Hesap Sil
+            </h1>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Silme Onayı
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                    </h6>
+                    <p class="mb-0">
+                        Bu hesabı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve hesaba ait tüm veriler kalıcı olarak silinecektir.
+                    </p>
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Hesap Numarası</label>
+                        <div class="fw-bold text-primary">@Model.AccountNumber</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Hesap Adı</label>
+                        <div class="fw-bold">@Model.AccountName</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Hesap Türü</label>
+                        <div>
+                            <span class="badge bg-light text-dark">@Model.AccountType</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Mevcut Bakiye</label>
+                        <div class="fw-bold fs-5 @(Model.CurrentBalance >= 0 ? "text-success" : "text-danger")">
+                            @Model.CurrentBalance.ToString("C")
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Toplam İşlem Sayısı</label>
+                        <div class="fw-bold">@Model.TotalTransactions</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Oluşturma Tarihi</label>
+                        <div>@(Model.CreatedDate?.ToString("dd.MM.yyyy"))</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label class="form-label text-muted">Açıklama</label>
+                        <div>@Model.Description</div>
+                    </div>
+                </div>
+                
+                @if (Model.HasActiveTransactions)
+                {
+                    <div class="alert alert-warning mt-3">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Aktif İşlemler Mevcut
+                        </h6>
+                        <p class="mb-0">
+                            Bu hesaba ait aktif işlemler bulunmaktadır. Hesabı silmeden önce tüm işlemleri tamamlamanız veya iptal etmeniz önerilir.
+                        </p>
+                    </div>
+                }
+                
+                @if (Model.CurrentBalance != 0)
+                {
+                    <div class="alert alert-info mt-3">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-info-circle me-2"></i>Bakiye Uyarısı
+                        </h6>
+                        <p class="mb-0">
+                            Hesabın mevcut bakiyesi sıfır değildir. Silme işlemi öncesinde bakiyeyi sıfırlamanız önerilir.
+                        </p>
+                    </div>
+                }
+                
+                <hr class="my-4">
+                
+                <form asp-action="Delete" method="post">
+                    <input asp-for="Id" type="hidden" />
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="confirmDelete" required>
+                        <label class="form-check-label" for="confirmDelete">
+                            Hesabın silineceğini ve bu işlemin geri alınamayacağını anlıyorum
+                        </label>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="confirmDataLoss" required>
+                        <label class="form-check-label" for="confirmDataLoss">
+                            Hesaba ait tüm verilerin kalıcı olarak silineceğini kabul ediyorum
+                        </label>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-2"></i>İptal
+                        </a>
+                        <button type="submit" class="btn btn-danger" id="deleteBtn" disabled>
+                            <i class="bi bi-trash me-2"></i>Hesabı Sil
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Alternatif Seçenekler -->
+        <div class="card border-0 shadow-sm mt-3">
+            <div class="card-header bg-white">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-lightbulb text-warning me-2"></i>Alternatif Seçenekler
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="d-grid">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">
+                                <i class="bi bi-pencil me-2"></i>Hesabı Düzenle
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-grid">
+                            <a asp-controller="AccountTransactions" asp-action="Index" asp-route-accountId="@Model.Id" class="btn btn-outline-info">
+                                <i class="bi bi-list-ul me-2"></i>İşlemleri Görüntüle
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-grid">
+                            <button type="button" class="btn btn-outline-warning" onclick="deactivateAccount()">
+                                <i class="bi bi-pause-circle me-2"></i>Hesabı Pasifleştir
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-grid">
+                            <button type="button" class="btn btn-outline-secondary" onclick="exportAccountData()">
+                                <i class="bi bi-download me-2"></i>Verileri Yedekle
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Checkbox validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmDelete = document.getElementById('confirmDelete');
+            const confirmDataLoss = document.getElementById('confirmDataLoss');
+            const deleteBtn = document.getElementById('deleteBtn');
+            
+            function updateDeleteButton() {
+                deleteBtn.disabled = !(confirmDelete.checked && confirmDataLoss.checked);
+            }
+            
+            confirmDelete.addEventListener('change', updateDeleteButton);
+            confirmDataLoss.addEventListener('change', updateDeleteButton);
+        });
+        
+        function deactivateAccount() {
+            if (confirm('Hesabı pasifleştirmek istediğinizden emin misiniz?')) {
+                // API call to deactivate account
+                console.log("API call handled server-side");
+                    .then(() => {
+                        app.showNotification('Hesap başarıyla pasifleştirildi', 'success');
+                        setTimeout(() => {
+                            window.location.href = '@Url.Action("Index")';
+                        }, 1500);
+                    })
+                    .catch(error => {
+                        app.showNotification('Hesap pasifleştirilemedi', 'error');
+                    });
+            }
+        }
+        
+        function exportAccountData() {
+            // Export account data before deletion
+            console.log("Export to Excel handled server-side");.toISOString().split('T')[0]}`);
+        }
+    </script>
+} 

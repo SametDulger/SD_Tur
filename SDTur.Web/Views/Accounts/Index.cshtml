@@ -1,0 +1,269 @@
+@model IEnumerable<SDTur.Web.Models.Financial.Accounts.AccountViewModel>
+@{
+    ViewData["Title"] = "Hesaplar";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-bank text-primary me-2"></i>Hesaplar
+            </h1>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Yeni Hesap
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filtreler -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white">
+        <h6 class="card-title mb-0">
+            <i class="bi bi-funnel text-info me-2"></i>Filtreler
+        </h6>
+    </div>
+    <div class="card-body">
+        <form id="filterForm" class="row g-3">
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label">Hesap Türü</label>
+                <select class="form-select" id="accountTypeFilter">
+                    <option value="">Tüm Hesap Türleri</option>
+                    <option value="Customer">Müşteri</option>
+                    <option value="Supplier">Tedarikçi</option>
+                    <option value="Bank">Banka</option>
+                    <option value="Employee">Çalışan</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label">Para Birimi</label>
+                <select class="form-select" id="currencyFilter">
+                    <option value="">Tüm Para Birimleri</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label">Durum</label>
+                <select class="form-select" id="statusFilter">
+                    <option value="">Tüm Durumlar</option>
+                    <option value="true">Aktif</option>
+                    <option value="false">Pasif</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label">&nbsp;</label>
+                <div class="d-grid">
+                    <button type="button" class="btn btn-outline-primary" onclick="applyFilters()">
+                        <i class="bi bi-search me-2"></i>Filtrele
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- İstatistikler -->
+<div class="row g-4 mb-4" id="statisticsCards">
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-bank text-primary fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">Toplam Hesap</h6>
+                        <h3 class="mb-0 fw-bold" id="totalAccounts">0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-success bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-check-circle text-success fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">Aktif Hesap</h6>
+                        <h3 class="mb-0 fw-bold text-success" id="activeAccounts">0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-info bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-currency-dollar text-info fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">Toplam Bakiye</h6>
+                        <h3 class="mb-0 fw-bold text-info" id="totalBalance">₺0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-people text-warning fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">Müşteri Hesabı</h6>
+                        <h3 class="mb-0 fw-bold text-warning" id="customerAccounts">0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hesap Listesi -->
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-list-ul me-2"></i>Hesap Listesi
+                </h5>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-end gap-2">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" id="searchInput" placeholder="Hesap ara..." data-search="accountsTable">
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="bi bi-download me-1"></i>Dışa Aktar
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="exportToExcel()">
+                                <i class="bi bi-file-earmark-excel me-2"></i>Excel
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="exportToPDF()">
+                                <i class="bi bi-file-earmark-pdf me-2"></i>PDF
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive" id="accountsTable">
+            <!-- Dinamik olarak yüklenecek -->
+        </div>
+    </div>
+    <div class="card-footer bg-light">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <small class="text-muted">
+                    Toplam <strong id="recordCount">0</strong> hesap bulundu
+                </small>
+            </div>
+            <div class="col-md-6 text-end">
+                <nav aria-label="Sayfa navigasyonu">
+                    <ul class="pagination pagination-sm mb-0 justify-content-end" id="pagination">
+                        <!-- Dinamik olarak oluşturulacak -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bakiye Özeti -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-pie-chart text-success me-2"></i>Bakiye Özeti
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3" id="balanceSummary">
+                    <!-- Dinamik olarak yüklenecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentFilters = {};
+        
+        function applyFilters() {
+            currentFilters = {
+                accountType: document.getElementById('accountTypeFilter').value,
+                currencyId: document.getElementById('currencyFilter').value,
+                isActive: document.getElementById('statusFilter').value
+            };
+            
+            // Reload page with filters
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const url = queryString ? `/Accounts?${queryString}` : '/Accounts';
+            window.location.href = url;
+        }
+        
+        function updateStatistics() {
+            // Statistics are loaded server-side, no need for client-side API calls
+            console.log('Statistics updated via server-side rendering');
+        }
+        
+        function exportToExcel() {
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const url = queryString ? `/Accounts/Export/Excel?${queryString}` : '/Accounts/Export/Excel';
+            window.location.href = url;
+        }
+        
+        function exportToPDF() {
+            const queryString = new URLSearchParams(currentFilters).toString();
+            const url = queryString ? `/Accounts/Export/PDF?${queryString}` : '/Accounts/Export/PDF';
+            window.location.href = url;
+        }
+        
+        // Setup search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup search functionality
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const table = document.getElementById('accountsTable');
+                    const rows = table.querySelectorAll('tbody tr');
+                    
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+                    });
+                });
+            }
+        });
+        
+        // Balance summary is rendered server-side
+        console.log('Balance summary rendered via server-side');
+    </script>
+} 

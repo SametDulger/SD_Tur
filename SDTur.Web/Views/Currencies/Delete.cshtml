@@ -1,0 +1,141 @@
+@model SDTur.Web.Models.Master.References.CurrencyViewModel
+@{
+    ViewData["Title"] = "Para Birimi Sil";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-trash text-danger me-2"></i>Para Birimi Sil
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme Onayý
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                        </h6>
+                        <p class="mb-0">Bu para birimini silmek istediðinizden emin misiniz? Bu iþlem geri alýnamaz.</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-hash me-1"></i>Kod
+                            </label>
+                            <div class="h5 mb-0 text-primary">@Model.Code</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-symbol me-1"></i>Sembol
+                            </label>
+                            <div>
+                                <span class="badge bg-info fs-6">
+                                    <i class="bi bi-symbol me-1"></i>@Model.Symbol
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-currency-exchange me-1"></i>Para Birimi Adý
+                            </label>
+                            <div class="h6 mb-0">@Model.Name</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-graph-up me-1"></i>Döviz Kuru
+                            </label>
+                            <div class="h4 mb-0 text-success">@Model.ExchangeRate.ToString("N4")</div>
+                            <small class="text-muted">TL karþýlýðý</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-calendar me-1"></i>Son Güncelleme
+                            </label>
+                            <div class="h6 mb-0">@Model.LastUpdated.ToString("dd MMMM yyyy")</div>
+                            <small class="text-muted">@Model.LastUpdated.ToString("dddd, HH:mm")</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-toggle-on me-1"></i>Durum
+                            </label>
+                            <div>
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6">
+                                        <i class="bi bi-toggle-off me-1"></i>Pasif
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                            </a>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bu kaydý silmek istediðinizden emin misiniz?')">
+                                <i class="bi bi-trash me-2"></i>Sil
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarý
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Bu iþlem geri alýnamaz</li>
+                            <li>Para birimi kalýcý olarak silinecektir</li>
+                            <li>Ýlgili kayýtlar etkilenebilir</li>
+                            <li>Silme iþlemi öncesi yedek almanýz önerilir</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

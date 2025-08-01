@@ -1,0 +1,126 @@
+@model PassCompanyCreateViewModel
+@{
+    ViewData["Title"] = "Yeni Pas Þirketi";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-plus-circle text-primary me-2"></i>Yeni Pas Þirketi
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-form me-2"></i>Þirket Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Name" class="form-label fw-semibold">
+                                    <i class="bi bi-building me-1"></i>Þirket Adý <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Name" class="form-control" placeholder="Þirket adý..." required />
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ContactPerson" class="form-label fw-semibold">
+                                    <i class="bi bi-person me-1"></i>Ýletiþim Kiþisi
+                                </label>
+                                <input asp-for="ContactPerson" class="form-control" placeholder="Ýletiþim kiþisi..." />
+                                <span asp-validation-for="ContactPerson" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Phone" class="form-label fw-semibold">
+                                    <i class="bi bi-telephone me-1"></i>Telefon <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Phone" class="form-control" placeholder="Telefon numarasý..." required />
+                                <span asp-validation-for="Phone" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Email" class="form-label fw-semibold">
+                                    <i class="bi bi-envelope me-1"></i>E-posta <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresi..." required />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActiveSwitch">
+                                    <label class="form-check-label fw-semibold" for="isActiveSwitch">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </label>
+                                </div>
+                                <small class="text-muted">Bu þirketin aktif olduðunu iþaretleyin</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label asp-for="Address" class="form-label fw-semibold">
+                                    <i class="bi bi-geo-alt me-1"></i>Adres <span class="text-danger">*</span>
+                                </label>
+                                <textarea asp-for="Address" class="form-control" rows="3" placeholder="Þirket adresi..." required></textarea>
+                                <span asp-validation-for="Address" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Pas Þirketi Oluþturma
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Þirket adý ve iletiþim bilgilerini girin</li>
+                            <li>Ýletiþim kiþisi bilgilerini belirleyin</li>
+                            <li>Adres bilgilerini ekleyin</li>
+                            <li>Aktiflik durumunu iþaretleyin</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

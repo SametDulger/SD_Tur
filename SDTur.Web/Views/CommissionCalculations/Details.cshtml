@@ -1,0 +1,123 @@
+@model SDTur.Web.Models.Financial.Transactions.CommissionCalculationViewModel
+@{
+    ViewData["Title"] = "Komisyon Hesaplama Detayý";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-calculator text-primary me-2"></i>Komisyon Hesaplama Detayý
+                </h1>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+                        <i class="bi bi-pencil me-2"></i>Düzenle
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Hesaplama Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Hesaplama Türü</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="badge bg-primary">@Model.CalculationType</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Durum</label>
+                            <div class="p-2 bg-light rounded">
+                                @if (Model.Status == "Hesaplandý")
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle me-1"></i>@Model.Status
+                                    </span>
+                                }
+                                else if (Model.Status == "Hesaplanýyor")
+                                {
+                                    <span class="badge bg-warning">
+                                        <i class="bi bi-clock me-1"></i>@Model.Status
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        <i class="bi bi-x-circle me-1"></i>@Model.Status
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Baþlangýç Tarihi</label>
+                            <div class="p-2 bg-light rounded">
+                                <i class="bi bi-calendar-check me-2"></i>@(Model.CalculationDate.ToString("dd/MM/yyyy HH:mm"))
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Para Birimi</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="badge bg-outline-secondary">@Model.Currency</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Oluþturma Tarihi</label>
+                            <div class="p-2 bg-light rounded">
+                                <i class="bi bi-clock me-2"></i>@(Model.CreatedDate.ToString("dd/MM/yyyy HH:mm"))
+                            </div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Description))
+                        {
+                            <div class="col-12">
+                                <label class="form-label fw-semibold text-muted">Açýklama</label>
+                                <div class="p-2 bg-light rounded">
+                                    <p class="mb-0">@Model.Description</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-calculator me-2"></i>Finansal Özet
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Toplam Tutar:</span>
+                        <span class="fw-bold text-success fs-5">@(Model.TotalAmount.ToString("C"))</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Komisyon Oraný:</span>
+                        <span class="fw-bold text-primary fs-5">%@Model.CommissionRate</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold">Komisyon Tutarý:</span>
+                        <span class="fw-bold text-primary fs-4">
+                            @(Model.CommissionAmount.ToString("C"))
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

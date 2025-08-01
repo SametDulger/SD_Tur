@@ -1,0 +1,172 @@
+@model CashViewModel
+@{
+    ViewData["Title"] = "Nakit İşlemi Detayı";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-eye text-primary me-2"></i>Nakit İşlemi Detayı
+                </h1>
+                <div class="btn-group" role="group">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <i class="bi bi-pencil me-2"></i>Düzenle
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Nakit İşlemi Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-cash-coin me-1"></i>Nakit Tipi
+                            </label>
+                            <div>
+                                <span class="badge bg-primary fs-6">@Model.CashType</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-tag me-1"></i>İşlem Tipi
+                            </label>
+                            <div>
+                                <span class="badge bg-secondary fs-6">@Model.TransactionType</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-currency-exchange me-1"></i>Tutar
+                            </label>
+                            <div class="h4 mb-0 text-primary">@Model.Amount.ToString("C")</div>
+                            <small class="text-muted">@Model.Currency</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-calendar me-1"></i>İşlem Tarihi
+                            </label>
+                            <div class="h6 mb-0">@Model.TransactionDate.ToString("dd MMMM yyyy")</div>
+                            <small class="text-muted">@Model.TransactionDate.ToString("dddd, HH:mm")</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-receipt me-1"></i>Makbuz Numarası
+                            </label>
+                            <div class="h6 mb-0">@Model.ReceiptNumber</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-check-circle me-1"></i>Durum
+                            </label>
+                            <div>
+                                @if (Model.IsApproved)
+                                {
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-check-circle me-1"></i>Onaylandı
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning fs-6">
+                                        <i class="bi bi-clock me-1"></i>Beklemede
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-tag me-1"></i>Kategori
+                            </label>
+                            <div>
+                                <span class="badge bg-info fs-6">@Model.Category</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-gear me-1"></i>Otomatik İşlem
+                            </label>
+                            <div>
+                                @if (Model.IsAutomatic)
+                                {
+                                    <span class="badge bg-info fs-6">
+                                        <i class="bi bi-robot me-1"></i>Otomatik
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6">
+                                        <i class="bi bi-person me-1"></i>Manuel
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label class="form-label fw-semibold text-muted">
+                                    <i class="bi bi-text-paragraph me-1"></i>Açıklama
+                                </label>
+                                <div class="p-3 bg-light rounded">
+                                    @Model.Description
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Nakit İşlemi
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Nakit işlem detayları</li>
+                            <li>Tutar ve para birimi bilgileri</li>
+                            <li>İşlem tarihi ve makbuz bilgileri</li>
+                            <li>Onay durumu takibi</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

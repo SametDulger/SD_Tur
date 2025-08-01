@@ -1,0 +1,128 @@
+@model RegionEditViewModel
+@{
+    ViewData["Title"] = "Bölge Düzenle";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-pencil text-primary me-2"></i>Bölge Düzenle
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-form me-2"></i>Bölge Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Name" class="form-label fw-semibold">
+                                    <i class="bi bi-geo-alt me-1"></i>Bölge Adý <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Name" class="form-control" placeholder="Bölge adý..." required />
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Country" class="form-label fw-semibold">
+                                    <i class="bi bi-flag me-1"></i>Ülke <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Country" class="form-control" placeholder="Ülke adý..." required />
+                                <span asp-validation-for="Country" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DistanceFromKemer" class="form-label fw-semibold">
+                                    <i class="bi bi-arrow-right me-1"></i>Kemer'e Uzaklýk (km) <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="DistanceFromKemer" type="number" class="form-control" placeholder="0" required />
+                                <span asp-validation-for="DistanceFromKemer" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Order" class="form-label fw-semibold">
+                                    <i class="bi bi-sort-numeric-up me-1"></i>Sýralama <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="Order" type="number" class="form-control" placeholder="0" required />
+                                <span asp-validation-for="Order" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActiveSwitch">
+                                    <label class="form-check-label fw-semibold" for="isActiveSwitch">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </label>
+                                </div>
+                                <small class="text-muted">Bu bölgenin aktif olduðunu iþaretleyin</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label asp-for="Description" class="form-label fw-semibold">
+                                    <i class="bi bi-file-text me-1"></i>Açýklama
+                                </label>
+                                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Bölge açýklamasý..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-check-circle me-2"></i>Güncelle
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Bölge Düzenleme
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Bölge adý ve ülke bilgilerini güncelleyin</li>
+                            <li>Kemer'e olan uzaklýðý düzenleyin</li>
+                            <li>Sýralama numarasýný deðiþtirebilirsiniz</li>
+                            <li>Açýklama ve aktiflik durumunu güncelleyin</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

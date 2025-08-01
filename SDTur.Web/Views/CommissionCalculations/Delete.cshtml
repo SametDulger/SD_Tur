@@ -1,0 +1,121 @@
+@model SDTur.Web.Models.Financial.Transactions.CommissionCalculationViewModel
+@{
+    ViewData["Title"] = "Komisyon Hesaplama Sil";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-trash text-danger me-2"></i>Komisyon Hesaplama Sil
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Silme Onayý
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Dikkat!</strong> Bu komisyon hesaplamasýný silmek istediðinizden emin misiniz? Bu iþlem geri alýnamaz.
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Hesaplama Türü</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="badge bg-primary">@Model.CalculationType</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Durum</label>
+                            <div class="p-2 bg-light rounded">
+                                @if (Model.Status == "Hesaplandý")
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle me-1"></i>@Model.Status
+                                    </span>
+                                }
+                                else if (Model.Status == "Hesaplanýyor")
+                                {
+                                    <span class="badge bg-warning">
+                                        <i class="bi bi-clock me-1"></i>@Model.Status
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        <i class="bi bi-x-circle me-1"></i>@Model.Status
+                                    </span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold text-muted">Toplam Tutar</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="fw-bold text-success">@Model.TotalAmount.ToString("C")</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold text-muted">Komisyon Oraný</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="fw-bold text-primary">%@Model.CommissionRate</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold text-muted">Komisyon Tutarý</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="fw-bold text-primary">@Model.CommissionAmount.ToString("C")</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Para Birimi</label>
+                            <div class="p-2 bg-light rounded">
+                                <span class="badge bg-outline-secondary">@Model.Currency</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Oluþturma Tarihi</label>
+                            <div class="p-2 bg-light rounded">
+                                <i class="bi bi-clock me-2"></i>@Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")
+                            </div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Description))
+                        {
+                            <div class="col-12">
+                                <label class="form-label fw-semibold text-muted">Açýklama</label>
+                                <div class="p-2 bg-light rounded">
+                                    <p class="mb-0">@Model.Description</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <form asp-action="Delete" method="post" class="mt-4">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-2"></i>Sil
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

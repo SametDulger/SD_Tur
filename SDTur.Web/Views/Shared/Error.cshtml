@@ -1,0 +1,34 @@
+@model SDTur.Web.Models.ErrorViewModel
+@{
+    ViewData["Title"] = "Hata";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="text-center">
+            <div class="mb-4">
+                <i class="bi bi-exclamation-triangle text-danger" style="font-size: 4rem;"></i>
+            </div>
+            <h1 class="h3 mb-3">Bir hata oluştu</h1>
+            <p class="text-muted mb-4">
+                Üzgünüz, bir hata oluştu. Lütfen daha sonra tekrar deneyin veya sistem yöneticisi ile iletişime geçin.
+            </p>
+            
+            @if (Model.ShowRequestId)
+            {
+                <div class="alert alert-info">
+                    <strong>Hata ID:</strong> <code>@Model.RequestId</code>
+                </div>
+            }
+            
+            <div class="d-flex justify-content-center gap-2">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                    <i class="bi bi-house me-2"></i>Ana Sayfa
+                </a>
+                <button onclick="history.back()" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </button>
+            </div>
+        </div>
+    </div>
+</div> 

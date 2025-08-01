@@ -8,7 +8,7 @@ builder.Services.AddControllersWithViews();
 // HTTP Client for API communication
 builder.Services.AddHttpClient<IApiService, ApiService>(client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"] ?? "http://localhost:5018/");
+    client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"] ?? "http://localhost:5000/");
 });
 
 var app = builder.Build();
@@ -30,5 +30,10 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Configure custom port for the web application
+app.Urls.Clear();
+app.Urls.Add("http://localhost:5018");
+app.Urls.Add("https://localhost:7275");
 
 app.Run();

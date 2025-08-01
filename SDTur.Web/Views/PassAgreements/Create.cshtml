@@ -1,0 +1,163 @@
+@model SDTur.Web.Models.Master.Pass.PassAgreementCreateViewModel
+@{
+    ViewData["Title"] = "Yeni Pas Anlaþmasý";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-plus-circle text-primary me-2"></i>Yeni Pas Anlaþmasý
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-form me-2"></i>Anlaþma Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PassCompanyId" class="form-label fw-semibold">
+                                    <i class="bi bi-building me-1"></i>Pas Þirketi <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="PassCompanyId" id="passCompanySelect" class="form-select" required>
+                                    <option value="">Pas þirketi seçiniz...</option>
+                                </select>
+                                <span asp-validation-for="PassCompanyId" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="AgreementNumber" class="form-label fw-semibold">
+                                    <i class="bi bi-hash me-1"></i>Anlaþma Numarasý <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="AgreementNumber" class="form-control" placeholder="Anlaþma numarasý..." required />
+                                <span asp-validation-for="AgreementNumber" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="StartDate" class="form-label fw-semibold">
+                                    <i class="bi bi-calendar me-1"></i>Baþlangýç Tarihi <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="StartDate" type="date" class="form-control" required />
+                                <span asp-validation-for="StartDate" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="EndDate" class="form-label fw-semibold">
+                                    <i class="bi bi-calendar me-1"></i>Bitiþ Tarihi <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="EndDate" type="date" class="form-control" required />
+                                <span asp-validation-for="EndDate" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="CommissionRate" class="form-label fw-semibold">
+                                    <i class="bi bi-percent me-1"></i>Komisyon Oraný <span class="text-danger">*</span>
+                                </label>
+                                <input asp-for="CommissionRate" type="number" step="0.01" class="form-control" placeholder="0.00" required />
+                                <span asp-validation-for="CommissionRate" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActiveSwitch">
+                                    <label class="form-check-label fw-semibold" for="isActiveSwitch">
+                                        <i class="bi bi-toggle-on me-1"></i>Aktif
+                                    </label>
+                                </div>
+                                <small class="text-muted">Bu anlaþmanýn aktif olduðunu iþaretleyin</small>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label asp-for="Terms" class="form-label fw-semibold">
+                                    <i class="bi bi-file-text me-1"></i>Anlaþma Þartlarý
+                                </label>
+                                <textarea asp-for="Terms" class="form-control" rows="4" placeholder="Anlaþma þartlarý..."></textarea>
+                                <span asp-validation-for="Terms" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Pas Anlaþmasý Oluþturma
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Pas þirketi seçin</li>
+                            <li>Anlaþma numarasý ve tarihlerini belirleyin</li>
+                            <li>Komisyon oranýný ayarlayýn</li>
+                            <li>Anlaþma þartlarýný ekleyin</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Load pass companies dynamically
+        async function loadPassCompanies() {
+            try {
+                const response = await fetch('/api/passcompanies');
+                const passCompanies = await response.json();
+                const passCompanySelect = document.getElementById('passCompanySelect');
+                
+                passCompanies.forEach(company => {
+                    const option = document.createElement('option');
+                    option.value = company.id;
+                    option.textContent = company.name;
+                    passCompanySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading pass companies:', error);
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPassCompanies();
+        });
+    </script>
+}

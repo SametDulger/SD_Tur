@@ -1,0 +1,214 @@
+@model IEnumerable<SDTur.Web.Models.Tour.Operations.CustomerDistributionViewModel>
+@{
+    ViewData["Title"] = "Müþteri Daðýlýmlarý";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-people text-primary me-2"></i>Müþteri Daðýlýmlarý
+                </h1>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i>Yeni Daðýlým
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-list-ul me-2"></i>Müþteri Daðýlým Listesi
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="bi bi-search text-muted"></i>
+                                </span>
+                                <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Müþteri daðýlýmý ara...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="border-0">
+                                        <i class="bi bi-airplane me-1"></i>Tur
+                                    </th>
+                                    <th class="border-0">
+                                        <i class="bi bi-person me-1"></i>Müþteri
+                                    </th>
+                                    <th class="border-0">
+                                        <i class="bi bi-tag me-1"></i>Daðýlým Tipi
+                                    </th>
+                                    <th class="border-0">
+                                        <i class="bi bi-calendar me-1"></i>Tarih
+                                    </th>
+                                    <th class="border-0">
+                                        <i class="bi bi-check-circle me-1"></i>Durum
+                                    </th>
+                                    <th class="border-0 text-end">
+                                        <i class="bi bi-gear me-1"></i>Ýþlemler
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Any())
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                                        <i class="bi bi-airplane text-primary"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-semibold">@item.TourName</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-info bg-opacity-10 rounded-circle p-2 me-2">
+                                                        <i class="bi bi-person text-info"></i>
+                                                    </div>
+                                                    <span class="fw-semibold">@item.CustomerName</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-secondary">@item.DistributionType</span>
+                                            </td>
+                                            <td>
+                                                <div class="h6 mb-0">@item.DistributionDate.ToString("dd MMM yyyy")</div>
+                                                <small class="text-muted">@item.DistributionDate.ToString("HH:mm")</small>
+                                            </td>
+                                            <td>
+                                                @if (item.IsCompleted)
+                                                {
+                                                    <span class="badge bg-success">
+                                                        <i class="bi bi-check-circle me-1"></i>Tamamlandý
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-warning">
+                                                        <i class="bi bi-clock me-1"></i>Beklemede
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="btn-group" role="group">
+                                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary" title="Detay">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning" title="Düzenle">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Sil">
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">
+                                            <div class="text-muted">
+                                                <i class="bi bi-inbox display-4 d-block mb-3"></i>
+                                                <h5>Henüz müþteri daðýlýmý bulunmuyor</h5>
+                                                <p class="mb-0">Yeni bir müþteri daðýlýmý eklemek için yukarýdaki butonu kullanýn.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @if (Model != null && Model.Any())
+                {
+                    <div class="card-footer bg-white">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <small class="text-muted">
+                                    Toplam <strong>@Model.Count()</strong> müþteri daðýlýmý listeleniyor
+                                </small>
+                            </div>
+                            <div class="col-md-6">
+                                <nav aria-label="Sayfalama">
+                                    <ul class="pagination pagination-sm justify-content-end mb-0">
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1">Önceki</a>
+                                        </li>
+                                        <li class="page-item active">
+                                            <a class="page-link" href="#">1</a>
+                                        </li>
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#">Sonraki</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Müþteri Daðýlýmlarý
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Tur müþterilerinin daðýlýmýný yönetin</li>
+                            <li>Müþteri tiplerini belirleyin</li>
+                            <li>Daðýlým tarihlerini takip edin</li>
+                            <li>Tamamlanma durumunu kontrol edin</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const tableRows = document.querySelectorAll('tbody tr');
+            
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

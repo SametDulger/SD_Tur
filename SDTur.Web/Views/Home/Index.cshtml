@@ -1,0 +1,442 @@
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-speedometer2 text-primary me-2"></i>Dashboard
+            </h1>
+            <div class="text-muted">
+                <i class="bi bi-calendar3 me-1"></i><span id="currentDate">@DateTime.Now.ToString("dd MMMM yyyy")</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- İstatistik Kartları -->
+<div class="row g-4 mb-4" id="statisticsCards">
+    <!-- Dinamik olarak yüklenecek -->
+</div>
+
+<!-- Ana İçerik -->
+<div class="row g-4">
+    <!-- Hızlı İşlemler -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-lightning-charge text-warning me-2"></i>Hızlı İşlemler
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3" id="quickActions">
+                    <!-- Dinamik olarak yüklenecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Son Aktiviteler -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-activity text-success me-2"></i>Son Aktiviteler
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush" id="recentActivities">
+                    <!-- Dinamik olarak yüklenecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grafikler ve Raporlar -->
+<div class="row g-4 mt-4">
+    <!-- Aylık Gelir Grafiği -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-graph-up text-primary me-2"></i>Aylık Gelir Grafiği
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="monthlyIncomeChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tur Dağılımı -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-pie-chart text-success me-2"></i>Tur Dağılımı
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="tourDistributionChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Yaklaşan Turlar -->
+<div class="row g-4 mt-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-calendar-event text-info me-2"></i>Yaklaşan Turlar
+                    </h5>
+                    <a href="/Tour/Tours" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-arrow-right me-1"></i>Tümünü Gör
+                    </a>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive" id="upcomingTours">
+                    <!-- Dinamik olarak yüklenecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let monthlyIncomeChart, tourDistributionChart;
+
+        // Sayfa yüklendiğinde çalışacak fonksiyonlar
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+        });
+
+        function initializeDashboard() {
+            // Tarih güncelleme
+            updateCurrentDate();
+            
+            // İstatistikleri yükle
+            loadStatistics();
+            
+            // Grafikleri yükle
+            loadCharts();
+            
+            // Otomatik yenileme (5 dakikada bir)
+            setInterval(loadStatistics, 300000);
+        }
+
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('tr-TR', options);
+        }
+
+        async function loadStatistics() {
+            try {
+                const response = await fetch('/api/dashboard/statistics');
+                const data = await response.json();
+                
+                if (data) {
+                    renderStatistics(data);
+                }
+            } catch (error) {
+                console.error('İstatistikler yüklenirken hata:', error);
+            }
+        }
+
+        function renderStatistics(data) {
+            const container = document.getElementById('statisticsCards');
+            
+            const html = `
+                <div class="col-xl-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle p-3">
+                                        <i class="bi bi-airplane text-primary fs-4"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="card-title text-muted mb-1">Aktif Turlar</h6>
+                                    <h3 class="mb-0 fw-bold">${data.activeTours || 0}</h3>
+                                    <small class="text-success">
+                                        <i class="bi bi-arrow-up me-1"></i>${data.tourGrowth || 0}% artış
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 rounded-circle p-3">
+                                        <i class="bi bi-ticket-perforated text-success fs-4"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="card-title text-muted mb-1">Satılan Biletler</h6>
+                                    <h3 class="mb-0 fw-bold">${data.soldTickets || 0}</h3>
+                                    <small class="text-success">
+                                        <i class="bi bi-arrow-up me-1"></i>${data.ticketGrowth || 0}% artış
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning bg-opacity-10 rounded-circle p-3">
+                                        <i class="bi bi-currency-dollar text-warning fs-4"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="card-title text-muted mb-1">Aylık Gelir</h6>
+                                    <h3 class="mb-0 fw-bold">₺${(data.monthlyIncome || 0).toLocaleString('tr-TR')}</h3>
+                                    <small class="text-success">
+                                        <i class="bi bi-arrow-up me-1"></i>${data.incomeGrowth || 0}% artış
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info bg-opacity-10 rounded-circle p-3">
+                                        <i class="bi bi-people text-info fs-4"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="card-title text-muted mb-1">Aktif Müşteriler</h6>
+                                    <h3 class="mb-0 fw-bold">${data.activeCustomers || 0}</h3>
+                                    <small class="text-success">
+                                        <i class="bi bi-arrow-up me-1"></i>${data.customerGrowth || 0}% artış
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        async function loadCharts() {
+            try {
+                const [incomeData, tourData] = await Promise.all([
+                    fetch('/api/dashboard/monthly-income').then(r => r.json()),
+                    fetch('/api/dashboard/tour-distribution').then(r => r.json())
+                ]);
+
+                createMonthlyIncomeChart(incomeData);
+                createTourDistributionChart(tourData);
+            } catch (error) {
+                console.error('Grafikler yüklenirken hata:', error);
+            }
+        }
+
+        function createMonthlyIncomeChart(data) {
+            const ctx = document.getElementById('monthlyIncomeChart').getContext('2d');
+            
+            monthlyIncomeChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels || ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran'],
+                    datasets: [{
+                        label: 'Aylık Gelir (₺)',
+                        data: data.values || [0, 0, 0, 0, 0, 0],
+                        borderColor: '#0d6efd',
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₺' + value.toLocaleString('tr-TR');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createTourDistributionChart(data) {
+            const ctx = document.getElementById('tourDistributionChart').getContext('2d');
+            
+            tourDistributionChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.labels || ['Yurt İçi', 'Yurt Dışı', 'Günübirlik'],
+                    datasets: [{
+                        data: data.values || [0, 0, 0],
+                        backgroundColor: [
+                            '#0d6efd',
+                            '#198754',
+                            '#ffc107'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Özel render fonksiyonları
+        window.renderQuickActions = function(data, element) {
+            if (!data || !data.length) {
+                element.innerHTML = '<div class="text-center py-4 text-muted">Hızlı işlem bulunamadı</div>';
+                return;
+            }
+
+            const html = data.map(action => `
+                <div class="col-md-6">
+                    <a href="${action.url}" class="btn btn-outline-${action.color} w-100 text-start p-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-${action.icon} fs-4 me-3"></i>
+                            <div>
+                                <div class="fw-semibold">${action.title}</div>
+                                <small class="text-muted">${action.description}</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            `).join('');
+            
+            element.innerHTML = html;
+        };
+
+        window.renderActivities = function(data, element) {
+            if (!data || !data.length) {
+                element.innerHTML = '<div class="text-center py-4 text-muted">Aktivite bulunamadı</div>';
+                return;
+            }
+
+            const html = data.map(activity => `
+                <div class="list-group-item border-0 py-3">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-${activity.color} bg-opacity-10 rounded-circle p-2 me-3">
+                            <i class="bi bi-${activity.icon} text-${activity.color}"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">${activity.title}</div>
+                            <small class="text-muted">${activity.description}</small>
+                        </div>
+                        <small class="text-muted">${activity.timeAgo}</small>
+                    </div>
+                </div>
+            `).join('');
+            
+            element.innerHTML = html;
+        };
+
+        window.renderUpcomingTours = function(data, element) {
+            if (!data || !data.length) {
+                element.innerHTML = '<div class="text-center py-4 text-muted">Yaklaşan tur bulunamadı</div>';
+                return;
+            }
+
+            const html = `
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Tur Adı</th>
+                            <th>Tarih</th>
+                            <th>Kapasite</th>
+                            <th>Durum</th>
+                            <th class="text-end">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.map(tour => `
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">${tour.name}</div>
+                                    <small class="text-muted">${tour.destination}</small>
+                                </td>
+                                <td>
+                                    <div>${tour.startDate}</div>
+                                    <small class="text-muted">${tour.duration} gün</small>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                                            <div class="progress-bar bg-${tour.capacityPercentage > 80 ? 'success' : tour.capacityPercentage > 50 ? 'warning' : 'danger'}" 
+                                                 style="width: ${tour.capacityPercentage}%"></div>
+                                        </div>
+                                        <small>${tour.bookedSeats}/${tour.totalSeats}</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-${tour.status === 'Aktif' ? 'success' : tour.status === 'Yakında' ? 'warning' : 'secondary'}">
+                                        ${tour.status}
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="/Tour/Tours/Details/${tour.id}" class="btn btn-outline-info" title="Görüntüle">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="/Tour/Tours/Edit/${tour.id}" class="btn btn-outline-primary" title="Düzenle">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            element.innerHTML = html;
+        };
+    </script>
+} 

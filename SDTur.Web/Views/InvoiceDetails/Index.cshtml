@@ -1,0 +1,123 @@
+@model IEnumerable<SDTur.Web.Models.Financial.Transactions.InvoiceDetailViewModel>
+@{
+    ViewData["Title"] = "Fatura Detaylarý";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-receipt text-primary me-2"></i>Fatura Detaylarý
+                </h1>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i>Yeni Detay
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-list-ul me-2"></i>Detay Listesi
+                    </h5>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" id="searchInput" placeholder="Detay ara...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="detailsTable">
+                    <thead>
+                        <tr>
+                            <th>Fatura No</th>
+                            <th>Ürün/Hizmet</th>
+                            <th>Açýklama</th>
+                            <th>Miktar</th>
+                            <th>Birim Fiyat</th>
+                            <th>KDV Oraný</th>
+                            <th>KDV Tutarý</th>
+                            <th>Toplam Tutar</th>
+                            <th class="text-end">Ýþlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="fw-semibold text-primary">@item.InvoiceNumber</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                            <i class="bi bi-box text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-semibold">@item.ProductName</div>
+                                            <small class="text-muted">@item.ProductCode</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-muted">@(item.Description?.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description)</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark">@item.Quantity @item.Unit</span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-success">@item.UnitPrice.ToString("C")</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-outline-warning">%@item.VatRate</span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-warning">@item.VatAmount.ToString("C")</span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-primary">@item.TotalAmount.ToString("C")</span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $("#searchInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#detailsTable tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

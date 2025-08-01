@@ -16,5 +16,12 @@ namespace SDTur.Web.Models.Tour.Core
         public string Location { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
+        
+        public DateTime TourDate { get; set; }
+        public decimal TotalIncome { get; set; }
+        public decimal TotalExpense { get; set; }
+        public bool IsCompleted { get; set; }
+        public bool IsCancelled { get; set; }
+        public string Notes { get; set; } = string.Empty;
     }
 } 

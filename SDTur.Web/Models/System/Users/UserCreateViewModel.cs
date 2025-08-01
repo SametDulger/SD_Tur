@@ -24,6 +24,8 @@ namespace SDTur.Web.Models.System.Users
         public string Role { get; set; } = string.Empty;
         public int? EmployeeId { get; set; }
         public int? BranchId { get; set; }
+        public string Address { get; set; } = string.Empty;
+        public string Notes { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
     }
 } 
