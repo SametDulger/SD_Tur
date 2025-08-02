@@ -1,4 +1,4 @@
-@model UserViewModel
+@model SDTur.Web.Models.System.Users.UserViewModel
 @{
     ViewData["Title"] = "Kullanıcı Sil";
 }
@@ -161,7 +161,7 @@
                             <a asp-action="Index" class="btn btn-outline-secondary">
                                 <i class="bi bi-x-circle me-2"></i>İptal
                             </a>
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bu kaydı silmek istediğinizden emin misiniz?')">
+                            <button type="submit" class="btn btn-danger">
                                 <i class="bi bi-trash me-2"></i>Sil
                             </button>
                         </div>

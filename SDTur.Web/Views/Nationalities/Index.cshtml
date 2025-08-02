@@ -1,4 +1,4 @@
-@model IEnumerable<NationalityViewModel>
+@model IEnumerable<SDTur.Web.Models.Master.References.NationalityViewModel>
 @{
     ViewData["Title"] = "Uyruklar";
 }
@@ -16,38 +16,9 @@
     </div>
 </div>
 
-<!-- Filtreler -->
-<div class="card border-0 shadow-sm mb-4">
-    <div class="card-header bg-white">
-        <h6 class="card-title mb-0">
-            <i class="bi bi-funnel text-info me-2"></i>Filtreler
-        </h6>
-    </div>
-    <div class="card-body">
-        <form id="filterForm" class="row g-3">
-            <div class="col-lg-6 col-md-6">
-                <label class="form-label">Durum</label>
-                <select class="form-select" id="statusFilter">
-                    <option value="">Tüm Durumlar</option>
-                    <option value="true">Aktif</option>
-                    <option value="false">Pasif</option>
-                </select>
-            </div>
-            <div class="col-lg-6 col-md-6">
-                <label class="form-label">&nbsp;</label>
-                <div class="d-grid">
-                    <button type="button" class="btn btn-outline-primary" onclick="applyFilters()">
-                        <i class="bi bi-search me-2"></i>Filtrele
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Ýstatistikler -->
-<div class="row g-4 mb-4" id="statisticsCards">
-    <div class="col-xl-3 col-md-6">
+<!-- Ä°statistikler -->
+<div class="row g-4 mb-4">
+    <div class="col-xl-6 col-md-6">
         <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <div class="d-flex align-items-center">
@@ -58,14 +29,13 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Toplam Uyruk</h6>
-                        <h3 class="mb-0 fw-bold" id="totalNationalities">0</h3>
+                        <h3 class="mb-0 fw-bold">@Model.Count()</h3>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-6 col-md-6">
         <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <div class="d-flex align-items-center">
@@ -76,43 +46,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Aktif Uyruk</h6>
-                        <h3 class="mb-0 fw-bold text-success" id="activeNationalities">0</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-xl-3 col-md-6">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <div class="bg-info bg-opacity-10 rounded-circle p-3">
-                            <i class="bi bi-people text-info fs-4"></i>
-                        </div>
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                        <h6 class="card-title text-muted mb-1">Kullanýlan</h6>
-                        <h3 class="mb-0 fw-bold text-info" id="usedNationalities">0</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-xl-3 col-md-6">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <div class="bg-warning bg-opacity-10 rounded-circle p-3">
-                            <i class="bi bi-calendar text-warning fs-4"></i>
-                        </div>
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                        <h6 class="card-title text-muted mb-1">Son Eklenen</h6>
-                        <h3 class="mb-0 fw-bold text-warning" id="lastAdded">-</h3>
+                        <h3 class="mb-0 fw-bold text-success">@Model.Count(n => n.IsActive)</h3>
                     </div>
                 </div>
             </div>
@@ -122,7 +56,7 @@
 
 <!-- Uyruk Listesi -->
 <div class="card border-0 shadow-sm">
-    <div class="card-header bg-white">
+    <div class="card-header bg-white border-0">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h5 class="card-title mb-0">
@@ -135,17 +69,17 @@
                         <span class="input-group-text bg-light border-end-0">
                             <i class="bi bi-search text-muted"></i>
                         </span>
-                        <input type="text" class="form-control border-start-0" id="searchInput" placeholder="Uyruk ara..." data-search="nationalitiesTable">
+                        <input type="text" class="form-control border-start-0" placeholder="Uyruk ara...">
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="bi bi-download me-1"></i>Dýþa Aktar
+                            <i class="bi bi-download me-1"></i>DÄ±ÅŸa Aktar
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="exportToExcel()">
+                            <li><a class="dropdown-item" href="#">
                                 <i class="bi bi-file-earmark-excel me-2"></i>Excel
                             </a></li>
-                            <li><a class="dropdown-item" href="#" onclick="exportToPDF()">
+                            <li><a class="dropdown-item" href="#">
                                 <i class="bi bi-file-earmark-pdf me-2"></i>PDF
                             </a></li>
                         </ul>
@@ -155,155 +89,77 @@
         </div>
     </div>
     <div class="card-body p-0">
-        <div class="table-responsive" id="nationalitiesTable">
-            <!-- Dinamik olarak yüklenecek -->
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>Kod</th>
+                        <th>Ad</th>
+                        <th>Durum</th>
+                        <th class="text-end">Ä°ÅŸlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var nationality in Model)
+                        {
+                            <tr>
+                                <td><span class="fw-semibold">@nationality.Code</span></td>
+                                <td>@nationality.Name</td>
+                                <td>
+                                    @if (nationality.IsActive)
+                                    {
+                                        <span class="badge bg-success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Pasif</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Details" asp-route-id="@nationality.Id" class="btn btn-outline-info" title="Detay">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@nationality.Id" class="btn btn-outline-primary" title="DÃ¼zenle">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@nationality.Id" class="btn btn-outline-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-4">
+                                <i class="bi bi-inbox text-muted fs-1"></i>
+                                <p class="text-muted mt-2">Uyruk bulunamadÄ±</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="card-footer bg-light">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <small class="text-muted">
-                    Toplam <strong id="recordCount">0</strong> uyruk bulundu
+                    Toplam <strong>@Model.Count()</strong> uyruk bulundu
                 </small>
             </div>
             <div class="col-md-6 text-end">
-                <nav aria-label="Sayfa navigasyonu">
-                    <ul class="pagination pagination-sm mb-0 justify-content-end" id="pagination">
-                        <!-- Dinamik olarak oluþturulacak -->
-                    </ul>
-                </nav>
+                <small class="text-muted">
+                    Son gÃ¼ncelleme: @DateTime.Now.ToString("dd.MM.yyyy HH:mm")
+                </small>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Popüler Uyruklar -->
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-star text-warning me-2"></i>Popüler Uyruklar
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-3" id="popularNationalities">
-                    <!-- Dinamik olarak yüklenecek -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-@section Scripts {
-    <script>
-        let currentFilters = {};
-        
-        function applyFilters() {
-            currentFilters = {
-                isActive: document.getElementById('statusFilter').value
-            };
-            
-            // Reload data with filters
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const endpoint = queryString ? `/api/master/nationalities?${queryString}` : '/api/master/nationalities';
-            
-            console.log("Load data handled server-side"););
-            updateStatistics();
-        }
-        
-        function updateStatistics() {
-            // Load statistics based on current filters
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const endpoint = queryString ? `/api/master/nationalities/statistics?${queryString}` : '/api/master/nationalities/statistics';
-            
-            console.log("API call handled server-side");
-                .then(data => {
-                    document.getElementById('totalNationalities').textContent = data.totalNationalities || 0;
-                    document.getElementById('activeNationalities').textContent = data.activeNationalities || 0;
-                    document.getElementById('usedNationalities').textContent = data.usedNationalities || 0;
-                    document.getElementById('lastAdded').textContent = data.lastAdded || '-';
-                    document.getElementById('recordCount').textContent = data.totalNationalities || 0;
-                })
-                .catch(error => {
-                    console.error('Statistics loading failed:', error);
-                });
-        }
-        
-        function exportToExcel() {
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const filename = `uyruklar_${new Date().toISOString().split('T')[0]}`;
-            console.log("Export to Excel handled server-side");;
-        }
-        
-        function exportToPDF() {
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const filename = `uyruklar_${new Date().toISOString().split('T')[0]}`;
-            console.log("Export to PDF handled server-side");;
-        }
-        
-        // Auto-load data and setup
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load initial data
-            updateStatistics();
-            
-            // Apply initial filters
-            applyFilters();
-            
-            // Setup search functionality
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const table = document.getElementById('nationalitiesTable');
-                    const rows = table.querySelectorAll('tbody tr');
-                    
-                    rows.forEach(row => {
-                        const text = row.textContent.toLowerCase();
-                        row.style.display = text.includes(searchTerm) ? '' : 'none';
-                    });
-                }, 300));
-            }
-        });
-        
-        // Custom render function for popular nationalities
-        window.renderPopularNationalities = function(data, element) {
-            if (!data || !data.length) {
-                element.innerHTML = '<div class="text-center py-4 text-muted">Popüler uyruk bulunamadý</div>';
-                return;
-            }
-
-            const html = data.map(nationality => `
-                <div class="col-lg-3 col-md-6">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body text-center">
-                            <div class="bg-${nationality.color} bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-                                <i class="bi bi-flag text-${nationality.color} fs-4"></i>
-                            </div>
-                            <h6 class="fw-bold">${nationality.name}</h6>
-                            <div class="h4 fw-bold text-${nationality.color} mb-2">${nationality.code}</div>
-                            <div class="row g-2 text-center">
-                                <div class="col-6">
-                                    <small class="text-muted">Kullaným</small>
-                                    <div class="fw-semibold text-primary">${nationality.usageCount}</div>
-                                </div>
-                                <div class="col-6">
-                                    <small class="text-muted">Oran</small>
-                                    <div class="fw-semibold text-success">${nationality.usagePercentage}%</div>
-                                </div>
-                            </div>
-                            <div class="mt-2">
-                                <div class="progress" style="height: 6px;">
-                                    <div class="progress-bar bg-success" style="width: ${nationality.usagePercentage}%"></div>
-                                </div>
-                                <small class="text-muted">${nationality.usagePercentage}% kullaným</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
-            element.innerHTML = html;
-        };
-    </script>
-}

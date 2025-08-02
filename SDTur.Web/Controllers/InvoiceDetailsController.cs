@@ -17,13 +17,13 @@ namespace SDTur.Web.Controllers
         {
             try
             {
-                var invoiceDetails = await _apiService.GetAsync<IEnumerable<InvoiceDetailViewModel>>("api/invoicedetails");
+                var invoiceDetails = await _apiService.GetInvoiceDetailsAsync();
                 return View(invoiceDetails);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log the exception
-                return View("Error");
+                TempData["Error"] = "Fatura detayları yüklenirken hata oluştu: " + ex.Message;
+                return View(new List<InvoiceDetailViewModel>());
             }
         }
 
@@ -31,52 +31,75 @@ namespace SDTur.Web.Controllers
         {
             try
             {
-                var invoiceDetail = await _apiService.GetAsync<InvoiceDetailViewModel>($"api/invoicedetails/{id}");
+                var invoiceDetail = await _apiService.GetInvoiceDetailByIdAsync(id);
                 if (invoiceDetail == null)
-                    return NotFound();
-
+                {
+                    TempData["Error"] = "Fatura detayı bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
                 return View(invoiceDetail);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log the exception
-                return View("Error");
+                TempData["Error"] = "Fatura detayı yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
             }
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            try
+            {
+                var invoices = await _apiService.GetInvoicesAsync();
+                ViewBag.Invoices = invoices;
+                return View(new InvoiceDetailCreateViewModel());
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Sayfa yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(InvoiceDetailCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    var createdInvoiceDetail = await _apiService.PostAsync<InvoiceDetailCreateViewModel, InvoiceDetailViewModel>("api/invoicedetails", model);
+                    var result = await _apiService.CreateInvoiceDetailAsync(model);
+                    TempData["Success"] = "Fatura detayı başarıyla oluşturuldu.";
                     return RedirectToAction(nameof(Index));
                 }
-                catch (Exception)
-                {
-                    // Log the exception
-                    ModelState.AddModelError("", "Fatura detayı oluşturulurken bir hata oluştu.");
-                }
+                
+                var invoices = await _apiService.GetInvoicesAsync();
+                ViewBag.Invoices = invoices;
+                return View(model);
             }
-
-            return View(model);
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Fatura detayı oluşturulurken hata oluştu: " + ex.Message;
+                var invoices = await _apiService.GetInvoicesAsync();
+                ViewBag.Invoices = invoices;
+                return View(model);
+            }
         }
 
         public async Task<IActionResult> Edit(int id)
         {
             try
             {
-                var invoiceDetail = await _apiService.GetAsync<InvoiceDetailViewModel>($"api/invoicedetails/{id}");
+                var invoiceDetail = await _apiService.GetInvoiceDetailByIdAsync(id);
                 if (invoiceDetail == null)
-                    return NotFound();
+                {
+                    TempData["Error"] = "Fatura detayı bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var invoices = await _apiService.GetInvoicesAsync();
+                ViewBag.Invoices = invoices;
 
                 var editModel = new InvoiceDetailEditViewModel
                 {
@@ -92,51 +115,55 @@ namespace SDTur.Web.Controllers
 
                 return View(editModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log the exception
-                return View("Error");
+                TempData["Error"] = "Fatura detayı yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, InvoiceDetailEditViewModel model)
+        public async Task<IActionResult> Edit(InvoiceDetailEditViewModel model)
         {
-            if (id != model.Id)
-                return NotFound();
-
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    var updatedInvoiceDetail = await _apiService.PutAsync<InvoiceDetailEditViewModel, InvoiceDetailViewModel>($"api/invoicedetails/{id}", model);
+                    var result = await _apiService.UpdateInvoiceDetailAsync(model);
+                    TempData["Success"] = "Fatura detayı başarıyla güncellendi.";
                     return RedirectToAction(nameof(Index));
                 }
-                catch (Exception)
-                {
-                    // Log the exception
-                    ModelState.AddModelError("", "Fatura detayı güncellenirken bir hata oluştu.");
-                }
+                
+                var invoices = await _apiService.GetInvoicesAsync();
+                ViewBag.Invoices = invoices;
+                return View(model);
             }
-
-            return View(model);
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Fatura detayı güncellenirken hata oluştu: " + ex.Message;
+                var invoices = await _apiService.GetInvoicesAsync();
+                ViewBag.Invoices = invoices;
+                return View(model);
+            }
         }
 
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var invoiceDetail = await _apiService.GetAsync<InvoiceDetailViewModel>($"api/invoicedetails/{id}");
+                var invoiceDetail = await _apiService.GetInvoiceDetailByIdAsync(id);
                 if (invoiceDetail == null)
-                    return NotFound();
-
+                {
+                    TempData["Error"] = "Fatura detayı bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
                 return View(invoiceDetail);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log the exception
-                return View("Error");
+                TempData["Error"] = "Fatura detayı yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -146,13 +173,14 @@ namespace SDTur.Web.Controllers
         {
             try
             {
-                await _apiService.DeleteAsync($"api/invoicedetails/{id}");
+                await _apiService.DeleteInvoiceDetailAsync(id);
+                TempData["Success"] = "Fatura detayı başarıyla silindi.";
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log the exception
-                return View("Error");
+                TempData["Error"] = "Fatura detayı silinirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -160,13 +188,14 @@ namespace SDTur.Web.Controllers
         {
             try
             {
-                var invoiceDetails = await _apiService.GetAsync<IEnumerable<InvoiceDetailViewModel>>($"api/invoicedetails/invoice/{invoiceId}");
+                var invoiceDetails = await _apiService.GetInvoiceDetailsByInvoiceIdAsync(invoiceId);
+                ViewBag.InvoiceId = invoiceId;
                 return View("Index", invoiceDetails);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log the exception
-                return View("Error");
+                TempData["Error"] = "Fatura detayları yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
             }
         }
     }

@@ -3,255 +3,275 @@
     ViewData["Title"] = "Yeni Tur";
 }
 
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="h3 mb-0">
-                <i class="bi bi-airplane text-primary me-2"></i>Yeni Tur
-            </h1>
-            <a asp-action="Index" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-2"></i>Geri Dön
-            </a>
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-airplane text-primary me-2"></i>Yeni Tur
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-lg-8">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-plus-circle text-success me-2"></i>Tur Bilgileri
-                </h5>
-            </div>
-            <div class="card-body">
-                <form asp-action="Create" method="post" data-validate>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label asp-for="Name" class="form-label">
-                                <i class="bi bi-airplane me-1"></i>Tur Adı
-                            </label>
-                            <input asp-for="Name" class="form-control" placeholder="Tur adını giriniz" required>
-                            <span asp-validation-for="Name" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="TourTypeId" class="form-label">
-                                <i class="bi bi-tag me-1"></i>Tur Türü
-                            </label>
-                            <select asp-for="TourTypeId" class="form-select" required>
-                                <option value="">Tur türü seçiniz</option>
-                            </select>
-                            <span asp-validation-for="TourTypeId" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="DepartureLocation" class="form-label">
-                                <i class="bi bi-geo-alt me-1"></i>Kalkış Yeri
-                            </label>
-                            <input asp-for="DepartureLocation" class="form-control" placeholder="Kalkış yeri" required>
-                            <span asp-validation-for="DepartureLocation" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="DestinationLocation" class="form-label">
-                                <i class="bi bi-geo-alt me-1"></i>Varış Yeri
-                            </label>
-                            <input asp-for="DestinationLocation" class="form-control" placeholder="Varış yeri" required>
-                            <span asp-validation-for="DestinationLocation" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="StartDate" class="form-label">
-                                <i class="bi bi-calendar me-1"></i>Başlangıç Tarihi
-                            </label>
-                            <input asp-for="StartDate" type="datetime-local" class="form-control" required>
-                            <span asp-validation-for="StartDate" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="EndDate" class="form-label">
-                                <i class="bi bi-calendar me-1"></i>Bitiş Tarihi
-                            </label>
-                            <input asp-for="EndDate" type="datetime-local" class="form-control" required>
-                            <span asp-validation-for="EndDate" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="Capacity" class="form-label">
-                                <i class="bi bi-people me-1"></i>Kapasite
-                            </label>
-                            <input asp-for="Capacity" type="number" class="form-control" placeholder="0" min="1" required>
-                            <span asp-validation-for="Capacity" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="Price" class="form-label">
-                                <i class="bi bi-currency-dollar me-1"></i>Fiyat
-                            </label>
-                            <div class="input-group">
-                                <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="0.00" required>
-                                <span class="input-group-text">₺</span>
-                            </div>
-                            <span asp-validation-for="Price" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="CurrencyId" class="form-label">
-                                <i class="bi bi-currency-exchange me-1"></i>Para Birimi
-                            </label>
-                            <select asp-for="CurrencyId" class="form-select" required>
-                                <option value="">Para birimi seçiniz</option>
-                            </select>
-                            <span asp-validation-for="CurrencyId" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="GuideName" class="form-label">
-                                <i class="bi bi-person me-1"></i>Rehber
-                            </label>
-                            <input asp-for="GuideName" class="form-control" placeholder="Rehber adı">
-                            <span asp-validation-for="GuideName" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="GuidePhone" class="form-label">
-                                <i class="bi bi-telephone me-1"></i>Rehber Telefonu
-                            </label>
-                            <input asp-for="GuidePhone" class="form-control" placeholder="Rehber telefon numarası">
-                            <span asp-validation-for="GuidePhone" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="TransportType" class="form-label">
-                                <i class="bi bi-truck me-1"></i>Ulaşım Türü
-                            </label>
-                            <select asp-for="TransportType" class="form-select">
-                                <option value="">Ulaşım türü seçiniz</option>
-                            </select>
-                            <span asp-validation-for="TransportType" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-12">
-                            <label asp-for="Description" class="form-label">
-                                <i class="bi bi-text-paragraph me-1"></i>Tur Açıklaması
-                            </label>
-                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Tur açıklaması" required></textarea>
-                            <span asp-validation-for="Description" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-12">
-                            <label asp-for="Itinerary" class="form-label">
-                                <i class="bi bi-list-ul me-1"></i>Güzergah
-                            </label>
-                            <textarea asp-for="Itinerary" class="form-control" rows="4" placeholder="Tur güzergahı"></textarea>
-                            <span asp-validation-for="Itinerary" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-12">
-                            <div class="form-check">
-                                <input asp-for="IsActive" class="form-check-input" type="checkbox" checked>
-                                <label asp-for="IsActive" class="form-check-label">
-                                    <i class="bi bi-check-circle me-1"></i>Aktif Tur
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-plus-circle text-success me-2"></i>Tur Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label">
+                                    <i class="bi bi-airplane me-1"></i>Tur Adı
                                 </label>
+                                <input asp-for="Name" class="form-control" placeholder="Tur adını giriniz" required>
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="TourTypeId" class="form-label">
+                                    <i class="bi bi-tag me-1"></i>Tur Türü
+                                </label>
+                                <select asp-for="TourTypeId" class="form-select" required>
+                                    <option value="">Tur türü seçiniz</option>
+                                    @if (ViewBag.TourTypes != null)
+                                    {
+                                        @foreach (var tourType in ViewBag.TourTypes)
+                                        {
+                                            <option value="@tourType.Id">@tourType.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="TourTypeId" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="DepartureLocation" class="form-label">
+                                    <i class="bi bi-geo-alt me-1"></i>Kalkış Yeri
+                                </label>
+                                <input asp-for="DepartureLocation" class="form-control" placeholder="Kalkış yeri" required>
+                                <span asp-validation-for="DepartureLocation" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="DestinationLocation" class="form-label">
+                                    <i class="bi bi-geo-alt me-1"></i>Varış Yeri
+                                </label>
+                                <input asp-for="DestinationLocation" class="form-control" placeholder="Varış yeri" required>
+                                <span asp-validation-for="DestinationLocation" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="StartDate" class="form-label">
+                                    <i class="bi bi-calendar me-1"></i>Başlangıç Tarihi
+                                </label>
+                                <input asp-for="StartDate" type="datetime-local" class="form-control" required>
+                                <span asp-validation-for="StartDate" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="EndDate" class="form-label">
+                                    <i class="bi bi-calendar me-1"></i>Bitiş Tarihi
+                                </label>
+                                <input asp-for="EndDate" type="datetime-local" class="form-control" required>
+                                <span asp-validation-for="EndDate" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="Capacity" class="form-label">
+                                    <i class="bi bi-people me-1"></i>Kapasite
+                                </label>
+                                <input asp-for="Capacity" type="number" class="form-control" placeholder="0" min="1" required>
+                                <span asp-validation-for="Capacity" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="Price" class="form-label">
+                                    <i class="bi bi-currency-dollar me-1"></i>Fiyat
+                                </label>
+                                <div class="input-group">
+                                    <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="0.00" required>
+                                    <span class="input-group-text">₺</span>
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="CurrencyId" class="form-label">
+                                    <i class="bi bi-currency-exchange me-1"></i>Para Birimi
+                                </label>
+                                <select asp-for="CurrencyId" class="form-select" required>
+                                    <option value="">Para birimi seçiniz</option>
+                                    @if (ViewBag.Currencies != null)
+                                    {
+                                        @foreach (var currency in ViewBag.Currencies)
+                                        {
+                                            <option value="@currency.Id">@currency.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="CurrencyId" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="GuideName" class="form-label">
+                                    <i class="bi bi-person me-1"></i>Rehber
+                                </label>
+                                <input asp-for="GuideName" class="form-control" placeholder="Rehber adı">
+                                <span asp-validation-for="GuideName" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="GuidePhone" class="form-label">
+                                    <i class="bi bi-telephone me-1"></i>Rehber Telefonu
+                                </label>
+                                <input asp-for="GuidePhone" class="form-control" placeholder="Rehber telefon numarası">
+                                <span asp-validation-for="GuidePhone" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="TransportType" class="form-label">
+                                    <i class="bi bi-truck me-1"></i>Ulaşım Türü
+                                </label>
+                                <select asp-for="TransportType" class="form-select">
+                                    <option value="">Ulaşım türü seçiniz</option>
+                                    <option value="Bus">Otobüs</option>
+                                    <option value="Plane">Uçak</option>
+                                    <option value="Train">Tren</option>
+                                    <option value="Ship">Gemi</option>
+                                </select>
+                                <span asp-validation-for="TransportType" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label">
+                                    <i class="bi bi-text-paragraph me-1"></i>Tur Açıklaması
+                                </label>
+                                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Tur açıklaması" required></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label asp-for="Itinerary" class="form-label">
+                                    <i class="bi bi-list-ul me-1"></i>Güzergah
+                                </label>
+                                <textarea asp-for="Itinerary" class="form-control" rows="4" placeholder="Tur güzergahı"></textarea>
+                                <span asp-validation-for="Itinerary" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" checked>
+                                    <label asp-for="IsActive" class="form-check-label">
+                                        <i class="bi bi-check-circle me-1"></i>Aktif Tur
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <hr class="my-4">
-                    
-                    <div class="d-flex justify-content-end gap-2">
-                        <a asp-action="Index" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-circle me-2"></i>İptal
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-circle me-2"></i>Kaydet
+                        
+                        <hr class="my-4">
+                        
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>İptal
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <!-- Hızlı İşlemler -->
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header border-0">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-lightning-charge text-warning me-2"></i>Hızlı İşlemler
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-calendar me-2"></i>Hızlı Tarih
+                        </button>
+                        <button type="button" class="btn btn-outline-info btn-sm">
+                            <i class="bi bi-copy me-2"></i>Şablon Kopyala
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-calculator me-2"></i>Süre Hesapla
                         </button>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-lg-4">
-        <!-- Hızlı İşlemler -->
-        <div class="card border-0 shadow-sm mb-3">
-            <div class="card-header bg-white">
-                <h6 class="card-title mb-0">
-                    <i class="bi bi-lightning-charge text-warning me-2"></i>Hızlı İşlemler
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="d-grid gap-2">
-                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="setQuickDates()">
-                        <i class="bi bi-calendar me-2"></i>Hızlı Tarih
-                    </button>
-                    <button type="button" class="btn btn-outline-info btn-sm" onclick="copyFromTemplate()">
-                        <i class="bi bi-copy me-2"></i>Şablon Kopyala
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="calculateDuration()">
-                        <i class="bi bi-calculator me-2"></i>Süre Hesapla
-                    </button>
                 </div>
             </div>
-        </div>
-        
-        <!-- Tur Türü Bilgileri -->
-        <div class="card border-0 shadow-sm mb-3">
-            <div class="card-header bg-white">
-                <h6 class="card-title mb-0">
-                    <i class="bi bi-info-circle text-info me-2"></i>Tur Türü Bilgileri
-                </h6>
-            </div>
-            <div class="card-body" id="tourTypeInfo">
-                <div class="text-center text-muted">
-                    <i class="bi bi-tag fs-1"></i>
-                    <p class="mt-2">Tur türü seçiniz</p>
+            
+            <!-- Tur Türü Bilgileri -->
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header border-0">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle text-info me-2"></i>Tur Türü Bilgileri
+                    </h6>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Süre Hesaplayıcı -->
-        <div class="card border-0 shadow-sm mb-3">
-            <div class="card-header bg-white">
-                <h6 class="card-title mb-0">
-                    <i class="bi bi-calculator text-success me-2"></i>Süre Hesaplayıcı
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-2">
-                    <div class="col-6">
-                        <small class="text-muted">Başlangıç</small>
-                        <div class="fw-bold" id="startDateDisplay">-</div>
-                    </div>
-                    <div class="col-6">
-                        <small class="text-muted">Bitiş</small>
-                        <div class="fw-bold" id="endDateDisplay">-</div>
-                    </div>
-                    <div class="col-12">
-                        <hr class="my-2">
-                        <small class="text-muted">Toplam Süre</small>
-                        <div class="fw-bold text-primary" id="durationDisplay">-</div>
+                <div class="card-body">
+                    <div class="text-center text-muted">
+                        <i class="bi bi-tag fs-1"></i>
+                        <p class="mt-2">Tur türü seçiniz</p>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Bilgi -->
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h6 class="card-title mb-0">
-                    <i class="bi bi-lightbulb text-warning me-2"></i>Bilgi
-                </h6>
+            
+            <!-- Süre Hesaplayıcı -->
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header border-0">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-calculator text-success me-2"></i>Süre Hesaplayıcı
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <small class="text-muted">Başlangıç</small>
+                            <div class="fw-bold">-</div>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">Bitiş</small>
+                            <div class="fw-bold">-</div>
+                        </div>
+                        <div class="col-12">
+                            <hr class="my-2">
+                            <small class="text-muted">Toplam Süre</small>
+                            <div class="fw-bold text-primary">-</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="alert alert-info small">
-                    <ul class="mb-0">
-                        <li>Tur adı benzersiz olmalıdır</li>
-                        <li>Bitiş tarihi başlangıç tarihinden sonra olmalıdır</li>
-                        <li>Kapasite en az 1 olmalıdır</li>
-                        <li>Fiyat 0'dan büyük olmalıdır</li>
-                    </ul>
+            
+            <!-- Bilgi -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-lightbulb text-warning me-2"></i>Bilgi
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info shadow-sm small">
+                        <ul class="mb-0">
+                            <li>Tur adı benzersiz olmalıdır</li>
+                            <li>Bitiş tarihi başlangıç tarihinden sonra olmalıdır</li>
+                            <li>Kapasite en az 1 olmalıdır</li>
+                            <li>Fiyat 0'dan büyük olmalıdır</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -259,89 +279,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        function setQuickDates() {
-            const today = new Date();
-            const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-            const nextWeekEnd = new Date(nextWeek.getTime() + 2 * 24 * 60 * 60 * 1000);
-            
-            document.getElementById('StartDate').value = nextWeek.toISOString().slice(0, 16);
-            document.getElementById('EndDate').value = nextWeekEnd.toISOString().slice(0, 16);
-            
-            calculateDuration();
-        }
-        
-        function copyFromTemplate() {
-            // Template copy functionality
-            console.log('Template copy clicked');
-        }
-        
-        function calculateDuration() {
-            const startDate = document.getElementById('StartDate').value;
-            const endDate = document.getElementById('EndDate').value;
-            
-            if (startDate && endDate) {
-                const start = new Date(startDate);
-                const end = new Date(endDate);
-                const diffTime = Math.abs(end - start);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                
-                document.getElementById('startDateDisplay').textContent = start.toLocaleDateString('tr-TR');
-                document.getElementById('endDateDisplay').textContent = end.toLocaleDateString('tr-TR');
-                document.getElementById('durationDisplay').textContent = `${diffDays} gün`;
-            }
-        }
-        
-        // Tour type selection change handler
-        document.addEventListener('DOMContentLoaded', function() {
-            const tourTypeSelect = document.getElementById('TourTypeId');
-            const tourTypeInfo = document.getElementById('tourTypeInfo');
-            
-            tourTypeSelect.addEventListener('change', function() {
-                const selectedTourTypeId = this.value;
-                if (selectedTourTypeId) {
-                    // Load tour type details
-                    console.log("API call handled server-side");
-                        .then(tourType => {
-                            tourTypeInfo.innerHTML = `
-                                <div class="text-center">
-                                    <div class="bg-info bg-opacity-10 rounded-circle p-3 d-inline-block mb-2">
-                                        <i class="bi bi-tag text-info fs-4"></i>
-                                    </div>
-                                    <h6 class="fw-bold">${tourType.name}</h6>
-                                    <p class="text-muted small mb-2">${tourType.description || ''}</p>
-                                    <div class="row g-2 text-center">
-                                        <div class="col-6">
-                                            <small class="text-muted">Ortalama Süre</small>
-                                            <div class="fw-bold">${tourType.averageDuration || 0} gün</div>
-                                        </div>
-                                        <div class="col-6">
-                                            <small class="text-muted">Ortalama Fiyat</small>
-                                            <div class="fw-bold">${tourType.averagePrice ? tourType.averagePrice.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' }) : '₺0'}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        })
-                        .catch(error => {
-                            console.error('Tour type details loading failed:', error);
-                        });
-                } else {
-                    tourTypeInfo.innerHTML = `
-                        <div class="text-center text-muted">
-                            <i class="bi bi-tag fs-1"></i>
-                            <p class="mt-2">Tur türü seçiniz</p>
-                        </div>
-                    `;
-                }
-            });
-            
-            // Date change handlers
-            document.getElementById('StartDate').addEventListener('change', calculateDuration);
-            document.getElementById('EndDate').addEventListener('change', calculateDuration);
-            
-            // Set default dates
-            setQuickDates();
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 } 

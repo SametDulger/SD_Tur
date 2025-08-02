@@ -6,6 +6,9 @@ namespace SDTur.Web.Models.Master.Branches
     {
         public int Id { get; set; }
         
+        [Display(Name = "Şube Kodu")]
+        public string BranchCode { get; set; } = string.Empty;
+        
         public string BranchName { get; set; } = string.Empty;
         
         public string Address { get; set; } = string.Empty;
@@ -29,5 +32,15 @@ namespace SDTur.Web.Models.Master.Branches
         
         [Display(Name = "Yönetici")]
         public string Manager { get; set; } = string.Empty;
+        
+        [Display(Name = "Açıklama")]
+        public string Description { get; set; } = string.Empty;
+        
+        [Display(Name = "Çalışan Sayısı")]
+        public int EmployeeCount { get; set; }
+        
+        // Additional properties for compatibility
+        public bool IsMainBranch { get; set; }
+        public string RegionName { get; set; } = string.Empty;
     }
 }

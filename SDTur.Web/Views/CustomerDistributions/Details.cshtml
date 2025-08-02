@@ -1,6 +1,6 @@
 @model SDTur.Web.Models.Tour.Operations.CustomerDistributionViewModel
 @{
-    ViewData["Title"] = "Müþteri Daðýlýmý Detayý";
+    ViewData["Title"] = "MÃ¼ÅŸteri DaÄŸÄ±lÄ±mÄ± DetaylarÄ±";
 }
 
 <div class="container-fluid">
@@ -8,14 +8,14 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-eye text-primary me-2"></i>Müþteri Daðýlýmý Detayý
+                    <i class="bi bi-eye text-primary me-2"></i>MÃ¼ÅŸteri DaÄŸÄ±lÄ±mÄ± DetaylarÄ±
                 </h1>
                 <div class="btn-group" role="group">
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
-                        <i class="bi bi-pencil me-2"></i>Düzenle
+                        <i class="bi bi-pencil me-2"></i>DÃ¼zenle
                     </a>
                     <a asp-action="Index" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                        <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                     </a>
                 </div>
             </div>
@@ -27,7 +27,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
                     <h5 class="card-title mb-0">
-                        <i class="bi bi-info-circle me-2"></i>Müþteri Daðýlým Bilgileri
+                        <i class="bi bi-info-circle me-2"></i>MÃ¼ÅŸteri DaÄŸÄ±lÄ±m Bilgileri
                     </h5>
                 </div>
                 <div class="card-body">
@@ -42,19 +42,20 @@
                                 </div>
                                 <div>
                                     <div class="fw-semibold">@Model.TourName</div>
+                                    <small class="text-muted">@Model.TourScheduleDate.ToString("dd.MM.yyyy")</small>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-person me-1"></i>Müþteri
+                                <i class="bi bi-person me-1"></i>MÃ¼ÅŸteri Tipi
                             </label>
                             <div class="d-flex align-items-center">
                                 <div class="bg-info bg-opacity-10 rounded-circle p-2 me-2">
                                     <i class="bi bi-person text-info"></i>
                                 </div>
-                                <span class="fw-semibold">@Model.CustomerName</span>
+                                <span class="fw-semibold">@Model.CustomerType</span>
                             </div>
                         </div>
                     </div>
@@ -62,7 +63,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-tag me-1"></i>Daðýlým Tipi
+                                <i class="bi bi-tag me-1"></i>DaÄŸÄ±lÄ±m Tipi
                             </label>
                             <div>
                                 <span class="badge bg-secondary fs-6">@Model.DistributionType</span>
@@ -71,7 +72,7 @@
                         
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-calendar me-1"></i>Daðýlým Tarihi
+                                <i class="bi bi-calendar me-1"></i>DaÄŸÄ±lÄ±m Tarihi
                             </label>
                             <div class="h6 mb-0">@Model.DistributionDate.ToString("dd MMMM yyyy")</div>
                             <small class="text-muted">@Model.DistributionDate.ToString("dddd, HH:mm")</small>
@@ -87,7 +88,7 @@
                                 @if (Model.IsCompleted)
                                 {
                                     <span class="badge bg-success fs-6">
-                                        <i class="bi bi-check-circle me-1"></i>Tamamlandý
+                                        <i class="bi bi-check-circle me-1"></i>TamamlandÄ±
                                     </span>
                                 }
                                 else
@@ -105,7 +106,7 @@
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label class="form-label fw-semibold text-muted">
-                                    <i class="bi bi-text-paragraph me-1"></i>Açýklama
+                                    <i class="bi bi-text-paragraph me-1"></i>AÃ§Ä±klama
                                 </label>
                                 <div class="p-3 bg-light rounded">
                                     @Model.Description
@@ -127,13 +128,13 @@
                 <div class="card-body">
                     <div class="alert alert-info">
                         <h6 class="alert-heading">
-                            <i class="bi bi-lightbulb me-2"></i>Müþteri Daðýlýmý
+                            <i class="bi bi-lightbulb me-2"></i>MÃ¼ÅŸteri DaÄŸÄ±lÄ±mÄ±
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Tur müþterilerinin daðýlým detaylarý</li>
-                            <li>Daðýlým tipi ve tarihi bilgileri</li>
+                            <li>Tur mÃ¼ÅŸterilerinin daÄŸÄ±lÄ±m detaylarÄ±</li>
+                            <li>DaÄŸÄ±lÄ±m tipi ve tarihi bilgileri</li>
                             <li>Tamamlanma durumu takibi</li>
-                            <li>Ýlgili açýklama ve notlar</li>
+                            <li>Ä°lgili aÃ§Ä±klama ve notlar</li>
                         </ul>
                     </div>
                 </div>

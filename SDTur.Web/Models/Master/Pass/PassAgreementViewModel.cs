@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace SDTur.Web.Models.Master.Pass
 {
     public class PassAgreementViewModel
@@ -17,5 +19,8 @@ namespace SDTur.Web.Models.Master.Pass
         public decimal IncomingFullPrice { get; set; }
         public decimal IncomingHalfPrice { get; set; }
         public string Currency { get; set; } = string.Empty;
+        
+        [Display(Name = "Tur Adı")]
+        public string TourName { get; set; } = string.Empty;
     }
 } 

@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace SDTur.Web.Models.Financial.Accounts
 {
     public class AccountTransactionViewModel
@@ -17,5 +19,11 @@ namespace SDTur.Web.Models.Financial.Accounts
         public int? PassCompanyId { get; set; }
         public bool IsApproved { get; set; }
         public bool IsActive { get; set; }
+        
+        [Display(Name = "Hesap Numarası")]
+        public string AccountNumber { get; set; } = string.Empty;
+        
+        [Display(Name = "İşlem Numarası")]
+        public string TransactionNumber { get; set; } = string.Empty;
     }
 } 

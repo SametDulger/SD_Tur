@@ -19,13 +19,13 @@
 <div class="row">
     <div class="col-lg-8">
         <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
+            <div class="card-header border-0">
                 <h5 class="card-title mb-0">
                     <i class="bi bi-plus-circle text-success me-2"></i>Şube Bilgileri
                 </h5>
             </div>
             <div class="card-body">
-                <form asp-action="Create" method="post" data-validate>
+                <form asp-action="Create" method="post">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label asp-for="BranchName" class="form-label">
@@ -153,20 +153,20 @@
     <div class="col-lg-4">
         <!-- Hızlı İşlemler -->
         <div class="card border-0 shadow-sm mb-3">
-            <div class="card-header bg-white">
+            <div class="card-header border-0">
                 <h6 class="card-title mb-0">
                     <i class="bi bi-lightning-charge text-warning me-2"></i>Hızlı İşlemler
                 </h6>
             </div>
             <div class="card-body">
                 <div class="d-grid gap-2">
-                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="generateBranchCode()">
+                    <button type="button" class="btn btn-outline-primary btn-sm">
                         <i class="bi bi-magic me-2"></i>Şube Kodu Oluştur
                     </button>
-                    <button type="button" class="btn btn-outline-info btn-sm" onclick="copyFromTemplate()">
+                    <button type="button" class="btn btn-outline-info btn-sm">
                         <i class="bi bi-copy me-2"></i>Şablon Kopyala
                     </button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="setCurrentDate()">
+                    <button type="button" class="btn btn-outline-secondary btn-sm">
                         <i class="bi bi-calendar me-2"></i>Bugünün Tarihi
                     </button>
                 </div>
@@ -175,12 +175,12 @@
         
         <!-- Bölge Bilgileri -->
         <div class="card border-0 shadow-sm mb-3">
-            <div class="card-header bg-white">
+            <div class="card-header border-0">
                 <h6 class="card-title mb-0">
                     <i class="bi bi-info-circle text-info me-2"></i>Bölge Bilgileri
                 </h6>
             </div>
-            <div class="card-body" id="regionInfo">
+            <div class="card-body">
                 <div class="text-center text-muted">
                     <i class="bi bi-geo-alt fs-1"></i>
                     <p class="mt-2">Bölge seçiniz</p>
@@ -190,13 +190,13 @@
         
         <!-- Bilgi -->
         <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
+            <div class="card-header border-0">
                 <h6 class="card-title mb-0">
                     <i class="bi bi-lightbulb text-warning me-2"></i>Bilgi
                 </h6>
             </div>
             <div class="card-body">
-                <div class="alert alert-info small">
+                <div class="alert alert-info shadow-sm small">
                     <ul class="mb-0">
                         <li>Şube kodu benzersiz olmalıdır</li>
                         <li>Bölge seçimi zorunludur</li>
@@ -210,78 +210,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        function generateBranchCode() {
-            const branchName = document.getElementById('BranchName').value;
-            if (branchName) {
-                const code = branchName.substring(0, 3).toUpperCase() + 
-                           Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-                document.getElementById('BranchCode').value = code;
-            } else {
-                app.showNotification('Önce şube adını giriniz', 'warning');
-            }
-        }
-        
-        function copyFromTemplate() {
-            // Template copy functionality
-            console.log('Template copy clicked');
-        }
-        
-        function setCurrentDate() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('OpeningDate').value = today;
-        }
-        
-        // Region selection change handler
-        document.addEventListener('DOMContentLoaded', function() {
-            const regionSelect = document.getElementById('RegionId');
-            const regionInfo = document.getElementById('regionInfo');
-            
-            regionSelect.addEventListener('change', function() {
-                const selectedRegionId = this.value;
-                if (selectedRegionId) {
-                    // Load region details
-                    console.log("API call handled server-side");
-                        .then(region => {
-                            regionInfo.innerHTML = `
-                                <div class="text-center">
-                                    <div class="bg-info bg-opacity-10 rounded-circle p-3 d-inline-block mb-2">
-                                        <i class="bi bi-geo-alt text-info fs-4"></i>
-                                    </div>
-                                    <h6 class="fw-bold">${region.name}</h6>
-                                    <p class="text-muted small mb-2">${region.description || ''}</p>
-                                    <div class="row g-2 text-center">
-                                        <div class="col-6">
-                                            <small class="text-muted">Şube Sayısı</small>
-                                            <div class="fw-bold">${region.branchCount || 0}</div>
-                                        </div>
-                                        <div class="col-6">
-                                            <small class="text-muted">Durum</small>
-                                            <div class="fw-bold">
-                                                <span class="badge ${region.isActive ? 'bg-success' : 'bg-secondary'}">
-                                                    ${region.isActive ? 'Aktif' : 'Pasif'}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        })
-                        .catch(error => {
-                            console.error('Region details loading failed:', error);
-                        });
-                } else {
-                    regionInfo.innerHTML = `
-                        <div class="text-center text-muted">
-                            <i class="bi bi-geo-alt fs-1"></i>
-                            <p class="mt-2">Bölge seçiniz</p>
-                        </div>
-                    `;
-                }
-            });
-            
-            // Set default date to today
-            setCurrentDate();
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 } 

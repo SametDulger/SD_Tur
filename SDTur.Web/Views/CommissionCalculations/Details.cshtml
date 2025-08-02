@@ -1,6 +1,6 @@
 @model SDTur.Web.Models.Financial.Transactions.CommissionCalculationViewModel
 @{
-    ViewData["Title"] = "Komisyon Hesaplama Detay�";
+    ViewData["Title"] = "Komisyon Hesaplaması Detayları";
 }
 
 <div class="container-fluid">
@@ -8,14 +8,14 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-calculator text-primary me-2"></i>Komisyon Hesaplama Detay�
+                    <i class="bi bi-eye text-primary me-2"></i>Komisyon Hesaplaması Detayları
                 </h1>
-                <div>
-                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
-                        <i class="bi bi-pencil me-2"></i>D�zenle
+                <div class="btn-group" role="group">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">
+                        <i class="bi bi-pencil me-2"></i>Düzenle
                     </a>
                     <a asp-action="Index" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left me-2"></i>Geri D�n
+                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
                     </a>
                 </div>
             </div>
@@ -24,100 +24,154 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm mb-4">
+            <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-info-circle me-2"></i>Hesaplama Bilgileri
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Hesaplama T�r�</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="badge bg-primary">@Model.CalculationType</span>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Çalışan</label>
+                            <div class="form-control-plaintext">@(Model.EmployeeName ?? "Belirtilmemiş")</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Komisyon Türü</label>
+                            <div class="form-control-plaintext">
+                                <span class="badge bg-info">@Model.CommissionType</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Hesaplama Tarihi</label>
+                            <div class="form-control-plaintext">@Model.CalculationDate.ToString("dd.MM.yyyy")</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Komisyon Tutarı</label>
+                            <div class="form-control-plaintext fw-bold text-success">@Model.CommissionAmount.ToString("C")</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Para Birimi</label>
+                            <div class="form-control-plaintext">@Model.Currency</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Komisyon Oranı</label>
+                            <div class="form-control-plaintext">%@Model.CommissionRate</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">Durum</label>
-                            <div class="p-2 bg-light rounded">
-                                @if (Model.Status == "Hesapland�")
+                            <div class="form-control-plaintext">
+                                @if (Model.Status == "Hesaplandı")
                                 {
-                                    <span class="badge bg-success">
-                                        <i class="bi bi-check-circle me-1"></i>@Model.Status
-                                    </span>
+                                    <span class="badge bg-primary">Hesaplandı</span>
                                 }
-                                else if (Model.Status == "Hesaplan�yor")
+                                else if (Model.Status == "Onaylandı")
                                 {
-                                    <span class="badge bg-warning">
-                                        <i class="bi bi-clock me-1"></i>@Model.Status
-                                    </span>
+                                    <span class="badge bg-success">Onaylandı</span>
+                                }
+                                else if (Model.Status == "Ödendi")
+                                {
+                                    <span class="badge bg-info">Ödendi</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">
-                                        <i class="bi bi-x-circle me-1"></i>@Model.Status
-                                    </span>
+                                    <span class="badge bg-secondary">@Model.Status</span>
                                 }
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Ba�lang�� Tarihi</label>
-                            <div class="p-2 bg-light rounded">
-                                <i class="bi bi-calendar-check me-2"></i>@(Model.CalculationDate.ToString("dd/MM/yyyy HH:mm"))
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Aktiflik Durumu</label>
+                            <div class="form-control-plaintext">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success">Aktif</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Pasif</span>
+                                }
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Para Birimi</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="badge bg-outline-secondary">@Model.Currency</span>
-                            </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted">Notlar</label>
+                            <div class="form-control-plaintext">@Model.Notes</div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Olu�turma Tarihi</label>
-                            <div class="p-2 bg-light rounded">
-                                <i class="bi bi-clock me-2"></i>@(Model.CreatedDate.ToString("dd/MM/yyyy HH:mm"))
-                            </div>
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Oluşturulma Tarihi</label>
+                            <div class="form-control-plaintext">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</div>
                         </div>
-                        @if (!string.IsNullOrEmpty(Model.Description))
-                        {
-                            <div class="col-12">
-                                <label class="form-label fw-semibold text-muted">A��klama</label>
-                                <div class="p-2 bg-light rounded">
-                                    <p class="mb-0">@Model.Description</p>
-                                </div>
-                            </div>
-                        }
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Güncellenme Tarihi</label>
+                            <div class="form-control-plaintext">@(Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm") ?? "-")</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm mb-4">
+            <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-calculator me-2"></i>Finansal �zet
-                    </h5>
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-gear text-info me-2"></i>İşlemler
+                    </h6>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-muted">Toplam Tutar:</span>
-                        <span class="fw-bold text-success fs-5">@(Model.TotalAmount.ToString("C"))</span>
+                    <div class="d-grid gap-2">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                            <i class="bi bi-pencil me-2"></i>Düzenle
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
+                            <i class="bi bi-trash me-2"></i>Sil
+                        </a>
+                        <button type="button" class="btn btn-outline-secondary">
+                            <i class="bi bi-printer me-2"></i>Yazdır
+                        </button>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-muted">Komisyon Oran�:</span>
-                        <span class="fw-bold text-primary fs-5">%@Model.CommissionRate</span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-semibold">Komisyon Tutar�:</span>
-                        <span class="fw-bold text-primary fs-4">
-                            @(Model.CommissionAmount.ToString("C"))
-                        </span>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-header bg-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle text-info me-2"></i>Bilgi
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Komisyon Hesaplaması
+                        </h6>
+                        <p class="mb-0 small">
+                            Bu sayfa komisyon hesaplamasının detaylarını göstermektedir. Hesaplama bilgilerini 
+                            düzenlemek için "Düzenle" butonunu kullanabilirsiniz.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+

@@ -3,23 +3,118 @@
     ViewData["Title"] = "Pas Şirketi Düzenle";
 }
 
-<div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1 class="h3 mb-0">
-                    <i class="bi bi-list-ul text-primary me-2"></i>Pas Şirketi Düzenle
-                </h1>
-                <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
-                </a>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-pencil-square text-primary me-2"></i>Pas Şirketi Düzenle
+            </h1>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-building text-warning me-2"></i>Şirket Bilgileri
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post" data-validate>
+                    <input asp-for="Id" type="hidden" />
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="Name" class="form-label">
+                                <i class="bi bi-building me-1"></i>Şirket Adı
+                            </label>
+                            <input asp-for="Name" class="form-control" placeholder="Şirket adını giriniz" required>
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="ContactPerson" class="form-label">
+                                <i class="bi bi-person me-1"></i>İletişim Kişisi
+                            </label>
+                            <input asp-for="ContactPerson" class="form-control" placeholder="İletişim kişisi adı" required>
+                            <span asp-validation-for="ContactPerson" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="Phone" class="form-label">
+                                <i class="bi bi-telephone me-1"></i>Telefon
+                            </label>
+                            <input asp-for="Phone" class="form-control" placeholder="Telefon numarası" required>
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label">
+                                <i class="bi bi-envelope me-1"></i>E-posta
+                            </label>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresi" required>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label asp-for="Address" class="form-label">
+                                <i class="bi bi-geo-alt me-1"></i>Adres
+                            </label>
+                            <textarea asp-for="Address" class="form-control" rows="3" placeholder="Şirket adresini giriniz"></textarea>
+                            <span asp-validation-for="Address" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="IsActive" class="form-label">
+                                <i class="bi bi-toggle-on me-1"></i>Durum
+                            </label>
+                            <div class="form-check form-switch">
+                                <input asp-for="IsActive" class="form-check-input" type="checkbox">
+                                <label asp-for="IsActive" class="form-check-label">Aktif</label>
+                            </div>
+                            <span asp-validation-for="IsActive" class="text-danger small"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-x-circle me-2"></i>İptal
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Kaydet
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <div class="card border-0 shadow-sm">
-        <div class="card-body">
-            <p class="text-muted">Bu sayfa henüz tamamlanmamıştır.</p>
+    <!-- Yardım Kartı -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-question-circle text-info me-2"></i>Yardım
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Şirket adı benzersiz olmalıdır</li>
+                        <li>Telefon numarası geçerli formatta olmalıdır</li>
+                        <li>E-posta adresi geçerli formatta olmalıdır</li>
+                        <li>Pasif şirketler yeni anlaşma yapamaz</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>

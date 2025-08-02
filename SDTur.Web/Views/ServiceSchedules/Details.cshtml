@@ -1,6 +1,6 @@
 @model SDTur.Web.Models.Tour.Operations.ServiceScheduleViewModel
 @{
-    ViewData["Title"] = "Servis Programý Detayý";
+    ViewData["Title"] = "Servis ProgramÄ± DetayÄ±";
 }
 
 <div class="container-fluid">
@@ -8,14 +8,14 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-eye text-primary me-2"></i>Servis Programý Detayý
+                    <i class="bi bi-eye text-primary me-2"></i>Servis ProgramÄ± DetayÄ±
                 </h1>
                 <div class="btn-group" role="group">
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
-                        <i class="bi bi-pencil me-2"></i>Düzenle
+                        <i class="bi bi-pencil me-2"></i>DÃ¼zenle
                     </a>
                     <a asp-action="Index" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                        <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                     </a>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                         
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-geo-alt me-1"></i>Bölge
+                                <i class="bi bi-geo-alt me-1"></i>BÃ¶lge
                             </label>
                             <div>
                                 <span class="badge bg-info fs-6">@Model.RegionId</span>
@@ -81,7 +81,7 @@
                                 <i class="bi bi-clock me-1"></i>Servis Saati
                             </label>
                             <div class="h6 mb-0">@Model.ServiceTime.ToString("HH:mm")</div>
-                            <small class="text-muted">24 saat formatýnda</small>
+                            <small class="text-muted">24 saat formatÄ±nda</small>
                         </div>
                         
                         <div class="col-md-6 mb-3">
@@ -92,7 +92,7 @@
                                 @if (Model.IsCompleted)
                                 {
                                     <span class="badge bg-success fs-6">
-                                        <i class="bi bi-check-circle me-1"></i>Tamamlandý
+                                        <i class="bi bi-check-circle me-1"></i>TamamlandÄ±
                                     </span>
                                 }
                                 else if (Model.IsActive)
@@ -127,7 +127,7 @@
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label class="form-label fw-semibold text-muted">
-                                    <i class="bi bi-text-paragraph me-1"></i>Açýklama
+                                    <i class="bi bi-text-paragraph me-1"></i>AÃ§Ä±klama
                                 </label>
                                 <div class="p-3 bg-light rounded">
                                     @Model.Description
@@ -149,10 +149,10 @@
                 <div class="card-body">
                     <div class="alert alert-info">
                         <h6 class="alert-heading">
-                            <i class="bi bi-lightbulb me-2"></i>Servis Programý
+                            <i class="bi bi-lightbulb me-2"></i>Servis ProgramÄ±
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Tur servis program detaylarý</li>
+                            <li>Tur servis program detaylarÄ±</li>
                             <li>Servis tipi ve tarihi bilgileri</li>
                             <li>Konum ve saat bilgileri</li>
                             <li>Tamamlanma durumu takibi</li>

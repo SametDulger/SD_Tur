@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Web.Models.Financial.Transactions;
+using SDTur.Web.Models.Financial.Invoices;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,89 +15,197 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var invoices = await _apiService.GetAsync<List<InvoiceViewModel>>("api/invoices");
-            return View(invoices);
+            try
+            {
+                var invoices = await _apiService.GetInvoicesAsync();
+                return View(invoices);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Faturalar yüklenirken hata oluştu: " + ex.Message;
+                return View(new List<InvoiceViewModel>());
+            }
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var invoice = await _apiService.GetAsync<InvoiceViewModel>($"api/invoices/{id}/details");
-            if (invoice == null)
-                return NotFound();
-
-            return View(invoice);
+            try
+            {
+                var invoice = await _apiService.GetInvoiceByIdAsync(id);
+                if (invoice == null)
+                {
+                    TempData["Error"] = "Fatura bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(invoice);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Fatura detayları yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            try
+            {
+                var passCompanies = await _apiService.GetPassCompaniesAsync();
+                var currencies = await _apiService.GetCurrenciesAsync();
+                
+                ViewBag.PassCompanies = passCompanies;
+                ViewBag.Currencies = currencies;
+                
+                return View(new InvoiceCreateViewModel());
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Sayfa yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("InvoiceNumber,InvoiceDate,PassCompanyId,TotalAmount,Currency,Status,Notes")] InvoiceCreateViewModel createInvoiceViewModel)
+        public async Task<IActionResult> Create(InvoiceCreateViewModel createViewModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await _apiService.PostAsync<InvoiceCreateViewModel, InvoiceViewModel>("api/invoices", createInvoiceViewModel);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    var result = await _apiService.CreateInvoiceAsync(createViewModel);
+                    TempData["Success"] = "Fatura başarıyla oluşturuldu.";
+                    return RedirectToAction(nameof(Index));
+                }
+                
+                var passCompanies = await _apiService.GetPassCompaniesAsync();
+                var currencies = await _apiService.GetCurrenciesAsync();
+                
+                ViewBag.PassCompanies = passCompanies;
+                ViewBag.Currencies = currencies;
+                
+                return View(createViewModel);
             }
-            return View(createInvoiceViewModel);
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Fatura oluşturulurken hata oluştu: " + ex.Message;
+                var passCompanies = await _apiService.GetPassCompaniesAsync();
+                var currencies = await _apiService.GetCurrenciesAsync();
+                
+                ViewBag.PassCompanies = passCompanies;
+                ViewBag.Currencies = currencies;
+                
+                return View(createViewModel);
+            }
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var invoice = await _apiService.GetAsync<InvoiceViewModel>($"api/invoices/{id}");
-            if (invoice == null)
-                return NotFound();
-
-            var updateDto = new InvoiceEditViewModel
+            try
             {
-                Id = invoice.Id,
-                InvoiceNumber = invoice.InvoiceNumber,
-                InvoiceDate = invoice.InvoiceDate,
-                PassCompanyId = invoice.PassCompanyId,
-                TotalAmount = invoice.TotalAmount,
-                Currency = invoice.Currency,
-                Status = invoice.Status,
-                Notes = invoice.Notes,
-                IsActive = invoice.IsActive
-            };
+                var invoice = await _apiService.GetInvoiceByIdAsync(id);
+                if (invoice == null)
+                {
+                    TempData["Error"] = "Fatura bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
 
-            return View(updateDto);
+                var passCompanies = await _apiService.GetPassCompaniesAsync();
+                var currencies = await _apiService.GetCurrenciesAsync();
+                
+                ViewBag.PassCompanies = passCompanies;
+                ViewBag.Currencies = currencies;
+
+                var updateViewModel = new InvoiceEditViewModel
+                {
+                    Id = invoice.Id,
+                    InvoiceNumber = invoice.InvoiceNumber,
+                    InvoiceDate = invoice.InvoiceDate,
+                    PassCompanyId = invoice.PassCompanyId,
+                    TotalAmount = invoice.TotalAmount,
+                    Currency = invoice.Currency,
+                    Status = invoice.Status,
+                    Notes = invoice.Notes,
+                    IsActive = invoice.IsActive
+                };
+
+                return View(updateViewModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Fatura yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, InvoiceEditViewModel updateDto)
+        public async Task<IActionResult> Edit(InvoiceEditViewModel updateViewModel)
         {
-            if (id != updateDto.Id)
-                return NotFound();
-
-            if (ModelState.IsValid)
+            try
             {
-                var result = await _apiService.PutAsync<InvoiceEditViewModel, InvoiceViewModel>($"api/invoices/{id}", updateDto);
-                if (result != null)
+                if (ModelState.IsValid)
+                {
+                    var result = await _apiService.UpdateInvoiceAsync(updateViewModel);
+                    TempData["Success"] = "Fatura başarıyla güncellendi.";
                     return RedirectToAction(nameof(Index));
+                }
+                
+                var passCompanies = await _apiService.GetPassCompaniesAsync();
+                var currencies = await _apiService.GetCurrenciesAsync();
+                
+                ViewBag.PassCompanies = passCompanies;
+                ViewBag.Currencies = currencies;
+                
+                return View(updateViewModel);
             }
-            return View(updateDto);
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Fatura güncellenirken hata oluştu: " + ex.Message;
+                var passCompanies = await _apiService.GetPassCompaniesAsync();
+                var currencies = await _apiService.GetCurrenciesAsync();
+                
+                ViewBag.PassCompanies = passCompanies;
+                ViewBag.Currencies = currencies;
+                
+                return View(updateViewModel);
+            }
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var invoice = await _apiService.GetAsync<InvoiceViewModel>($"api/invoices/{id}");
-            if (invoice == null)
-                return NotFound();
-
-            return View(invoice);
+            try
+            {
+                var invoice = await _apiService.GetInvoiceByIdAsync(id);
+                if (invoice == null)
+                {
+                    TempData["Error"] = "Fatura bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(invoice);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Fatura yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _apiService.DeleteAsync($"api/invoices/{id}");
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _apiService.DeleteInvoiceAsync(id);
+                TempData["Success"] = "Fatura başarıyla silindi.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Fatura silinirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 } 

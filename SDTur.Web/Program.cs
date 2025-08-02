@@ -34,6 +34,6 @@ app.MapControllerRoute(
 // Configure custom port for the web application
 app.Urls.Clear();
 app.Urls.Add("http://localhost:5018");
-app.Urls.Add("https://localhost:7275");
+app.Urls.Add("https://localhost:7276");
 
 app.Run();

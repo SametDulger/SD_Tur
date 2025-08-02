@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace SDTur.Web.Models.Financial.Cash
 {
     public class CashViewModel
@@ -18,5 +20,21 @@ namespace SDTur.Web.Models.Financial.Cash
         public int? TourScheduleId { get; set; }
         public int? EmployeeId { get; set; }
         public int? PassCompanyId { get; set; }
+        
+        [Display(Name = "Oluşturma Tarihi")]
+        public DateTime CreatedDate { get; set; }
+        
+        [Display(Name = "Güncelleme Tarihi")]
+        public DateTime? UpdatedDate { get; set; }
+        
+        // Additional properties needed for the view
+        [Display(Name = "İşlem Numarası")]
+        public string TransactionNumber { get; set; } = string.Empty;
+        
+        [Display(Name = "Para Birimi Kodu")]
+        public string CurrencyCode { get; set; } = string.Empty;
+        
+        [Display(Name = "İşlemi Yapan")]
+        public string ProcessedBy { get; set; } = string.Empty;
     }
 } 

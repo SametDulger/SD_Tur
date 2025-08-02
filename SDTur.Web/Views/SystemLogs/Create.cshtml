@@ -3,7 +3,7 @@
     ViewData["Title"] = "Yeni Sistem Logu";
 }
 
-<div class="container-fluid">
+<div class="container">
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
@@ -11,7 +11,7 @@
                     <i class="bi bi-plus-circle text-primary me-2"></i>Yeni Sistem Logu
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                 </a>
             </div>
         </div>
@@ -20,22 +20,22 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-form me-2"></i>Log Bilgileri
                     </h5>
                 </div>
                 <div class="card-body">
                     <form asp-action="Create" method="post">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm" role="alert"></div>
                         
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="LogLevel" class="form-label fw-semibold">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="LogLevel" class="form-label">
                                     <i class="bi bi-journal-text me-1"></i>Log Seviyesi <span class="text-danger">*</span>
                                 </label>
                                 <select asp-for="LogLevel" class="form-select" required>
-                                    <option value="">Log seviyesi seçiniz...</option>
+                                    <option value="">Log seviyesi seÃ§iniz...</option>
                                     <option value="Error">Error</option>
                                     <option value="Warning">Warning</option>
                                     <option value="Info">Info</option>
@@ -44,8 +44,8 @@
                                 <span asp-validation-for="LogLevel" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Source" class="form-label fw-semibold">
+                            <div class="col-md-6">
+                                <label asp-for="Source" class="form-label">
                                     <i class="bi bi-gear me-1"></i>Kaynak <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="Source" class="form-control" placeholder="Kaynak..." required />
@@ -53,35 +53,35 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="LogDate" class="form-label fw-semibold">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="LogDate" class="form-label">
                                     <i class="bi bi-calendar me-1"></i>Log Tarihi <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="LogDate" type="datetime-local" class="form-control" required />
                                 <span asp-validation-for="LogDate" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="UserId" class="form-label fw-semibold">
-                                    <i class="bi bi-person me-1"></i>Kullanýcý ID
+                            <div class="col-md-6">
+                                <label asp-for="UserId" class="form-label">
+                                    <i class="bi bi-person me-1"></i>KullanÄ±cÄ± ID
                                 </label>
-                                <input asp-for="UserId" class="form-control" placeholder="Kullanýcý ID..." />
+                                <input asp-for="UserId" class="form-control" placeholder="KullanÄ±cÄ± ID..." />
                                 <span asp-validation-for="UserId" class="text-danger small"></span>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="EmployeeId" class="form-label fw-semibold">
-                                    <i class="bi bi-person-badge me-1"></i>Çalýþan ID
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="EmployeeId" class="form-label">
+                                    <i class="bi bi-person-badge me-1"></i>Ã‡alÄ±ÅŸan ID
                                 </label>
-                                <input asp-for="EmployeeId" type="number" class="form-control" placeholder="Çalýþan ID..." />
+                                <input asp-for="EmployeeId" type="number" class="form-control" placeholder="Ã‡alÄ±ÅŸan ID..." />
                                 <span asp-validation-for="EmployeeId" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="IpAddress" class="form-label fw-semibold">
+                            <div class="col-md-6">
+                                <label asp-for="IpAddress" class="form-label">
                                     <i class="bi bi-globe me-1"></i>IP Adresi
                                 </label>
                                 <input asp-for="IpAddress" class="form-control" placeholder="IP adresi..." />
@@ -89,29 +89,29 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <label asp-for="Message" class="form-label fw-semibold">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="Message" class="form-label">
                                     <i class="bi bi-message me-1"></i>Mesaj <span class="text-danger">*</span>
                                 </label>
-                                <textarea asp-for="Message" class="form-control" rows="3" placeholder="Log mesajý..." required></textarea>
+                                <textarea asp-for="Message" class="form-control" rows="3" placeholder="Log mesajÄ±..." required></textarea>
                                 <span asp-validation-for="Message" class="text-danger small"></span>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <label asp-for="Exception" class="form-label fw-semibold">
-                                    <i class="bi bi-exclamation-triangle me-1"></i>Hata Detayý
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="Exception" class="form-label">
+                                    <i class="bi bi-exclamation-triangle me-1"></i>Hata DetayÄ±
                                 </label>
-                                <textarea asp-for="Exception" class="form-control" rows="4" placeholder="Hata detayý..."></textarea>
+                                <textarea asp-for="Exception" class="form-control" rows="4" placeholder="Hata detayÄ±..."></textarea>
                                 <span asp-validation-for="Exception" class="text-danger small"></span>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <label asp-for="UserAgent" class="form-label fw-semibold">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="UserAgent" class="form-label">
                                     <i class="bi bi-browser me-1"></i>User Agent
                                 </label>
                                 <textarea asp-for="UserAgent" class="form-control" rows="2" placeholder="User agent bilgisi..."></textarea>
@@ -119,9 +119,11 @@
                             </div>
                         </div>
 
+                        <hr class="my-4">
+
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                                <i class="bi bi-x-circle me-2"></i>Ä°ptal
                             </a>
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-check-circle me-2"></i>Kaydet
@@ -134,21 +136,21 @@
         
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-info-circle me-2"></i>Bilgi
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-info">
+                    <div class="alert alert-info shadow-sm">
                         <h6 class="alert-heading">
-                            <i class="bi bi-lightbulb me-2"></i>Sistem Logu Oluþturma
+                            <i class="bi bi-lightbulb me-2"></i>Sistem Logu OluÅŸturma
                         </h6>
                         <ul class="mb-0 small">
                             <li>Log seviyesi ve kaynak bilgilerini girin</li>
                             <li>Mesaj ve tarih bilgilerini belirleyin</li>
-                            <li>Kullanýcý ve çalýþan ID'lerini ekleyin</li>
-                            <li>Hata detayý ve user agent bilgilerini girin</li>
+                            <li>KullanÄ±cÄ± ve Ã§alÄ±ÅŸan ID'lerini ekleyin</li>
+                            <li>Hata detayÄ± ve user agent bilgilerini girin</li>
                         </ul>
                     </div>
                 </div>
@@ -156,3 +158,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

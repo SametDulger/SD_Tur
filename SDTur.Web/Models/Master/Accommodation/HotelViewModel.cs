@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace SDTur.Web.Models.Master.Accommodation
 {
     public class HotelViewModel
@@ -13,5 +15,15 @@ namespace SDTur.Web.Models.Master.Accommodation
         public DateTime CreatedDate { get; set; }
         public int RegionId { get; set; }
         public int Order { get; set; }
+        
+        [Display(Name = "Bölge Adı")]
+        public string RegionName { get; set; } = string.Empty;
+        
+        // Additional properties needed for the view
+        [Display(Name = "Değerlendirme")]
+        public int Rating { get; set; }
+        
+        [Display(Name = "Şehir")]
+        public string City { get; set; } = string.Empty;
     }
 } 

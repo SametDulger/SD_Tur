@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SDTur.Web.Models.Master.Locations;
+using SDTur.Web.Models.Master.Branches;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -15,86 +15,151 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var branches = await _apiService.GetAsync<IEnumerable<BranchViewModel>>("api/branches");
-            return View(branches);
+            try
+            {
+                var branches = await _apiService.GetBranchesAsync();
+                return View(branches);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Şubeler yüklenirken hata oluştu: " + ex.Message;
+                return View(new List<BranchViewModel>());
+            }
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var branch = await _apiService.GetAsync<BranchViewModel>($"api/branches/{id}");
-            if (branch == null)
-                return NotFound();
-
-            return View(branch);
+            try
+            {
+                var branch = await _apiService.GetBranchByIdAsync(id);
+                if (branch == null)
+                {
+                    TempData["Error"] = "Şube bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(branch);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Şube detayları yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public IActionResult Create()
         {
-            return View();
+            return View(new BranchCreateViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Address,Phone,Email,IsActive")] BranchCreateViewModel BranchCreateViewModel)
+        public async Task<IActionResult> Create(BranchCreateViewModel createViewModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await _apiService.PostAsync<BranchCreateViewModel, BranchViewModel>("api/branches", BranchCreateViewModel);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    var result = await _apiService.CreateBranchAsync(createViewModel);
+                    TempData["Success"] = "Şube başarıyla oluşturuldu.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(createViewModel);
             }
-            return View(BranchCreateViewModel);
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Şube oluşturulurken hata oluştu: " + ex.Message;
+                return View(createViewModel);
+            }
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var branch = await _apiService.GetAsync<BranchViewModel>($"api/branches/{id}");
-            if (branch == null)
-                return NotFound();
-
-            var updateDto = new BranchEditViewModel
+            try
             {
-                Id = branch.Id,
-                Name = branch.Name,
-                Address = branch.Address,
-                Phone = branch.Phone,
-                Email = branch.Email,
-                IsActive = branch.IsActive
-            };
+                var branch = await _apiService.GetBranchByIdAsync(id);
+                if (branch == null)
+                {
+                    TempData["Error"] = "Şube bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
 
-            return View(updateDto);
+                var updateViewModel = new BranchEditViewModel
+                {
+                    Id = branch.Id,
+                    BranchName = branch.BranchName,
+                    BranchCode = branch.BranchCode,
+                    Address = branch.Address,
+                    Phone = branch.Phone,
+                    Email = branch.Email,
+                    ManagerName = branch.ManagerName,
+                    IsActive = branch.IsActive,
+                    Description = branch.Description
+                };
+
+                return View(updateViewModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Şube bilgileri yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, BranchEditViewModel BranchEditViewModel)
+        public async Task<IActionResult> Edit(BranchEditViewModel updateViewModel)
         {
-            if (id != BranchEditViewModel.Id)
-                return NotFound();
-
-            if (ModelState.IsValid)
+            try
             {
-                var result = await _apiService.PutAsync<BranchEditViewModel, BranchViewModel>($"api/branches/{id}", BranchEditViewModel);
-                if (result != null)
+                if (ModelState.IsValid)
+                {
+                    var result = await _apiService.UpdateBranchAsync(updateViewModel);
+                    TempData["Success"] = "Şube başarıyla güncellendi.";
                     return RedirectToAction(nameof(Index));
+                }
+                return View(updateViewModel);
             }
-            return View(BranchEditViewModel);
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Şube güncellenirken hata oluştu: " + ex.Message;
+                return View(updateViewModel);
+            }
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var branch = await _apiService.GetAsync<BranchViewModel>($"api/branches/{id}");
-            if (branch == null)
-                return NotFound();
-
-            return View(branch);
+            try
+            {
+                var branch = await _apiService.GetBranchByIdAsync(id);
+                if (branch == null)
+                {
+                    TempData["Error"] = "Şube bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(branch);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Şube bilgileri yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _apiService.DeleteAsync($"api/branches/{id}");
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _apiService.DeleteBranchAsync(id);
+                TempData["Success"] = "Şube başarıyla silindi.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Şube silinirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 } 

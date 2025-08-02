@@ -3,187 +3,202 @@
     ViewData["Title"] = "Hesap Düzenle";
 }
 
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="h3 mb-0">
-                <i class="bi bi-pencil-square text-primary me-2"></i>Hesap Düzenle
-            </h1>
-            <a asp-action="Index" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-2"></i>Geri Dön
-            </a>
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-pencil-square text-primary me-2"></i>Hesap Düzenle
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-lg-8">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-bank text-warning me-2"></i>Hesap Bilgileri
-                </h5>
-            </div>
-            <div class="card-body">
-                <form asp-action="Edit" method="post" data-validate>
-                    <input asp-for="Id" type="hidden" />
-                    
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label asp-for="AccountNumber" class="form-label">
-                                <i class="bi bi-hash me-1"></i>Hesap Numarası
-                            </label>
-                            <input asp-for="AccountNumber" class="form-control" readonly>
-                            <small class="text-muted">Hesap numarası değiştirilemez</small>
-                        </div>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-bank text-warning me-2"></i>Hesap Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <input asp-for="Id" type="hidden" />
                         
-                        <div class="col-md-6">
-                            <label asp-for="AccountName" class="form-label">
-                                <i class="bi bi-building me-1"></i>Hesap Adı
-                            </label>
-                            <input asp-for="AccountName" class="form-control" placeholder="Hesap adını giriniz">
-                            <span asp-validation-for="AccountName" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="AccountType" class="form-label">
-                                <i class="bi bi-tag me-1"></i>Hesap Türü
-                            </label>
-                            <select asp-for="AccountType" class="form-select">
-                                <option value="">Hesap türü seçiniz</option>
-                            </select>
-                            <span asp-validation-for="AccountType" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="CurrencyId" class="form-label">
-                                <i class="bi bi-currency-exchange me-1"></i>Para Birimi
-                            </label>
-                            <select asp-for="CurrencyId" class="form-select">
-                                <option value="">Para birimi seçiniz</option>
-                            </select>
-                            <span asp-validation-for="CurrencyId" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="ContactPerson" class="form-label">
-                                <i class="bi bi-person me-1"></i>İletişim Kişisi
-                            </label>
-                            <input asp-for="ContactPerson" class="form-control" placeholder="İletişim kişisi adı">
-                            <span asp-validation-for="ContactPerson" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="Phone" class="form-label">
-                                <i class="bi bi-telephone me-1"></i>Telefon
-                            </label>
-                            <input asp-for="Phone" class="form-control" placeholder="Telefon numarası">
-                            <span asp-validation-for="Phone" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="Email" class="form-label">
-                                <i class="bi bi-envelope me-1"></i>E-posta
-                            </label>
-                            <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresi">
-                            <span asp-validation-for="Email" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="CurrentBalance" class="form-label">
-                                <i class="bi bi-wallet me-1"></i>Mevcut Bakiye
-                            </label>
-                            <input asp-for="CurrentBalance" type="number" step="0.01" class="form-control" readonly>
-                            <small class="text-muted">Bakiye işlemler üzerinden güncellenir</small>
-                        </div>
-                        
-                        <div class="col-12">
-                            <label asp-for="Address" class="form-label">
-                                <i class="bi bi-geo-alt me-1"></i>Adres
-                            </label>
-                            <textarea asp-for="Address" class="form-control" rows="3" placeholder="Adres bilgisi"></textarea>
-                            <span asp-validation-for="Address" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-12">
-                            <label asp-for="Description" class="form-label">
-                                <i class="bi bi-text-paragraph me-1"></i>Açıklama
-                            </label>
-                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Hesap açıklaması"></textarea>
-                            <span asp-validation-for="Description" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-12">
-                            <div class="form-check">
-                                <input asp-for="IsActive" class="form-check-input" type="checkbox">
-                                <label asp-for="IsActive" class="form-check-label">
-                                    <i class="bi bi-check-circle me-1"></i>Aktif Hesap
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="AccountNumber" class="form-label">
+                                    <i class="bi bi-hash me-1"></i>Hesap Numarası
                                 </label>
+                                <input asp-for="AccountNumber" class="form-control" readonly>
+                                <small class="text-muted">Hesap numarası değiştirilemez</small>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="AccountName" class="form-label">
+                                    <i class="bi bi-building me-1"></i>Hesap Adı
+                                </label>
+                                <input asp-for="AccountName" class="form-control" placeholder="Hesap adını giriniz" required>
+                                <span asp-validation-for="AccountName" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="AccountType" class="form-label">
+                                    <i class="bi bi-tag me-1"></i>Hesap Türü
+                                </label>
+                                <select asp-for="AccountType" class="form-select" required>
+                                    <option value="">Hesap türü seçiniz</option>
+                                    <option value="Customer">Müşteri</option>
+                                    <option value="Supplier">Tedarikçi</option>
+                                    <option value="Bank">Banka</option>
+                                    <option value="Employee">Çalışan</option>
+                                </select>
+                                <span asp-validation-for="AccountType" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="CurrencyId" class="form-label">
+                                    <i class="bi bi-currency-exchange me-1"></i>Para Birimi
+                                </label>
+                                <select asp-for="CurrencyId" class="form-select" required>
+                                    <option value="">Para birimi seçiniz</option>
+                                    @if (ViewBag.Currencies != null)
+                                    {
+                                        foreach (var currency in ViewBag.Currencies)
+                                        {
+                                            <option value="@currency.Id" selected="@(Model.CurrencyId == currency.Id)">
+                                                @currency.Name (@currency.Code)
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="CurrencyId" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="ContactPerson" class="form-label">
+                                    <i class="bi bi-person me-1"></i>İletişim Kişisi
+                                </label>
+                                <input asp-for="ContactPerson" class="form-control" placeholder="İletişim kişisi adı" required>
+                                <span asp-validation-for="ContactPerson" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="Phone" class="form-label">
+                                    <i class="bi bi-telephone me-1"></i>Telefon
+                                </label>
+                                <input asp-for="Phone" class="form-control" placeholder="Telefon numarası" required>
+                                <span asp-validation-for="Phone" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label">
+                                    <i class="bi bi-envelope me-1"></i>E-posta
+                                </label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresi" required>
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="CurrentBalance" class="form-label">
+                                    <i class="bi bi-wallet me-1"></i>Mevcut Bakiye
+                                </label>
+                                <input asp-for="CurrentBalance" type="number" step="0.01" class="form-control" readonly>
+                                <small class="text-muted">Bakiye işlemler üzerinden güncellenir</small>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label asp-for="Address" class="form-label">
+                                    <i class="bi bi-geo-alt me-1"></i>Adres
+                                </label>
+                                <textarea asp-for="Address" class="form-control" rows="3" placeholder="Adres bilgisi"></textarea>
+                                <span asp-validation-for="Address" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label">
+                                    <i class="bi bi-text-paragraph me-1"></i>Açıklama
+                                </label>
+                                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Hesap açıklaması"></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox">
+                                    <label asp-for="IsActive" class="form-check-label">
+                                        <i class="bi bi-check-circle me-1"></i>Aktif Hesap
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <hr class="my-4">
-                    
-                    <div class="d-flex justify-content-end gap-2">
-                        <a asp-action="Index" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-circle me-2"></i>İptal
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-circle me-2"></i>Güncelle
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-lg-4">
-        <div class="card border-0 shadow-sm mb-3">
-            <div class="card-header bg-white">
-                <h6 class="card-title mb-0">
-                    <i class="bi bi-info-circle text-info me-2"></i>Hesap Bilgileri
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-2">
-                    <div class="col-6">
-                        <small class="text-muted">Oluşturma Tarihi</small>
-                        <div class="fw-semibold">@(Model.CreatedDate?.ToString("dd.MM.yyyy"))</div>
-                    </div>
-                    <div class="col-6">
-                        <small class="text-muted">Son Güncelleme</small>
-                        <div class="fw-semibold">@(Model.UpdatedDate?.ToString("dd.MM.yyyy"))</div>
-                    </div>
-                </div>
-                
-                <hr class="my-3">
-                
-                <div class="d-grid gap-2">
-                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-info btn-sm">
-                        <i class="bi bi-eye me-2"></i>Detayları Görüntüle
-                    </a>
-                    <a asp-controller="AccountTransactions" asp-action="Index" asp-route-accountId="@Model.Id" class="btn btn-outline-primary btn-sm">
-                        <i class="bi bi-list-ul me-2"></i>İşlem Geçmişi
-                    </a>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>İptal
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>Güncelle
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
         
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h6 class="card-title mb-0">
-                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>Uyarılar
-                </h6>
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header border-0">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle text-info me-2"></i>Hesap Bilgileri
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <small class="text-muted">Oluşturma Tarihi</small>
+                            <div class="fw-semibold">@(Model.CreatedDate?.ToString("dd.MM.yyyy"))</div>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">Son Güncelleme</small>
+                            <div class="fw-semibold">@(Model.UpdatedDate?.ToString("dd.MM.yyyy"))</div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-3">
+                    
+                    <div class="d-grid gap-2">
+                        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-info btn-sm">
+                            <i class="bi bi-eye me-2"></i>Detayları Görüntüle
+                        </a>
+                        <a asp-controller="AccountTransactions" asp-action="Index" asp-route-accountId="@Model.Id" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-list-ul me-2"></i>İşlem Geçmişi
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="alert alert-warning small">
-                    <ul class="mb-0">
-                        <li>Hesap numarası değiştirilemez</li>
-                        <li>Para birimi değişikliği mevcut işlemleri etkileyebilir</li>
-                        <li>Bakiye manuel olarak değiştirilemez</li>
-                        <li>Pasif hesaplar işlem yapamaz</li>
-                    </ul>
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle text-warning me-2"></i>Uyarılar
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning shadow-sm small">
+                        <ul class="mb-0">
+                            <li>Hesap numarası değiştirilemez</li>
+                            <li>Para birimi değişikliği mevcut işlemleri etkileyebilir</li>
+                            <li>Bakiye manuel olarak değiştirilemez</li>
+                            <li>Pasif hesaplar işlem yapamaz</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -191,19 +206,7 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Auto-load dropdown data
-        document.addEventListener('DOMContentLoaded', function() {
-            const accountTypeSelect = document.querySelector('select[data-load="/api/master/accounttypes"]');
-            const currencySelect = document.querySelector('select[data-load="/api/master/currencies"]');
-            
-            if (accountTypeSelect) {
-                console.log("Load data handled server-side");;
-            }
-            
-            if (currencySelect) {
-                console.log("Load data handled server-side");;
-            }
-        });
-    </script>
-} 
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+ 

@@ -32,5 +32,14 @@ namespace SDTur.Web.Models.Financial.Cash
         public string ReceiptNumber { get; set; } = string.Empty;
         
         public bool IsActive { get; set; } = true;
+        
+        [Display(Name = "Kategori")]
+        public string Category { get; set; } = string.Empty;
+        
+        [Display(Name = "Pas Şirketi")]
+        public int? PassCompanyId { get; set; }
+        
+        [Display(Name = "Otomatik")]
+        public bool IsAutomatic { get; set; }
     }
 } 

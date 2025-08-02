@@ -1,6 +1,6 @@
-@model RegionViewModel
+@model SDTur.Web.Models.Master.Locations.RegionViewModel
 @{
-    ViewData["Title"] = "Bölge Sil";
+    ViewData["Title"] = "BÃ¶lge Sil";
 }
 
 <div class="container-fluid">
@@ -8,10 +8,10 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-trash text-danger me-2"></i>Bölge Sil
+                    <i class="bi bi-trash text-danger me-2"></i>BÃ¶lge Sil
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                 </a>
             </div>
         </div>
@@ -22,7 +22,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
                     <h5 class="card-title mb-0">
-                        <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme Onayý
+                        <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme OnayÄ±
                     </h5>
                 </div>
                 <div class="card-body">
@@ -30,20 +30,20 @@
                         <h6 class="alert-heading">
                             <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
                         </h6>
-                        <p class="mb-0">Bu bölgeyi silmek istediðinizden emin misiniz? Bu iþlem geri alýnamaz.</p>
+                        <p class="mb-0">Bu bÃ¶lgeyi silmek istediÄŸinizden emin misiniz? Bu iÅŸlem geri alÄ±namaz.</p>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-geo-alt me-1"></i>Bölge Adý
+                                <i class="bi bi-geo-alt me-1"></i>BÃ¶lge AdÄ±
                             </label>
                             <div class="h5 mb-0 text-primary">@Model.Name</div>
                         </div>
                         
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-flag me-1"></i>Ülke
+                                <i class="bi bi-flag me-1"></i>Ãœlke
                             </label>
                             <div>
                                 <span class="badge bg-info fs-6">
@@ -56,15 +56,15 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-arrow-right me-1"></i>Kemer'e Uzaklýk
+                                <i class="bi bi-arrow-right me-1"></i>Kemer'e UzaklÄ±k
                             </label>
                             <div class="h4 mb-0 text-success">@Model.DistanceFromKemer km</div>
-                            <small class="text-muted">Kemer'den uzaklýk</small>
+                            <small class="text-muted">Kemer'den uzaklÄ±k</small>
                         </div>
                         
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-sort-numeric-up me-1"></i>Sýralama
+                                <i class="bi bi-sort-numeric-up me-1"></i>SÄ±ralama
                             </label>
                             <div>
                                 <span class="badge bg-secondary fs-6">
@@ -77,7 +77,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-calendar me-1"></i>Oluþturulma Tarihi
+                                <i class="bi bi-calendar me-1"></i>OluÅŸturulma Tarihi
                             </label>
                             <div class="h6 mb-0">@Model.CreatedDate.ToString("dd MMMM yyyy")</div>
                             <small class="text-muted">@Model.CreatedDate.ToString("dddd")</small>
@@ -109,7 +109,7 @@
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label class="form-label fw-semibold text-muted">
-                                    <i class="bi bi-file-text me-1"></i>Açýklama
+                                    <i class="bi bi-file-text me-1"></i>AÃ§Ä±klama
                                 </label>
                                 <div class="p-3 bg-light rounded">
                                     @Model.Description
@@ -122,9 +122,9 @@
                         <input type="hidden" asp-for="Id" />
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                                <i class="bi bi-x-circle me-2"></i>Ä°ptal
                             </a>
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bu kaydý silmek istediðinizden emin misiniz?')">
+                            <button type="submit" class="btn btn-danger">
                                 <i class="bi bi-trash me-2"></i>Sil
                             </button>
                         </div>
@@ -143,13 +143,13 @@
                 <div class="card-body">
                     <div class="alert alert-danger">
                         <h6 class="alert-heading">
-                            <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarý
+                            <i class="bi bi-exclamation-triangle me-2"></i>Ã–nemli UyarÄ±
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Bu iþlem geri alýnamaz</li>
-                            <li>Bölge kalýcý olarak silinecektir</li>
-                            <li>Ýlgili kayýtlar etkilenebilir</li>
-                            <li>Silme iþlemi öncesi yedek almanýz önerilir</li>
+                            <li>Bu iÅŸlem geri alÄ±namaz</li>
+                            <li>BÃ¶lge kalÄ±cÄ± olarak silinecektir</li>
+                            <li>Ä°lgili kayÄ±tlar etkilenebilir</li>
+                            <li>Silme iÅŸlemi Ã¶ncesi yedek almanÄ±z Ã¶nerilir</li>
                         </ul>
                     </div>
                 </div>

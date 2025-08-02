@@ -1,4 +1,4 @@
-@model SDTur.Web.Models.Financial.Transactions.InvoiceEditViewModel
+@model SDTur.Web.Models.Financial.Invoices.InvoiceEditViewModel
 @{
     ViewData["Title"] = "Fatura Düzenle";
 }
@@ -104,8 +104,15 @@
                                 <label asp-for="PassCompanyId" class="form-label fw-semibold">
                                     <i class="bi bi-building me-1"></i>Pas Şirketi
                                 </label>
-                                <select asp-for="PassCompanyId" id="passCompanySelect" class="form-select">
+                                <select asp-for="PassCompanyId" class="form-select">
                                     <option value="">Pas şirketi seçiniz...</option>
+                                    @if (ViewBag.PassCompanies != null)
+                                    {
+                                        @foreach (var company in ViewBag.PassCompanies)
+                                        {
+                                            <option value="@company.Id" selected="@(Model.PassCompanyId == company.Id)">@company.Name</option>
+                                        }
+                                    }
                                 </select>
                                 <span asp-validation-for="PassCompanyId" class="text-danger small"></span>
                             </div>
@@ -179,32 +186,7 @@
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        // Load pass companies dynamically
-        async function loadPassCompanies() {
-            try {
-                const response = await fetch('/api/passcompanies');
-                const passCompanies = await response.json();
-                const passCompanySelect = document.getElementById('passCompanySelect');
-                
-                passCompanies.forEach(company => {
-                    const option = document.createElement('option');
-                    option.value = company.id;
-                    option.textContent = company.name;
-                    if (company.id == @(Model.PassCompanyId ?? 0)) {
-                        option.selected = true;
-                    }
-                    passCompanySelect.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error loading pass companies:', error);
-            }
-        }
 
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            loadPassCompanies();
-        });
-    </script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 } 

@@ -26,6 +26,9 @@ namespace SDTur.Web.Models.Financial.Accounts
         
         public string Currency { get; set; } = string.Empty;
         
+        [Display(Name = "Para Birimi")]
+        public int CurrencyId { get; set; }
+        
         public bool IsActive { get; set; }
         
         public DateTime? CreatedDate { get; set; }

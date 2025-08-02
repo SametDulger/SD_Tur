@@ -1,6 +1,6 @@
 @model SDTur.Web.Models.System.Logs.SystemLogEditViewModel
 @{
-    ViewData["Title"] = "Sistem Logu Düzenle";
+    ViewData["Title"] = "Sistem Logu DÃ¼zenle";
 }
 
 <div class="container-fluid">
@@ -8,10 +8,10 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-pencil text-primary me-2"></i>Sistem Logu Düzenle
+                    <i class="bi bi-pencil text-primary me-2"></i>Sistem Logu DÃ¼zenle
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                 </a>
             </div>
         </div>
@@ -37,7 +37,7 @@
                                     <i class="bi bi-journal-text me-1"></i>Log Seviyesi <span class="text-danger">*</span>
                                 </label>
                                 <select asp-for="LogLevel" class="form-select" required>
-                                    <option value="">Log seviyesi seçiniz...</option>
+                                    <option value="">Log seviyesi seÃ§iniz...</option>
                                     <option value="Error">Error</option>
                                     <option value="Warning">Warning</option>
                                     <option value="Info">Info</option>
@@ -66,9 +66,9 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label asp-for="UserId" class="form-label fw-semibold">
-                                    <i class="bi bi-person me-1"></i>Kullanýcý ID
+                                    <i class="bi bi-person me-1"></i>KullanÄ±cÄ± ID
                                 </label>
-                                <input asp-for="UserId" class="form-control" placeholder="Kullanýcý ID..." />
+                                <input asp-for="UserId" class="form-control" placeholder="KullanÄ±cÄ± ID..." />
                                 <span asp-validation-for="UserId" class="text-danger small"></span>
                             </div>
                         </div>
@@ -76,9 +76,9 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="EmployeeId" class="form-label fw-semibold">
-                                    <i class="bi bi-person-badge me-1"></i>Çalýþan ID
+                                    <i class="bi bi-person-badge me-1"></i>Ã‡alÄ±ÅŸan ID
                                 </label>
-                                <input asp-for="EmployeeId" type="number" class="form-control" placeholder="Çalýþan ID..." />
+                                <input asp-for="EmployeeId" type="number" class="form-control" placeholder="Ã‡alÄ±ÅŸan ID..." />
                                 <span asp-validation-for="EmployeeId" class="text-danger small"></span>
                             </div>
                             
@@ -96,7 +96,7 @@
                                 <label asp-for="Message" class="form-label fw-semibold">
                                     <i class="bi bi-message me-1"></i>Mesaj <span class="text-danger">*</span>
                                 </label>
-                                <textarea asp-for="Message" class="form-control" rows="3" placeholder="Log mesajý..." required></textarea>
+                                <textarea asp-for="Message" class="form-control" rows="3" placeholder="Log mesajÄ±..." required></textarea>
                                 <span asp-validation-for="Message" class="text-danger small"></span>
                             </div>
                         </div>
@@ -104,9 +104,9 @@
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label asp-for="Exception" class="form-label fw-semibold">
-                                    <i class="bi bi-exclamation-triangle me-1"></i>Hata Detayý
+                                    <i class="bi bi-exclamation-triangle me-1"></i>Hata DetayÄ±
                                 </label>
-                                <textarea asp-for="Exception" class="form-control" rows="4" placeholder="Hata detayý..."></textarea>
+                                <textarea asp-for="Exception" class="form-control" rows="4" placeholder="Hata detayÄ±..."></textarea>
                                 <span asp-validation-for="Exception" class="text-danger small"></span>
                             </div>
                         </div>
@@ -123,10 +123,10 @@
 
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                                <i class="bi bi-x-circle me-2"></i>Ä°ptal
                             </a>
                             <button type="submit" class="btn btn-warning">
-                                <i class="bi bi-check-circle me-2"></i>Güncelle
+                                <i class="bi bi-check-circle me-2"></i>GÃ¼ncelle
                             </button>
                         </div>
                     </form>
@@ -144,13 +144,13 @@
                 <div class="card-body">
                     <div class="alert alert-info">
                         <h6 class="alert-heading">
-                            <i class="bi bi-lightbulb me-2"></i>Sistem Logu Düzenleme
+                            <i class="bi bi-lightbulb me-2"></i>Sistem Logu DÃ¼zenleme
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Log seviyesi ve kaynak bilgilerini güncelleyin</li>
-                            <li>Mesaj ve tarih bilgilerini düzenleyin</li>
-                            <li>Kullanýcý ve çalýþan ID'lerini deðiþtirebilirsiniz</li>
-                            <li>Hata detayý ve user agent bilgilerini güncelleyin</li>
+                            <li>Log seviyesi ve kaynak bilgilerini gÃ¼ncelleyin</li>
+                            <li>Mesaj ve tarih bilgilerini dÃ¼zenleyin</li>
+                            <li>KullanÄ±cÄ± ve Ã§alÄ±ÅŸan ID'lerini deÄŸiÅŸtirebilirsiniz</li>
+                            <li>Hata detayÄ± ve user agent bilgilerini gÃ¼ncelleyin</li>
                         </ul>
                     </div>
                 </div>
@@ -158,3 +158,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
