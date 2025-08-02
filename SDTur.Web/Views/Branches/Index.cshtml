@@ -7,7 +7,7 @@
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="h3 mb-0">
-                <i class="bi bi-building text-primary me-2"></i>Şubeler
+                <i class="bi bi-geo-alt text-primary me-2"></i>Şubeler
             </h1>
             <a asp-action="Create" class="btn btn-primary">
                 <i class="bi bi-plus-circle me-2"></i>Yeni Şube
@@ -16,59 +16,20 @@
     </div>
 </div>
 
-<!-- Filtreler -->
-<div class="card border-0 shadow-sm mb-4">
-    <div class="card-header bg-white">
-        <h6 class="card-title mb-0">
-            <i class="bi bi-funnel text-info me-2"></i>Filtreler
-        </h6>
-    </div>
-    <div class="card-body">
-        <form id="filterForm" class="row g-3">
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label">Bölge</label>
-                <select class="form-select" id="regionFilter">
-                    <option value="">Tüm Bölgeler</option>
-                </select>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label">Durum</label>
-                <select class="form-select" id="statusFilter">
-                    <option value="">Tüm Durumlar</option>
-                    <option value="true">Aktif</option>
-                    <option value="false">Pasif</option>
-                </select>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label">Şehir</label>
-                <input type="text" class="form-control" id="cityFilter" placeholder="Şehir ara...">
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label">&nbsp;</label>
-                <div class="d-grid">
-                    <button type="button" class="btn btn-outline-primary" onclick="applyFilters()">
-                        <i class="bi bi-search me-2"></i>Filtrele
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
 <!-- İstatistikler -->
-<div class="row g-4 mb-4" id="statisticsCards">
+<div class="row g-4 mb-4">
     <div class="col-xl-3 col-md-6">
         <div class="card border-0 shadow-sm">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0">
                         <div class="bg-primary bg-opacity-10 rounded-circle p-3">
-                            <i class="bi bi-building text-primary fs-4"></i>
+                            <i class="bi bi-geo-alt text-primary fs-4"></i>
                         </div>
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Toplam Şube</h6>
-                        <h3 class="mb-0 fw-bold" id="totalBranches">0</h3>
+                        <h3 class="mb-0 fw-bold">@Model.Count()</h3>
                     </div>
                 </div>
             </div>
@@ -86,7 +47,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Aktif Şube</h6>
-                        <h3 class="mb-0 fw-bold text-success" id="activeBranches">0</h3>
+                        <h3 class="mb-0 fw-bold text-success">@Model.Count(b => b.IsActive)</h3>
                     </div>
                 </div>
             </div>
@@ -104,7 +65,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Toplam Çalışan</h6>
-                        <h3 class="mb-0 fw-bold text-info" id="totalEmployees">0</h3>
+                        <h3 class="mb-0 fw-bold text-info">@Model.Sum(b => b.EmployeeCount)</h3>
                     </div>
                 </div>
             </div>
@@ -117,12 +78,12 @@
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0">
                         <div class="bg-warning bg-opacity-10 rounded-circle p-3">
-                            <i class="bi bi-geo-alt text-warning fs-4"></i>
+                            <i class="bi bi-building text-warning fs-4"></i>
                         </div>
                     </div>
                     <div class="flex-grow-1 ms-3">
-                        <h6 class="card-title text-muted mb-1">Şehir Sayısı</h6>
-                        <h3 class="mb-0 fw-bold text-warning" id="totalCities">0</h3>
+                        <h6 class="card-title text-muted mb-1">Merkez Şube</h6>
+                        <h3 class="mb-0 fw-bold text-warning">@Model.Count(b => b.IsMainBranch)</h3>
                     </div>
                 </div>
             </div>
@@ -132,7 +93,7 @@
 
 <!-- Şube Listesi -->
 <div class="card border-0 shadow-sm">
-    <div class="card-header bg-white">
+    <div class="card-header bg-white border-0">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h5 class="card-title mb-0">
@@ -145,17 +106,17 @@
                         <span class="input-group-text bg-light border-end-0">
                             <i class="bi bi-search text-muted"></i>
                         </span>
-                        <input type="text" class="form-control border-start-0" id="searchInput" placeholder="Şube ara..." data-search="branchesTable">
+                        <input type="text" class="form-control border-start-0" placeholder="Şube ara...">
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="bi bi-download me-1"></i>Dışa Aktar
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="exportToExcel()">
+                            <li><a class="dropdown-item" href="#">
                                 <i class="bi bi-file-earmark-excel me-2"></i>Excel
                             </a></li>
-                            <li><a class="dropdown-item" href="#" onclick="exportToPDF()">
+                            <li><a class="dropdown-item" href="#">
                                 <i class="bi bi-file-earmark-pdf me-2"></i>PDF
                             </a></li>
                         </ul>
@@ -165,120 +126,119 @@
         </div>
     </div>
     <div class="card-body p-0">
-        <div class="table-responsive" id="branchesTable">
-            <!-- Dinamik olarak yüklenecek -->
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>Şube Kodu</th>
+                        <th>Şube Adı</th>
+                        <th>Bölge</th>
+                        <th>Telefon</th>
+                        <th>E-posta</th>
+                        <th>Çalışan Sayısı</th>
+                        <th>Durum</th>
+                        <th class="text-end">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var branch in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="fw-semibold">@branch.BranchCode</span>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">@branch.BranchName</div>
+                                    <small class="text-muted">@branch.Address</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">@branch.RegionName</span>
+                                </td>
+                                <td>@branch.Phone</td>
+                                <td>@branch.Email</td>
+                                <td>
+                                    <span class="fw-semibold">@branch.EmployeeCount</span>
+                                </td>
+                                <td>
+                                    @if (branch.IsActive)
+                                    {
+                                        <span class="badge bg-success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Pasif</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Details" asp-route-id="@branch.Id" class="btn btn-outline-info" title="Detay">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@branch.Id" class="btn btn-outline-primary" title="Düzenle">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@branch.Id" class="btn btn-outline-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <i class="bi bi-inbox text-muted fs-1"></i>
+                                <p class="text-muted mt-2">Şube bulunamadı</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="card-footer bg-light">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <small class="text-muted">
-                    Toplam <strong id="recordCount">0</strong> şube bulundu
+                    Toplam <strong>@Model.Count()</strong> şube bulundu
                 </small>
             </div>
             <div class="col-md-6 text-end">
-                <nav aria-label="Sayfa navigasyonu">
-                    <ul class="pagination pagination-sm mb-0 justify-content-end" id="pagination">
-                        <!-- Dinamik olarak oluşturulacak -->
-                    </ul>
-                </nav>
+                <small class="text-muted">
+                    Son güncelleme: @DateTime.Now.ToString("dd.MM.yyyy HH:mm")
+                </small>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Harita Görünümü -->
+<!-- Bölge Dağılımı -->
 <div class="row mt-4">
     <div class="col-12">
         <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
+            <div class="card-header bg-white border-0">
                 <h5 class="card-title mb-0">
-                    <i class="bi bi-map text-success me-2"></i>Şube Haritası
+                    <i class="bi bi-pie-chart text-success me-2"></i>Bölge Dağılımı
                 </h5>
             </div>
             <div class="card-body">
-                <div id="branchesMap" style="height: 400px; background-color: #f8f9fa; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center;">
-                    <div class="text-center text-muted">
-                        <i class="bi bi-map fs-1 mb-3"></i>
-                        <p>Harita yükleniyor...</p>
-                    </div>
+                <div class="row g-3">
+                    @foreach (var region in Model.GroupBy(b => b.RegionName).Take(4))
+                    {
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h6 class="text-muted mb-1">@region.Key</h6>
+                                <h4 class="text-primary mb-0">@region.Count()</h4>
+                                <small class="text-muted">şube</small>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-@section Scripts {
-    <script>
-        let currentFilters = {};
-        
-        function applyFilters() {
-            currentFilters = {
-                regionId: document.getElementById('regionFilter').value,
-                isActive: document.getElementById('statusFilter').value,
-                city: document.getElementById('cityFilter').value
-            };
-            
-            // Reload data with filters
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const endpoint = queryString ? `/api/master/branches?${queryString}` : '/api/master/branches';
-            
-            console.log("Load data handled server-side"););
-            updateStatistics();
-        }
-        
-        function updateStatistics() {
-            // Load statistics based on current filters
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const endpoint = queryString ? `/api/master/branches/statistics?${queryString}` : '/api/master/branches/statistics';
-            
-            console.log("API call handled server-side");
-                .then(data => {
-                    document.getElementById('totalBranches').textContent = data.totalBranches || 0;
-                    document.getElementById('activeBranches').textContent = data.activeBranches || 0;
-                    document.getElementById('totalEmployees').textContent = data.totalEmployees || 0;
-                    document.getElementById('totalCities').textContent = data.totalCities || 0;
-                    document.getElementById('recordCount').textContent = data.totalBranches || 0;
-                })
-                .catch(error => {
-                    console.error('Statistics loading failed:', error);
-                });
-        }
-        
-        function exportToExcel() {
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const filename = `subeler_${new Date().toISOString().split('T')[0]}`;
-            console.log("Export to Excel handled server-side");;
-        }
-        
-        function exportToPDF() {
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const filename = `subeler_${new Date().toISOString().split('T')[0]}`;
-            console.log("Export to PDF handled server-side");;
-        }
-        
-        // Auto-load data and setup
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load initial data
-            updateStatistics();
-            
-            // Apply initial filters
-            applyFilters();
-            
-            // Setup search functionality
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const table = document.getElementById('branchesTable');
-                    const rows = table.querySelectorAll('tbody tr');
-                    
-                    rows.forEach(row => {
-                        const text = row.textContent.toLowerCase();
-                        row.style.display = text.includes(searchTerm) ? '' : 'none';
-                    });
-                }, 300));
-            }
-        });
-    </script>
-} 
+</div> 

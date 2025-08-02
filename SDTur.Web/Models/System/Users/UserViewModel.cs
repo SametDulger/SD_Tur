@@ -14,5 +14,9 @@ namespace SDTur.Web.Models.System.Users
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? LastLoginDate { get; set; }
+        
+        // Computed properties
+        public string FullName => $"{FirstName} {LastName}".Trim();
+        public string BranchName { get; set; } = string.Empty;
     }
 } 

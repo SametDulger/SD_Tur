@@ -1,6 +1,6 @@
-@model RegionEditViewModel
+@model SDTur.Web.Models.Master.Locations.RegionEditViewModel
 @{
-    ViewData["Title"] = "Bölge Düzenle";
+    ViewData["Title"] = "BÃ¶lge DÃ¼zenle";
 }
 
 <div class="container-fluid">
@@ -8,10 +8,10 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-pencil text-primary me-2"></i>Bölge Düzenle
+                    <i class="bi bi-pencil text-primary me-2"></i>BÃ¶lge DÃ¼zenle
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                 </a>
             </div>
         </div>
@@ -22,7 +22,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
                     <h5 class="card-title mb-0">
-                        <i class="bi bi-form me-2"></i>Bölge Bilgileri
+                        <i class="bi bi-form me-2"></i>BÃ¶lge Bilgileri
                     </h5>
                 </div>
                 <div class="card-body">
@@ -34,17 +34,17 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="Name" class="form-label fw-semibold">
-                                    <i class="bi bi-geo-alt me-1"></i>Bölge Adý <span class="text-danger">*</span>
+                                    <i class="bi bi-geo-alt me-1"></i>BÃ¶lge AdÄ± <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="Name" class="form-control" placeholder="Bölge adý..." required />
+                                <input asp-for="Name" class="form-control" placeholder="BÃ¶lge adÄ±..." required />
                                 <span asp-validation-for="Name" class="text-danger small"></span>
                             </div>
                             
                             <div class="col-md-6 mb-3">
                                 <label asp-for="Country" class="form-label fw-semibold">
-                                    <i class="bi bi-flag me-1"></i>Ülke <span class="text-danger">*</span>
+                                    <i class="bi bi-flag me-1"></i>Ãœlke <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="Country" class="form-control" placeholder="Ülke adý..." required />
+                                <input asp-for="Country" class="form-control" placeholder="Ãœlke adÄ±..." required />
                                 <span asp-validation-for="Country" class="text-danger small"></span>
                             </div>
                         </div>
@@ -52,7 +52,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="DistanceFromKemer" class="form-label fw-semibold">
-                                    <i class="bi bi-arrow-right me-1"></i>Kemer'e Uzaklýk (km) <span class="text-danger">*</span>
+                                    <i class="bi bi-arrow-right me-1"></i>Kemer'e UzaklÄ±k (km) <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="DistanceFromKemer" type="number" class="form-control" placeholder="0" required />
                                 <span asp-validation-for="DistanceFromKemer" class="text-danger small"></span>
@@ -60,7 +60,7 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label asp-for="Order" class="form-label fw-semibold">
-                                    <i class="bi bi-sort-numeric-up me-1"></i>Sýralama <span class="text-danger">*</span>
+                                    <i class="bi bi-sort-numeric-up me-1"></i>SÄ±ralama <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="Order" type="number" class="form-control" placeholder="0" required />
                                 <span asp-validation-for="Order" class="text-danger small"></span>
@@ -75,26 +75,26 @@
                                         <i class="bi bi-toggle-on me-1"></i>Aktif
                                     </label>
                                 </div>
-                                <small class="text-muted">Bu bölgenin aktif olduðunu iþaretleyin</small>
+                                <small class="text-muted">Bu bÃ¶lgenin aktif olduÄŸunu iÅŸaretleyin</small>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label asp-for="Description" class="form-label fw-semibold">
-                                    <i class="bi bi-file-text me-1"></i>Açýklama
+                                    <i class="bi bi-file-text me-1"></i>AÃ§Ä±klama
                                 </label>
-                                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Bölge açýklamasý..."></textarea>
+                                <textarea asp-for="Description" class="form-control" rows="3" placeholder="BÃ¶lge aÃ§Ä±klamasÄ±..."></textarea>
                                 <span asp-validation-for="Description" class="text-danger small"></span>
                             </div>
                         </div>
 
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                                <i class="bi bi-x-circle me-2"></i>Ä°ptal
                             </a>
                             <button type="submit" class="btn btn-warning">
-                                <i class="bi bi-check-circle me-2"></i>Güncelle
+                                <i class="bi bi-check-circle me-2"></i>GÃ¼ncelle
                             </button>
                         </div>
                     </form>
@@ -112,13 +112,13 @@
                 <div class="card-body">
                     <div class="alert alert-info">
                         <h6 class="alert-heading">
-                            <i class="bi bi-lightbulb me-2"></i>Bölge Düzenleme
+                            <i class="bi bi-lightbulb me-2"></i>BÃ¶lge DÃ¼zenleme
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Bölge adý ve ülke bilgilerini güncelleyin</li>
-                            <li>Kemer'e olan uzaklýðý düzenleyin</li>
-                            <li>Sýralama numarasýný deðiþtirebilirsiniz</li>
-                            <li>Açýklama ve aktiflik durumunu güncelleyin</li>
+                            <li>BÃ¶lge adÄ± ve Ã¼lke bilgilerini gÃ¼ncelleyin</li>
+                            <li>Kemer'e olan uzaklÄ±ÄŸÄ± dÃ¼zenleyin</li>
+                            <li>SÄ±ralama numarasÄ±nÄ± deÄŸiÅŸtirebilirsiniz</li>
+                            <li>AÃ§Ä±klama ve aktiflik durumunu gÃ¼ncelleyin</li>
                         </ul>
                     </div>
                 </div>
@@ -126,3 +126,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

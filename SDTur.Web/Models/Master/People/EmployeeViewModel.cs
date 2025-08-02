@@ -37,5 +37,17 @@ namespace SDTur.Web.Models.Master.People
         
         public int? CurrencyId { get; set; }
         public int? BranchId { get; set; }
+        
+        // Additional properties for compatibility
+        public string Gender { get; set; } = string.Empty;
+        public string EmployeeNumber { get; set; } = string.Empty;
+        public string IdentityNumber { get; set; } = string.Empty;
+        
+        // Additional properties needed for the view
+        [Display(Name = "Başlangıç Tarihi")]
+        public DateTime StartDate { get; set; }
+        
+        [Display(Name = "Ad Soyad")]
+        public string FullName { get; set; } = string.Empty;
     }
 } 

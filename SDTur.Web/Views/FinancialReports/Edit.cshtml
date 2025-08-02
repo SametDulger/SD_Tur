@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-pencil text-warning me-2"></i>Finansal Rapor Düzenle
+                    <i class="bi bi-pencil text-primary me-2"></i>Finansal Rapor Düzenle
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left me-2"></i>Geri Dön
@@ -17,158 +17,199 @@
         </div>
     </div>
 
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
+    <div class="row">
+        <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
                     <h5 class="card-title mb-0">
-                        <i class="bi bi-graph-up me-2"></i>Rapor Bilgileri
+                        <i class="bi bi-form me-2"></i>Finansal Rapor Bilgileri
                     </h5>
                 </div>
                 <div class="card-body">
                     <form asp-action="Edit" method="post">
-                        <input type="hidden" asp-for="Id" />
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
                         
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label asp-for="ReportType" class="form-label">
-                                    <i class="bi bi-tag me-1"></i>Rapor Türü
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ReportType" class="form-label fw-semibold">
+                                    <i class="bi bi-file-earmark-text me-1"></i>Rapor Türü <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="ReportType" class="form-select">
-                                    <option value="">Rapor türü seçiniz</option>
-                                    <option value="Günlük">Günlük</option>
-                                    <option value="Haftalık">Haftalık</option>
-                                    <option value="Aylık">Aylık</option>
-                                    <option value="Yıllık">Yıllık</option>
-                                    <option value="Özel">Özel</option>
+                                <select asp-for="ReportType" class="form-select" required>
+                                    <option value="">Rapor türü seçiniz...</option>
+                                                                <option value="Daily" selected="@(Model.ReportType == "Daily")">Günlük</option>
+                            <option value="Weekly" selected="@(Model.ReportType == "Weekly")">Haftalık</option>
+                            <option value="Monthly" selected="@(Model.ReportType == "Monthly")">Aylık</option>
+                            <option value="Yearly" selected="@(Model.ReportType == "Yearly")">Yıllık</option>
                                 </select>
                                 <span asp-validation-for="ReportType" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6">
-                                <label asp-for="ReportDate" class="form-label">
-                                    <i class="bi bi-calendar me-1"></i>Rapor Tarihi
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ReportDate" class="form-label fw-semibold">
+                                    <i class="bi bi-calendar me-1"></i>Rapor Tarihi <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="ReportDate" type="datetime-local" class="form-control">
+                                <input asp-for="ReportDate" type="date" class="form-control" required />
                                 <span asp-validation-for="ReportDate" class="text-danger small"></span>
                             </div>
-                            
-                            <div class="col-md-6">
-                                <label asp-for="StartDate" class="form-label">
-                                    <i class="bi bi-calendar-check me-1"></i>Başlangıç Tarihi
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="StartDate" class="form-label fw-semibold">
+                                    <i class="bi bi-calendar-check me-1"></i>Başlangıç Tarihi <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="StartDate" type="date" class="form-control">
+                                <input asp-for="StartDate" type="date" class="form-control" required />
                                 <span asp-validation-for="StartDate" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6">
-                                <label asp-for="EndDate" class="form-label">
-                                    <i class="bi bi-calendar-x me-1"></i>Bitiş Tarihi
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="EndDate" class="form-label fw-semibold">
+                                    <i class="bi bi-calendar-x me-1"></i>Bitiş Tarihi <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="EndDate" type="date" class="form-control">
+                                <input asp-for="EndDate" type="date" class="form-control" required />
                                 <span asp-validation-for="EndDate" class="text-danger small"></span>
                             </div>
-                            
-                            <div class="col-md-4">
-                                <label asp-for="TotalIncome" class="form-label">
-                                    <i class="bi bi-arrow-up-circle text-success me-1"></i>Toplam Gelir
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="TotalIncome" class="form-label fw-semibold">
+                                    <i class="bi bi-currency-dollar me-1"></i>Toplam Gelir <span class="text-danger">*</span>
                                 </label>
-                                <div class="input-group">
-                                    <input asp-for="TotalIncome" type="number" step="0.01" class="form-control" placeholder="0.00">
-                                    <span class="input-group-text">₺</span>
-                                </div>
+                                <input asp-for="TotalIncome" type="number" step="0.01" class="form-control" placeholder="0.00" required />
                                 <span asp-validation-for="TotalIncome" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-4">
-                                <label asp-for="TotalExpense" class="form-label">
-                                    <i class="bi bi-arrow-down-circle text-danger me-1"></i>Toplam Gider
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="TotalExpense" class="form-label fw-semibold">
+                                    <i class="bi bi-currency-dollar me-1"></i>Toplam Gider <span class="text-danger">*</span>
                                 </label>
-                                <div class="input-group">
-                                    <input asp-for="TotalExpense" type="number" step="0.01" class="form-control" placeholder="0.00">
-                                    <span class="input-group-text">₺</span>
-                                </div>
+                                <input asp-for="TotalExpense" type="number" step="0.01" class="form-control" placeholder="0.00" required />
                                 <span asp-validation-for="TotalExpense" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-4">
-                                <label asp-for="NetProfit" class="form-label">
-                                    <i class="bi bi-calculator me-1"></i>Net Kar
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="NetProfit" class="form-label fw-semibold">
+                                    <i class="bi bi-calculator me-1"></i>Net Kar <span class="text-danger">*</span>
                                 </label>
-                                <div class="input-group">
-                                    <input asp-for="NetProfit" type="number" step="0.01" class="form-control" placeholder="0.00">
-                                    <span class="input-group-text">₺</span>
-                                </div>
+                                <input asp-for="NetProfit" type="number" step="0.01" class="form-control" placeholder="0.00" required />
                                 <span asp-validation-for="NetProfit" class="text-danger small"></span>
                             </div>
-                            
-                            <div class="col-md-6">
-                                <label asp-for="Currency" class="form-label">
-                                    <i class="bi bi-currency-exchange me-1"></i>Para Birimi
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Currency" class="form-label fw-semibold">
+                                    <i class="bi bi-currency-exchange me-1"></i>Para Birimi <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="Currency" class="form-select">
-                                    <option value="">Para birimi seçiniz</option>
-                                    <option value="TRY">Türk Lirası (₺)</option>
-                                    <option value="USD">Amerikan Doları ($)</option>
-                                    <option value="EUR">Euro (€)</option>
-                                    <option value="GBP">İngiliz Sterlini (£)</option>
+                                <select asp-for="Currency" class="form-select" required>
+                                    <option value="">Para birimi seçiniz...</option>
+                                    @if (ViewBag.Currencies != null)
+                                    {
+                                        @foreach (var currency in ViewBag.Currencies)
+                                        {
+                                            <option value="@currency.Code" selected="@(Model.Currency == currency.Code)">@currency.Name (@currency.Code)</option>
+                                        }
+                                    }
                                 </select>
                                 <span asp-validation-for="Currency" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6">
-                                <label asp-for="Status" class="form-label">
-                                    <i class="bi bi-info-circle me-1"></i>Durum
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Status" class="form-label fw-semibold">
+                                    <i class="bi bi-check-circle me-1"></i>Durum <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="Status" class="form-select">
-                                    <option value="">Durum seçiniz</option>
-                                    <option value="Hazırlanıyor">Hazırlanıyor</option>
-                                    <option value="Tamamlandı">Tamamlandı</option>
-                                    <option value="İptal">İptal</option>
+                                <select asp-for="Status" class="form-select" required>
+                                    <option value="">Durum seçiniz...</option>
+                                                                <option value="Hazırlandı" selected="@(Model.Status == "Hazırlandı")">Hazırlandı</option>
+                            <option value="Onaylandı" selected="@(Model.Status == "Onaylandı")">Onaylandı</option>
+                            <option value="Tamamlandı" selected="@(Model.Status == "Tamamlandı")">Tamamlandı</option>
                                 </select>
                                 <span asp-validation-for="Status" class="text-danger small"></span>
                             </div>
-                            
-                            <div class="col-12">
-                                <label asp-for="ReportData" class="form-label">
-                                    <i class="bi bi-file-text me-1"></i>Rapor Verisi (JSON)
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="EmployeeId" class="form-label fw-semibold">
+                                    <i class="bi bi-person me-1"></i>Hazırlayan Çalışan
                                 </label>
-                                <textarea asp-for="ReportData" class="form-control" rows="5" placeholder="Rapor verilerini JSON formatında giriniz"></textarea>
-                                <span asp-validation-for="ReportData" class="text-danger small"></span>
-                            </div>
-                            
-                            <div class="col-md-6">
-                                <label asp-for="EmployeeId" class="form-label">
-                                    <i class="bi bi-person me-1"></i>Çalışan ID
-                                </label>
-                                <input asp-for="EmployeeId" type="number" class="form-control" placeholder="Çalışan ID giriniz">
+                                <select asp-for="EmployeeId" class="form-select">
+                                    <option value="">Çalışan seçiniz...</option>
+                                    @if (ViewBag.Employees != null)
+                                    {
+                                        @foreach (var employee in ViewBag.Employees)
+                                        {
+                                            <option value="@employee.Id" selected="@(Model.EmployeeId == employee.Id)">@employee.FullName</option>
+                                        }
+                                    }
+                                </select>
                                 <span asp-validation-for="EmployeeId" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6">
-                                <div class="form-check form-switch mt-4">
-                                    <input asp-for="IsActive" class="form-check-input" type="checkbox">
-                                    <label asp-for="IsActive" class="form-check-label">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActiveSwitch">
+                                    <label class="form-check-label fw-semibold" for="isActiveSwitch">
                                         <i class="bi bi-toggle-on me-1"></i>Aktif
                                     </label>
                                 </div>
+                                <small class="text-muted">Bu raporun aktif olduğunu işaretleyin</small>
                             </div>
                         </div>
-                        
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <div class="d-flex justify-content-end gap-2">
-                                    <a asp-action="Index" class="btn btn-outline-secondary">
-                                        <i class="bi bi-x-circle me-2"></i>İptal
-                                    </a>
-                                    <button type="submit" class="btn btn-warning">
-                                        <i class="bi bi-check-circle me-2"></i>Güncelle
-                                    </button>
-                                </div>
-                            </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ReportData" class="form-label fw-semibold">
+                                <i class="bi bi-text-paragraph me-1"></i>Rapor Verileri
+                            </label>
+                            <textarea asp-for="ReportData" class="form-control" rows="5" placeholder="Rapor detayları ve açıklamalar..."></textarea>
+                            <span asp-validation-for="ReportData" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>İptal
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>Güncelle
+                            </button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle text-info me-2"></i>Bilgi
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info mb-3">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Finansal Rapor Düzenleme
+                        </h6>
+                        <p class="mb-0 small">
+                            Finansal rapor bilgilerini güncelleyebilirsiniz. Tarih aralığı ve tutar değişiklikleri 
+                            finansal hesaplamaları etkileyebilir.
+                        </p>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Önemli Notlar
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Rapor türü ve tarihler zorunludur</li>
+                            <li>Gelir ve gider tutarları pozitif olmalıdır</li>
+                            <li>Net kar = Toplam Gelir - Toplam Gider</li>
+                            <li>Değişiklikler geri alınamaz</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -177,16 +218,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
-    <script>
-        $(document).ready(function() {
-            // Otomatik net kar hesaplama
-            $('#TotalIncome, #TotalExpense').on('input', function() {
-                var income = parseFloat($('#TotalIncome').val()) || 0;
-                var expense = parseFloat($('#TotalExpense').val()) || 0;
-                var netProfit = income - expense;
-                $('#NetProfit').val(netProfit.toFixed(2));
-            });
-        });
-    </script>
 } 
+

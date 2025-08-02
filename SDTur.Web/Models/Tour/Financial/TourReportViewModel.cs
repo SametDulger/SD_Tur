@@ -10,5 +10,10 @@ namespace SDTur.Web.Models.Tour.Financial
         public string Content { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
         public bool IsApproved { get; set; }
+        
+        // Additional properties for compatibility
+        public string Status => IsApproved ? "Onaylandı" : "Beklemede";
+        public string AuthorName => Author;
+        public string ReportNumber { get; set; } = string.Empty;
     }
 } 

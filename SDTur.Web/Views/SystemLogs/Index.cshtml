@@ -1,134 +1,89 @@
 @model IEnumerable<SystemLogViewModel>
 @{
-    ViewData["Title"] = "Sistem Loglarý";
+    ViewData["Title"] = "Sistem LoglarÄ±";
 }
 
-<div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1 class="h3 mb-0">
-                    <i class="bi bi-journal-text text-primary me-2"></i>Sistem Loglarý
-                </h1>
-                <a asp-action="Create" class="btn btn-primary">
-                    <i class="bi bi-plus-circle me-2"></i>Yeni Log
-                </a>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-journal-text text-primary me-2"></i>Sistem LoglarÄ±
+            </h1>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Yeni Log
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Ä°statistikler -->
+<div class="row g-4 mb-4">
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-journal-text text-primary fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">Toplam Log</h6>
+                        <h3 class="mb-0 fw-bold">@Model.Count()</h3>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <h5 class="card-title mb-0">
-                                <i class="bi bi-list-ul me-2"></i>Log Listesi
-                            </h5>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="bi bi-search"></i>
-                                </span>
-                                <input type="text" id="searchInput" class="form-control" placeholder="Log ara...">
-                            </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-danger bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-exclamation-triangle text-danger fs-4"></i>
                         </div>
                     </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">Hata</h6>
+                        <h3 class="mb-0 fw-bold text-danger">@Model.Count(l => l.LogLevel == "Error")</h3>
+                    </div>
                 </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>
-                                        <i class="bi bi-journal-text me-1"></i>Log Seviyesi
-                                    </th>
-                                    <th>
-                                        <i class="bi bi-message me-1"></i>Mesaj
-                                    </th>
-                                    <th>
-                                        <i class="bi bi-gear me-1"></i>Kaynak
-                                    </th>
-                                    <th>
-                                        <i class="bi bi-person me-1"></i>Kullanýcý
-                                    </th>
-                                    <th>
-                                        <i class="bi bi-calendar me-1"></i>Tarih
-                                    </th>
-                                    <th class="text-end">
-                                        <i class="bi bi-gear me-1"></i>Ýþlemler
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var log in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            @{
-                                                var badgeClass = log.LogLevel switch
-                                                {
-                                                    "Error" => "bg-danger",
-                                                    "Warning" => "bg-warning",
-                                                    "Info" => "bg-info",
-                                                    "Debug" => "bg-secondary",
-                                                    _ => "bg-primary"
-                                                };
-                                            }
-                                            <span class="badge @badgeClass fs-6">
-                                                <i class="bi bi-journal-text me-1"></i>@log.LogLevel
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="bg-light rounded-circle p-2 me-2">
-                                                    <i class="bi bi-message text-muted"></i>
-                                                </div>
-                                                <div>
-                                                    <div class="fw-semibold">@log.Message</div>
-                                                    @if (!string.IsNullOrEmpty(log.Exception))
-                                                    {
-                                                        <small class="text-danger">@log.Exception</small>
-                                                    }
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-secondary fs-6">
-                                                <i class="bi bi-gear me-1"></i>@log.Source
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <div class="fw-semibold">@log.UserName</div>
-                                                <small class="text-muted">@log.UserId</small>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <div class="fw-semibold">@log.LogDate.ToString("dd.MM.yyyy")</div>
-                                                <small class="text-muted">@log.LogDate.ToString("HH:mm:ss")</small>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <div class="btn-group" role="group">
-                                                <a asp-action="Details" asp-route-id="@log.Id" class="btn btn-sm btn-outline-primary">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
-                                                <a asp-action="Edit" asp-route-id="@log.Id" class="btn btn-sm btn-outline-warning">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                <a asp-action="Delete" asp-route-id="@log.Id" class="btn btn-sm btn-outline-danger">
-                                                    <i class="bi bi-trash"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-exclamation-circle text-warning fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">UyarÄ±</h6>
+                        <h3 class="mb-0 fw-bold text-warning">@Model.Count(l => l.LogLevel == "Warning")</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-info bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-info-circle text-info fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">Bilgi</h6>
+                        <h3 class="mb-0 fw-bold text-info">@Model.Count(l => l.LogLevel == "Info")</h3>
                     </div>
                 </div>
             </div>
@@ -136,21 +91,126 @@
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const searchTerm = this.value.toLowerCase();
-            const tableRows = document.querySelectorAll('tbody tr');
-            
-            tableRows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    </script>
-}
+<!-- Log Listesi -->
+<div class="card border-0 shadow-sm">
+    <div class="card-header border-0">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-list-ul me-2"></i>Log Listesi
+                </h5>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0">
+                        <i class="bi bi-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" placeholder="Log ara...">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>
+                            <i class="bi bi-journal-text me-1"></i>Log Seviyesi
+                        </th>
+                        <th>
+                            <i class="bi bi-message me-1"></i>Mesaj
+                        </th>
+                        <th>
+                            <i class="bi bi-gear me-1"></i>Kaynak
+                        </th>
+                        <th>
+                            <i class="bi bi-person me-1"></i>KullanÄ±cÄ±
+                        </th>
+                        <th>
+                            <i class="bi bi-calendar me-1"></i>Tarih
+                        </th>
+                        <th class="text-end">
+                            <i class="bi bi-gear me-1"></i>Ä°ÅŸlemler
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in Model)
+                    {
+                        <tr>
+                            <td>
+                                @{
+                                    var badgeClass = log.LogLevel switch
+                                    {
+                                        "Error" => "bg-danger",
+                                        "Warning" => "bg-warning",
+                                        "Info" => "bg-info",
+                                        "Debug" => "bg-secondary",
+                                        _ => "bg-primary"
+                                    };
+                                }
+                                <span class="badge @badgeClass fs-6">
+                                    <i class="bi bi-journal-text me-1"></i>@log.LogLevel
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light rounded-circle p-2 me-2">
+                                        <i class="bi bi-message text-muted"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold">@log.Message</div>
+                                        @if (!string.IsNullOrEmpty(log.Exception))
+                                        {
+                                            <small class="text-danger">@log.Exception</small>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary fs-6">
+                                    <i class="bi bi-gear me-1"></i>@log.Source
+                                </span>
+                            </td>
+                            <td>
+                                <div>
+                                    <div class="fw-semibold">@log.UserName</div>
+                                    <small class="text-muted">@log.UserId</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <div class="fw-semibold">@log.LogDate.ToString("dd.MM.yyyy")</div>
+                                    <small class="text-muted">@log.LogDate.ToString("HH:mm:ss")</small>
+                                </div>
+                            </td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a asp-action="Details" asp-route-id="@log.Id" class="btn btn-outline-info">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@log.Id" class="btn btn-outline-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@log.Id" class="btn btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer bg-light">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <small class="text-muted">
+                    Toplam <strong>@Model.Count()</strong> log bulundu
+                </small>
+            </div>
+        </div>
+    </div>
+</div>

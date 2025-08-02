@@ -16,48 +16,8 @@
     </div>
 </div>
 
-<!-- Filtreler -->
-<div class="card border-0 shadow-sm mb-4">
-    <div class="card-header bg-white">
-        <h6 class="card-title mb-0">
-            <i class="bi bi-funnel text-info me-2"></i>Filtreler
-        </h6>
-    </div>
-    <div class="card-body">
-        <form id="filterForm" class="row g-3">
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label">Tur</label>
-                <select class="form-select" id="tourFilter">
-                    <option value="">Tüm Turlar</option>
-                </select>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label">Durum</label>
-                <select class="form-select" id="statusFilter">
-                    <option value="">Tüm Durumlar</option>
-                    <option value="true">Aktif</option>
-                    <option value="false">Pasif</option>
-                </select>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label">Başlangıç Tarihi</label>
-                <input type="date" class="form-control" id="startDateFilter">
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label">Bitiş Tarihi</label>
-                <input type="date" class="form-control" id="endDateFilter">
-            </div>
-            <div class="col-12">
-                <button type="button" class="btn btn-outline-primary" onclick="applyFilters()">
-                    <i class="bi bi-search me-2"></i>Filtrele
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
 <!-- İstatistikler -->
-<div class="row g-4 mb-4" id="statisticsCards">
+<div class="row g-4 mb-4">
     <div class="col-xl-3 col-md-6">
         <div class="card border-0 shadow-sm">
             <div class="card-body">
@@ -69,7 +29,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Toplam Program</h6>
-                        <h3 class="mb-0 fw-bold" id="totalSchedules">0</h3>
+                        <h3 class="mb-0 fw-bold">@Model.Count()</h3>
                     </div>
                 </div>
             </div>
@@ -87,7 +47,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Aktif Program</h6>
-                        <h3 class="mb-0 fw-bold text-success" id="activeSchedules">0</h3>
+                        <h3 class="mb-0 fw-bold text-success">@Model.Count(s => s.IsActive)</h3>
                     </div>
                 </div>
             </div>
@@ -104,8 +64,8 @@
                         </div>
                     </div>
                     <div class="flex-grow-1 ms-3">
-                        <h6 class="card-title text-muted mb-1">Toplam Kapasite</h6>
-                        <h3 class="mb-0 fw-bold text-info" id="totalCapacity">0</h3>
+                        <h6 class="card-title text-muted mb-1">Tamamlanan</h6>
+                        <h3 class="mb-0 fw-bold text-info">@Model.Count(s => s.IsCompleted)</h3>
                     </div>
                 </div>
             </div>
@@ -118,12 +78,12 @@
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0">
                         <div class="bg-warning bg-opacity-10 rounded-circle p-3">
-                            <i class="bi bi-percent text-warning fs-4"></i>
+                            <i class="bi bi-x-circle text-warning fs-4"></i>
                         </div>
                     </div>
                     <div class="flex-grow-1 ms-3">
-                        <h6 class="card-title text-muted mb-1">Ortalama Doluluk</h6>
-                        <h3 class="mb-0 fw-bold text-warning" id="averageOccupancy">0%</h3>
+                        <h6 class="card-title text-muted mb-1">İptal Edilen</h6>
+                        <h3 class="mb-0 fw-bold text-warning">@Model.Count(s => s.IsCancelled)</h3>
                     </div>
                 </div>
             </div>
@@ -133,7 +93,7 @@
 
 <!-- Program Listesi -->
 <div class="card border-0 shadow-sm">
-    <div class="card-header bg-white">
+    <div class="card-header border-0">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h5 class="card-title mb-0">
@@ -146,214 +106,114 @@
                         <span class="input-group-text bg-light border-end-0">
                             <i class="bi bi-search text-muted"></i>
                         </span>
-                        <input type="text" class="form-control border-start-0" id="searchInput" placeholder="Program ara..." data-search="schedulesTable">
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="bi bi-download me-1"></i>Dışa Aktar
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="exportToExcel()">
-                                <i class="bi bi-file-earmark-excel me-2"></i>Excel
-                            </a></li>
-                            <li><a class="dropdown-item" href="#" onclick="exportToPDF()">
-                                <i class="bi bi-file-earmark-pdf me-2"></i>PDF
-                            </a></li>
-                        </ul>
+                        <input type="text" class="form-control border-start-0" placeholder="Program ara...">
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="card-body p-0">
-        <div class="table-responsive" id="schedulesTable">
-            <!-- Dinamik olarak yüklenecek -->
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Tur</th>
+                        <th>Tarih</th>
+                        <th>Durum</th>
+                        <th>Gelir</th>
+                        <th>Gider</th>
+                        <th>Net Kar</th>
+                        <th class="text-end">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var schedule in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">@schedule.TourName</div>
+                                    <small class="text-muted">ID: @schedule.TourId</small>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">@schedule.TourDate.ToString("dd.MM.yyyy")</div>
+                                    <small class="text-muted">@schedule.TourDate.ToString("dddd")</small>
+                                </td>
+                                <td>
+                                    @if (schedule.IsCancelled)
+                                    {
+                                        <span class="badge bg-danger">
+                                            <i class="bi bi-x-circle me-1"></i>İptal
+                                        </span>
+                                    }
+                                    else if (schedule.IsCompleted)
+                                    {
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-check-circle me-1"></i>Tamamlandı
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">
+                                            <i class="bi bi-clock me-1"></i>Beklemede
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="text-success fw-semibold">@schedule.TotalIncome.ToString("C")</span>
+                                </td>
+                                <td>
+                                    <span class="text-danger fw-semibold">@schedule.TotalExpense.ToString("C")</span>
+                                </td>
+                                <td>
+                                    <span class="fw-semibold @(schedule.NetProfit >= 0 ? "text-success" : "text-danger")">
+                                        @schedule.NetProfit.ToString("C")
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Details" asp-route-id="@schedule.Id" class="btn btn-outline-info" title="Detay">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@schedule.Id" class="btn btn-outline-primary" title="Düzenle">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@schedule.Id" class="btn btn-outline-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-4">
+                                <i class="bi bi-inbox text-muted fs-1"></i>
+                                <p class="text-muted mt-2">Tur programı bulunamadı</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="card-footer bg-light">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <small class="text-muted">
-                    Toplam <strong id="recordCount">0</strong> program bulundu
+                    Toplam <strong>@Model.Count()</strong> program bulundu
                 </small>
             </div>
             <div class="col-md-6 text-end">
-                <nav aria-label="Sayfa navigasyonu">
-                    <ul class="pagination pagination-sm mb-0 justify-content-end" id="pagination">
-                        <!-- Dinamik olarak oluşturulacak -->
-                    </ul>
-                </nav>
+                <small class="text-muted">
+                    Son güncelleme: @DateTime.Now.ToString("dd.MM.yyyy HH:mm")
+                </small>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Doluluk Grafiği -->
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-bar-chart text-info me-2"></i>Doluluk Grafiği
-                </h5>
-            </div>
-            <div class="card-body">
-                <canvas id="occupancyChart" height="100"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
 
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        let currentFilters = {};
-        let occupancyChart;
-        
-        function applyFilters() {
-            currentFilters = {
-                tourId: document.getElementById('tourFilter').value,
-                isActive: document.getElementById('statusFilter').value,
-                startDate: document.getElementById('startDateFilter').value,
-                endDate: document.getElementById('endDateFilter').value
-            };
-            
-            // Reload data with filters
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const endpoint = queryString ? `/api/tour/schedules?${queryString}` : '/api/tour/schedules';
-            
-            console.log("Load data handled server-side"););
-            updateStatistics();
-            updateChart();
-        }
-        
-        function updateStatistics() {
-            // Load statistics based on current filters
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const endpoint = queryString ? `/api/tour/schedules/statistics?${queryString}` : '/api/tour/schedules/statistics';
-            
-            console.log("API call handled server-side");
-                .then(data => {
-                    document.getElementById('totalSchedules').textContent = data.totalSchedules || 0;
-                    document.getElementById('activeSchedules').textContent = data.activeSchedules || 0;
-                    document.getElementById('totalCapacity').textContent = data.totalCapacity || 0;
-                    document.getElementById('averageOccupancy').textContent = (data.averageOccupancy || 0) + '%';
-                    document.getElementById('recordCount').textContent = data.totalSchedules || 0;
-                })
-                .catch(error => {
-                    console.error('Statistics loading failed:', error);
-                });
-        }
-        
-        function updateChart() {
-            // Load chart data based on current filters
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const endpoint = queryString ? `/api/tour/schedules/occupancy-chart?${queryString}` : '/api/tour/schedules/occupancy-chart';
-            
-            console.log("API call handled server-side");
-                .then(data => {
-                    createOccupancyChart(data);
-                })
-                .catch(error => {
-                    console.error('Chart data loading failed:', error);
-                });
-        }
-        
-        function createOccupancyChart(data) {
-            const ctx = document.getElementById('occupancyChart').getContext('2d');
-            
-            if (occupancyChart) {
-                occupancyChart.destroy();
-            }
-            
-            occupancyChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: data.labels || [],
-                    datasets: [{
-                        label: 'Doluluk Oranı (%)',
-                        data: data.occupancyRates || [],
-                        backgroundColor: data.occupancyRates.map(rate => 
-                            rate >= 80 ? 'rgba(220, 53, 69, 0.8)' : 
-                            rate >= 60 ? 'rgba(255, 193, 7, 0.8)' : 
-                            'rgba(40, 167, 69, 0.8)'
-                        ),
-                        borderColor: data.occupancyRates.map(rate => 
-                            rate >= 80 ? 'rgba(220, 53, 69, 1)' : 
-                            rate >= 60 ? 'rgba(255, 193, 7, 1)' : 
-                            'rgba(40, 167, 69, 1)'
-                        ),
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return 'Doluluk: ' + context.parsed.y + '%';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        
-        function exportToExcel() {
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const filename = `tur_programlari_${new Date().toISOString().split('T')[0]}`;
-            console.log("Export to Excel handled server-side");;
-        }
-        
-        function exportToPDF() {
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const filename = `tur_programlari_${new Date().toISOString().split('T')[0]}`;
-            console.log("Export to PDF handled server-side");;
-        }
-        
-        // Auto-load data and setup
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load tour options
-            app.loadSelectOptions(document.getElementById('tourFilter'), '/api/tour/tours');
-            
-            // Load initial data
-            updateStatistics();
-            updateChart();
-            
-            // Apply initial filters
-            applyFilters();
-            
-            // Setup search functionality
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const table = document.getElementById('schedulesTable');
-                    const rows = table.querySelectorAll('tbody tr');
-                    
-                    rows.forEach(row => {
-                        const text = row.textContent.toLowerCase();
-                        row.style.display = text.includes(searchTerm) ? '' : 'none';
-                    });
-                }, 300));
-            }
-        });
-    </script>
-} 

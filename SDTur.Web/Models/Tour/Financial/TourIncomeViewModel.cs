@@ -15,5 +15,9 @@ namespace SDTur.Web.Models.Tour.Financial
         public string Category { get; set; } = string.Empty;
         public string Currency { get; set; } = string.Empty;
         public bool IsActive { get; set; }
+        
+        // Additional properties for compatibility
+        public string Status => IsReceived ? "Tahsil Edildi" : "Beklemede";
+        public string IncomeNumber { get; set; } = string.Empty;
     }
 } 

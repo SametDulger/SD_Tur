@@ -11,5 +11,12 @@ namespace SDTur.Web.Models.Tour.Operations
         public string DriverName { get; set; } = string.Empty;
         public DateTime AssignmentDate { get; set; }
         public bool IsActive { get; set; }
+        
+        // Additional properties needed for the view
+        public int Capacity { get; set; }
+        public string AssignmentNumber { get; set; } = string.Empty;
+        public DateTime TourDate { get; set; }
+        public string BusPlateNumber { get; set; } = string.Empty;
+        public string BusModel { get; set; } = string.Empty;
     }
 } 

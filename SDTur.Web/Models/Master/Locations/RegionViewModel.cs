@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace SDTur.Web.Models.Master.Locations
 {
     public class RegionViewModel
@@ -10,5 +12,8 @@ namespace SDTur.Web.Models.Master.Locations
         public int Order { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
+        
+        [Display(Name = "Otel Sayısı")]
+        public int HotelCount { get; set; }
     }
 } 

@@ -48,7 +48,7 @@
                     <div class="col-md-6">
                         <label class="form-label text-muted">Hesap Türü</label>
                         <div>
-                            <span class="badge bg-light text-dark">@Model.AccountType</span>
+                            <span class="badge bg-secondary">@Model.AccountType</span>
                         </div>
                     </div>
                     
@@ -71,7 +71,7 @@
                     
                     <div class="col-12">
                         <label class="form-label text-muted">Açıklama</label>
-                        <div>@Model.Description</div>
+                        <div>@(string.IsNullOrEmpty(Model.Description) ? "Açıklama girilmemiş" : Model.Description)</div>
                     </div>
                 </div>
                 
@@ -155,16 +155,16 @@
                     </div>
                     <div class="col-md-6">
                         <div class="d-grid">
-                            <button type="button" class="btn btn-outline-warning" onclick="deactivateAccount()">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-warning">
                                 <i class="bi bi-pause-circle me-2"></i>Hesabı Pasifleştir
-                            </button>
+                            </a>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="d-grid">
-                            <button type="button" class="btn btn-outline-secondary" onclick="exportAccountData()">
+                            <a href="#" class="btn btn-outline-secondary">
                                 <i class="bi bi-download me-2"></i>Verileri Yedekle
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -174,40 +174,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Checkbox validation
-        document.addEventListener('DOMContentLoaded', function() {
-            const confirmDelete = document.getElementById('confirmDelete');
-            const confirmDataLoss = document.getElementById('confirmDataLoss');
-            const deleteBtn = document.getElementById('deleteBtn');
-            
-            function updateDeleteButton() {
-                deleteBtn.disabled = !(confirmDelete.checked && confirmDataLoss.checked);
-            }
-            
-            confirmDelete.addEventListener('change', updateDeleteButton);
-            confirmDataLoss.addEventListener('change', updateDeleteButton);
-        });
-        
-        function deactivateAccount() {
-            if (confirm('Hesabı pasifleştirmek istediğinizden emin misiniz?')) {
-                // API call to deactivate account
-                console.log("API call handled server-side");
-                    .then(() => {
-                        app.showNotification('Hesap başarıyla pasifleştirildi', 'success');
-                        setTimeout(() => {
-                            window.location.href = '@Url.Action("Index")';
-                        }, 1500);
-                    })
-                    .catch(error => {
-                        app.showNotification('Hesap pasifleştirilemedi', 'error');
-                    });
-            }
-        }
-        
-        function exportAccountData() {
-            // Export account data before deletion
-            console.log("Export to Excel handled server-side");.toISOString().split('T')[0]}`);
-        }
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 } 

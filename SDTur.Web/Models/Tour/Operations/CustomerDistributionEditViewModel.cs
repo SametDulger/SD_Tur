@@ -16,5 +16,9 @@ namespace SDTur.Web.Models.Tour.Operations
         public DateTime DistributionDate { get; set; }
         public string Description { get; set; } = string.Empty;
         public bool IsCompleted { get; set; }
+        
+        // Additional properties for compatibility
+        public int TourScheduleId { get; set; }
+        public string CustomerType { get; set; } = string.Empty;
     }
 } 

@@ -1,4 +1,4 @@
-@model CashViewModel
+@model SDTur.Web.Models.Financial.Cash.CashViewModel
 @{
     ViewData["Title"] = "Nakit İşlemi Sil";
 }
@@ -21,84 +21,83 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme Onayı
+                    <h5 class="card-title mb-0 text-danger">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Silme Onayı
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-warning">
+                    <div class="alert alert-danger">
                         <h6 class="alert-heading">
                             <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
                         </h6>
-                        <p class="mb-0">Bu nakit işlemini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</p>
+                        <p class="mb-0">
+                            Bu nakit işlemini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+                        </p>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-cash-coin me-1"></i>Nakit Tipi
-                            </label>
-                            <div>
-                                <span class="badge bg-primary fs-6">@Model.CashType</span>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-tag me-1"></i>İşlem Tipi
-                            </label>
-                            <div>
-                                <span class="badge bg-secondary fs-6">@Model.TransactionType</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-currency-exchange me-1"></i>Tutar
-                            </label>
-                            <div class="h4 mb-0 text-primary">@Model.Amount.ToString("C")</div>
-                            <small class="text-muted">@Model.Currency</small>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-calendar me-1"></i>İşlem Tarihi
-                            </label>
-                            <div class="h6 mb-0">@Model.TransactionDate.ToString("dd MMMM yyyy")</div>
-                            <small class="text-muted">@Model.TransactionDate.ToString("dddd")</small>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-receipt me-1"></i>Makbuz Numarası
-                            </label>
-                            <div class="h6 mb-0">@Model.ReceiptNumber</div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-check-circle me-1"></i>Durum
-                            </label>
-                            <div>
-                                @if (Model.IsApproved)
+                            <label class="form-label fw-semibold text-muted">İşlem Türü</label>
+                            <div class="form-control-plaintext">
+                                @if (Model.TransactionType == "Income")
                                 {
-                                    <span class="badge bg-success fs-6">
-                                        <i class="bi bi-check-circle me-1"></i>Onaylandı
-                                    </span>
+                                    <span class="badge bg-success">Gelir</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-warning fs-6">
-                                        <i class="bi bi-clock me-1"></i>Beklemede
-                                    </span>
+                                    <span class="badge bg-danger">Gider</span>
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Tutar</label>
+                            <div class="form-control-plaintext fw-bold @(Model.TransactionType == "Income" ? "text-success" : "text-danger")">
+                                @Model.Amount.ToString("C")
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Para Birimi</label>
+                            <div class="form-control-plaintext">@Model.Currency</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">İşlem Tarihi</label>
+                            <div class="form-control-plaintext">@Model.TransactionDate.ToString("dd.MM.yyyy HH:mm")</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Kategori</label>
+                            <div class="form-control-plaintext">@(string.IsNullOrEmpty(Model.Category) ? "-" : Model.Category)</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Durum</label>
+                            <div class="form-control-plaintext">
+                                @if (Model.IsAutomatic)
+                                {
+                                    <span class="badge bg-info">Otomatik</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Manuel</span>
                                 }
                             </div>
                         </div>
                     </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted">Açıklama</label>
+                            <div class="form-control-plaintext">@Model.Description</div>
+                        </div>
+                    }
 
                     <form asp-action="Delete" method="post">
                         <input type="hidden" asp-for="Id" />
@@ -106,7 +105,7 @@
                             <a asp-action="Index" class="btn btn-outline-secondary">
                                 <i class="bi bi-x-circle me-2"></i>İptal
                             </a>
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bu kaydı silmek istediğinizden emin misiniz?')">
+                            <button type="submit" class="btn btn-danger">
                                 <i class="bi bi-trash me-2"></i>Sil
                             </button>
                         </div>
@@ -114,28 +113,40 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-info-circle me-2"></i>Bilgi
-                    </h5>
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle text-info me-2"></i>Bilgi
+                    </h6>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-danger">
+                    <div class="alert alert-warning">
                         <h6 class="alert-heading">
                             <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarı
                         </h6>
                         <ul class="mb-0 small">
                             <li>Bu işlem geri alınamaz</li>
-                            <li>Nakit işlemi kalıcı olarak silinecektir</li>
-                            <li>İlgili finansal kayıtlar etkilenebilir</li>
-                            <li>Silme işlemi öncesi yedek almanız önerilir</li>
+                            <li>Finansal raporlar etkilenebilir</li>
+                            <li>İşlem geçmişi kaybolur</li>
+                            <li>Silmeden önce yedek alın</li>
                         </ul>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Alternatif
+                        </h6>
+                        <p class="mb-0 small">
+                            İşlemi silmek yerine pasif hale getirmeyi düşünebilirsiniz. 
+                            Bu şekilde veri kaybı yaşamazsınız.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div> 
+</div>
+
+ 

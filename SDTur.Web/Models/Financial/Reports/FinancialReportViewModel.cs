@@ -32,5 +32,30 @@ namespace SDTur.Web.Models.Financial.Reports
         
         [Display(Name = "Rapor Verisi")]
         public string ReportData { get; set; } = string.Empty;
+        
+        [Display(Name = "Çalışan ID")]
+        public int EmployeeId { get; set; }
+        
+        [Display(Name = "Aktif")]
+        public bool IsActive { get; set; }
+        
+        [Display(Name = "Çalışan Adı")]
+        public string EmployeeName { get; set; } = string.Empty;
+        
+        [Display(Name = "Oluşturma Tarihi")]
+        public DateTime CreatedDate { get; set; }
+        
+        [Display(Name = "Güncelleme Tarihi")]
+        public DateTime? UpdatedDate { get; set; }
+        
+        // Additional properties needed for the view
+        [Display(Name = "Rapor Numarası")]
+        public string ReportNumber { get; set; } = string.Empty;
+        
+        [Display(Name = "Başlık")]
+        public string Title { get; set; } = string.Empty;
+        
+        [Display(Name = "Oluşturulma Tarihi")]
+        public DateTime CreatedAt { get; set; }
     }
 } 

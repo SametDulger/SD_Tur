@@ -1,9 +1,9 @@
-@model HotelCreateViewModel
+@model SDTur.Web.Models.Master.Accommodation.HotelCreateViewModel
 @{
     ViewData["Title"] = "Yeni Otel";
 }
 
-<div class="container-fluid">
+<div class="container">
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
@@ -11,7 +11,7 @@
                     <i class="bi bi-plus-circle text-primary me-2"></i>Yeni Otel
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                 </a>
             </div>
         </div>
@@ -20,51 +20,70 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-form me-2"></i>Otel Bilgileri
                     </h5>
                 </div>
                 <div class="card-body">
                     <form asp-action="Create" method="post">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm" role="alert"></div>
                         
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Name" class="form-label fw-semibold">
-                                    <i class="bi bi-building me-1"></i>Otel Adý <span class="text-danger">*</span>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label">
+                                    <i class="bi bi-building me-1"></i>Otel AdÄ± <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="Name" class="form-control" placeholder="Otel adý..." required />
+                                <input asp-for="Name" class="form-control" placeholder="Otel adÄ±..." required />
                                 <span asp-validation-for="Name" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="StarRating" class="form-label fw-semibold">
-                                    <i class="bi bi-star me-1"></i>Yýldýz Sayýsý <span class="text-danger">*</span>
+                            <div class="col-md-6">
+                                <label asp-for="RegionId" class="form-label">
+                                    <i class="bi bi-geo-alt me-1"></i>BÃ¶lge <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="RegionId" class="form-select" required>
+                                    <option value="">BÃ¶lge seÃ§iniz...</option>
+                                    @if (ViewBag.Regions != null)
+                                    {
+                                        @foreach (var region in ViewBag.Regions)
+                                        {
+                                            <option value="@region.Id">@region.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="RegionId" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="StarRating" class="form-label">
+                                    <i class="bi bi-star me-1"></i>YÄ±ldÄ±z SayÄ±sÄ± <span class="text-danger">*</span>
                                 </label>
                                 <select asp-for="StarRating" class="form-select" required>
-                                    <option value="">Yýldýz seçiniz...</option>
-                                    <option value="1">1 Yýldýz</option>
-                                    <option value="2">2 Yýldýz</option>
-                                    <option value="3">3 Yýldýz</option>
-                                    <option value="4">4 Yýldýz</option>
-                                    <option value="5">5 Yýldýz</option>
+                                    <option value="">YÄ±ldÄ±z seÃ§iniz...</option>
+                                    <option value="1">1 YÄ±ldÄ±z</option>
+                                    <option value="2">2 YÄ±ldÄ±z</option>
+                                    <option value="3">3 YÄ±ldÄ±z</option>
+                                    <option value="4">4 YÄ±ldÄ±z</option>
+                                    <option value="5">5 YÄ±ldÄ±z</option>
                                 </select>
                                 <span asp-validation-for="StarRating" class="text-danger small"></span>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Phone" class="form-label fw-semibold">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Phone" class="form-label">
                                     <i class="bi bi-telephone me-1"></i>Telefon <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="Phone" class="form-control" placeholder="Telefon numarasý..." required />
+                                <input asp-for="Phone" class="form-control" placeholder="Telefon numarasÄ±..." required />
                                 <span asp-validation-for="Phone" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Email" class="form-label fw-semibold">
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label">
                                     <i class="bi bi-envelope me-1"></i>E-posta <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresi..." required />
@@ -72,29 +91,29 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="ContactPerson" class="form-label fw-semibold">
-                                    <i class="bi bi-person me-1"></i>Ýletiþim Kiþisi
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="ContactPerson" class="form-label">
+                                    <i class="bi bi-person me-1"></i>Ä°letiÅŸim KiÅŸisi
                                 </label>
-                                <input asp-for="ContactPerson" class="form-control" placeholder="Ýletiþim kiþisi..." />
+                                <input asp-for="ContactPerson" class="form-control" placeholder="Ä°letiÅŸim kiÅŸisi..." />
                                 <span asp-validation-for="ContactPerson" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6">
                                 <div class="form-check form-switch">
-                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActiveSwitch">
-                                    <label class="form-check-label fw-semibold" for="isActiveSwitch">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox">
+                                    <label class="form-check-label">
                                         <i class="bi bi-toggle-on me-1"></i>Aktif
                                     </label>
                                 </div>
-                                <small class="text-muted">Bu otelin aktif olduðunu iþaretleyin</small>
+                                <small class="text-muted">Bu otelin aktif olduÄŸunu iÅŸaretleyin</small>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <label asp-for="Address" class="form-label fw-semibold">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="Address" class="form-label">
                                     <i class="bi bi-geo-alt me-1"></i>Adres <span class="text-danger">*</span>
                                 </label>
                                 <textarea asp-for="Address" class="form-control" rows="3" placeholder="Otel adresi..." required></textarea>
@@ -102,9 +121,11 @@
                             </div>
                         </div>
 
+                        <hr class="my-4">
+
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                                <i class="bi bi-x-circle me-2"></i>Ä°ptal
                             </a>
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-check-circle me-2"></i>Kaydet
@@ -117,21 +138,21 @@
         
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-info-circle me-2"></i>Bilgi
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-info">
+                    <div class="alert alert-info shadow-sm">
                         <h6 class="alert-heading">
-                            <i class="bi bi-lightbulb me-2"></i>Otel Oluþturma
+                            <i class="bi bi-lightbulb me-2"></i>Otel OluÅŸturma
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Otel adý ve yýldýz sayýsýný belirleyin</li>
-                            <li>Ýletiþim bilgilerini girin</li>
+                            <li>Otel adÄ± ve yÄ±ldÄ±z sayÄ±sÄ±nÄ± belirleyin</li>
+                            <li>Ä°letiÅŸim bilgilerini girin</li>
                             <li>Adres bilgilerini ekleyin</li>
-                            <li>Ýletiþim kiþisi bilgilerini belirleyin</li>
+                            <li>Ä°letiÅŸim kiÅŸisi bilgilerini belirleyin</li>
                         </ul>
                     </div>
                 </div>

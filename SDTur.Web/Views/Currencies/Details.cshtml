@@ -1,6 +1,6 @@
 @model CurrencyViewModel
 @{
-    ViewData["Title"] = "Para Birimi Detayý";
+    ViewData["Title"] = "Para Birimi DetayÄ±";
 }
 
 <div class="container-fluid">
@@ -8,14 +8,14 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-eye text-primary me-2"></i>Para Birimi Detayý
+                    <i class="bi bi-eye text-primary me-2"></i>Para Birimi DetayÄ±
                 </h1>
                 <div class="btn-group" role="group">
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
-                        <i class="bi bi-pencil me-2"></i>Düzenle
+                        <i class="bi bi-pencil me-2"></i>DÃ¼zenle
                     </a>
                     <a asp-action="Index" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                        <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                     </a>
                 </div>
             </div>
@@ -54,24 +54,24 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-currency-exchange me-1"></i>Para Birimi Adý
+                                <i class="bi bi-currency-exchange me-1"></i>Para Birimi AdÄ±
                             </label>
                             <div class="h6 mb-0">@Model.Name</div>
                         </div>
                         
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-graph-up me-1"></i>Döviz Kuru
+                                <i class="bi bi-graph-up me-1"></i>DÃ¶viz Kuru
                             </label>
                             <div class="h4 mb-0 text-success">@Model.ExchangeRate.ToString("N4")</div>
-                            <small class="text-muted">TL karþýlýðý</small>
+                            <small class="text-muted">TL karÅŸÄ±lÄ±ÄŸÄ±</small>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-calendar me-1"></i>Son Güncelleme
+                                <i class="bi bi-calendar me-1"></i>Son GÃ¼ncelleme
                             </label>
                             <div class="h6 mb-0">@Model.LastUpdated.ToString("dd MMMM yyyy")</div>
                             <small class="text-muted">@Model.LastUpdated.ToString("dddd, HH:mm")</small>
@@ -114,10 +114,10 @@
                             <i class="bi bi-lightbulb me-2"></i>Para Birimi Bilgileri
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Para birimi kodu ve sembolü</li>
-                            <li>Para birimi adý</li>
-                            <li>TL karþýlýðý döviz kuru</li>
-                            <li>Son güncelleme tarihi</li>
+                            <li>Para birimi kodu ve sembolÃ¼</li>
+                            <li>Para birimi adÄ±</li>
+                            <li>TL karÅŸÄ±lÄ±ÄŸÄ± dÃ¶viz kuru</li>
+                            <li>Son gÃ¼ncelleme tarihi</li>
                         </ul>
                     </div>
                 </div>

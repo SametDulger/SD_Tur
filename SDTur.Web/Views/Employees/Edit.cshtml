@@ -1,4 +1,4 @@
-@model EmployeeEditViewModel
+@model SDTur.Web.Models.Master.People.EmployeeEditViewModel
 @{
     ViewData["Title"] = "Çalışan Düzenle";
 }
@@ -36,7 +36,7 @@
                                 <label asp-for="FirstName" class="form-label fw-semibold">
                                     <i class="bi bi-person me-1"></i>Ad <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="FirstName" class="form-control" placeholder="Ad..." required />
+                                <input asp-for="FirstName" class="form-control" placeholder="Adınız..." required />
                                 <span asp-validation-for="FirstName" class="text-danger small"></span>
                             </div>
                             
@@ -44,7 +44,7 @@
                                 <label asp-for="LastName" class="form-label fw-semibold">
                                     <i class="bi bi-person me-1"></i>Soyad <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="LastName" class="form-control" placeholder="Soyad..." required />
+                                <input asp-for="LastName" class="form-control" placeholder="Soyadınız..." required />
                                 <span asp-validation-for="LastName" class="text-danger small"></span>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                                 <label asp-for="Email" class="form-label fw-semibold">
                                     <i class="bi bi-envelope me-1"></i>E-posta <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="Email" type="email" class="form-control" placeholder="E-posta adresi..." required />
+                                <input asp-for="Email" type="email" class="form-control" placeholder="ornek@email.com" required />
                                 <span asp-validation-for="Email" class="text-danger small"></span>
                             </div>
                             
@@ -62,7 +62,7 @@
                                 <label asp-for="Phone" class="form-label fw-semibold">
                                     <i class="bi bi-telephone me-1"></i>Telefon <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="Phone" class="form-control" placeholder="Telefon numarası..." required />
+                                <input asp-for="Phone" class="form-control" placeholder="0555 123 45 67" required />
                                 <span asp-validation-for="Phone" class="text-danger small"></span>
                             </div>
                         </div>
@@ -72,7 +72,16 @@
                                 <label asp-for="Position" class="form-label fw-semibold">
                                     <i class="bi bi-briefcase me-1"></i>Pozisyon <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="Position" class="form-control" placeholder="Pozisyon..." required />
+                                <select asp-for="Position" class="form-select" required>
+                                    <option value="">Pozisyon seçiniz...</option>
+                                    <option value="Müdür">Müdür</option>
+                                    <option value="Satış Temsilcisi">Satış Temsilcisi</option>
+                                    <option value="Muhasebeci">Muhasebeci</option>
+                                    <option value="Operasyon Uzmanı">Operasyon Uzmanı</option>
+                                    <option value="Rehber">Rehber</option>
+                                    <option value="Şoför">Şoför</option>
+                                    <option value="Diğer">Diğer</option>
+                                </select>
                                 <span asp-validation-for="Position" class="text-danger small"></span>
                             </div>
                             
@@ -80,7 +89,7 @@
                                 <label asp-for="BranchId" class="form-label fw-semibold">
                                     <i class="bi bi-building me-1"></i>Şube <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="BranchId" id="branchSelect" class="form-select" required>
+                                <select asp-for="BranchId" class="form-select" required>
                                     <option value="">Şube seçiniz...</option>
                                 </select>
                                 <span asp-validation-for="BranchId" class="text-danger small"></span>
@@ -100,7 +109,7 @@
                                 <label asp-for="CurrencyId" class="form-label fw-semibold">
                                     <i class="bi bi-currency-exchange me-1"></i>Para Birimi <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="CurrencyId" id="currencySelect" class="form-select" required>
+                                <select asp-for="CurrencyId" class="form-select" required>
                                     <option value="">Para birimi seçiniz...</option>
                                 </select>
                                 <span asp-validation-for="CurrencyId" class="text-danger small"></span>
@@ -174,55 +183,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        // Load branches dynamically
-        async function loadBranches() {
-            try {
-                const response = await fetch('/api/branches');
-                const branches = await response.json();
-                const branchSelect = document.getElementById('branchSelect');
-                
-                branches.forEach(branch => {
-                    const option = document.createElement('option');
-                    option.value = branch.id;
-                    option.textContent = branch.name;
-                    if (branch.id == @Model.BranchId) {
-                        option.selected = true;
-                    }
-                    branchSelect.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error loading branches:', error);
-            }
-        }
-
-        // Load currencies dynamically
-        async function loadCurrencies() {
-            try {
-                const response = await fetch('/api/currencies');
-                const currencies = await response.json();
-                const currencySelect = document.getElementById('currencySelect');
-                
-                currencies.forEach(currency => {
-                    const option = document.createElement('option');
-                    option.value = currency.id;
-                    option.textContent = `${currency.name} (${currency.code})`;
-                    if (currency.id == @Model.CurrencyId) {
-                        option.selected = true;
-                    }
-                    currencySelect.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error loading currencies:', error);
-            }
-        }
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            loadBranches();
-            loadCurrencies();
-        });
-    </script>
-} 

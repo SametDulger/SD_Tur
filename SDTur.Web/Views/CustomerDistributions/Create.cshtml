@@ -1,17 +1,17 @@
 @model SDTur.Web.Models.Tour.Operations.CustomerDistributionCreateViewModel
 @{
-    ViewData["Title"] = "Yeni Müþteri Daðýlýmý";
+    ViewData["Title"] = "Yeni MÃ¼ÅŸteri DaÄŸÄ±lÄ±mÄ±";
 }
 
-<div class="container-fluid">
+<div class="container">
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-plus-circle text-primary me-2"></i>Yeni Müþteri Daðýlýmý
+                    <i class="bi bi-plus-circle text-primary me-2"></i>Yeni MÃ¼ÅŸteri DaÄŸÄ±lÄ±mÄ±
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                 </a>
             </div>
         </div>
@@ -20,88 +20,100 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
-                        <i class="bi bi-form me-2"></i>Müþteri Daðýlým Bilgileri
+                        <i class="bi bi-form me-2"></i>MÃ¼ÅŸteri DaÄŸÄ±lÄ±m Bilgileri
                     </h5>
                 </div>
                 <div class="card-body">
                     <form asp-action="Create" method="post">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm" role="alert"></div>
                         
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="TourId" class="form-label fw-semibold">
-                                    <i class="bi bi-airplane me-1"></i>Tur <span class="text-danger">*</span>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="TourScheduleId" class="form-label">
+                                    <i class="bi bi-airplane me-1"></i>Tur ProgramÄ± <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="TourId" id="tourSelect" class="form-select" required>
-                                    <option value="">Tur seçiniz...</option>
+                                <select asp-for="TourScheduleId" class="form-select" required>
+                                    <option value="">Tur programÄ± seÃ§iniz...</option>
+                                    @if (ViewBag.TourSchedules != null)
+                                    {
+                                        @foreach (var schedule in ViewBag.TourSchedules)
+                                        {
+                                            <option value="@schedule.Id">@schedule.TourName - @schedule.StartDate.ToString("dd.MM.yyyy")</option>
+                                        }
+                                    }
                                 </select>
-                                <span asp-validation-for="TourId" class="text-danger small"></span>
+                                <span asp-validation-for="TourScheduleId" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="CustomerId" class="form-label fw-semibold">
-                                    <i class="bi bi-person me-1"></i>Müþteri <span class="text-danger">*</span>
+                            <div class="col-md-6">
+                                <label asp-for="CustomerType" class="form-label">
+                                    <i class="bi bi-person me-1"></i>MÃ¼ÅŸteri Tipi <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="CustomerId" id="customerSelect" class="form-select" required>
-                                    <option value="">Müþteri seçiniz...</option>
+                                <select asp-for="CustomerType" class="form-select" required>
+                                    <option value="">MÃ¼ÅŸteri tipi seÃ§iniz...</option>
+                                    <option value="Bireysel">Bireysel</option>
+                                    <option value="Grup">Grup</option>
+                                    <option value="Kurumsal">Kurumsal</option>
+                                    <option value="VIP">VIP</option>
                                 </select>
-                                <span asp-validation-for="CustomerId" class="text-danger small"></span>
+                                <span asp-validation-for="CustomerType" class="text-danger small"></span>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="DistributionType" class="form-label fw-semibold">
-                                    <i class="bi bi-tag me-1"></i>Daðýlým Tipi <span class="text-danger">*</span>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="DistributionType" class="form-label">
+                                    <i class="bi bi-tag me-1"></i>DaÄŸÄ±lÄ±m Tipi <span class="text-danger">*</span>
                                 </label>
                                 <select asp-for="DistributionType" class="form-select" required>
-                                    <option value="">Daðýlým tipi seçiniz...</option>
+                                    <option value="">DaÄŸÄ±lÄ±m tipi seÃ§iniz...</option>
                                     <option value="Otel">Otel</option>
                                     <option value="Oda">Oda</option>
-                                    <option value="Otobüs">Otobüs</option>
-                                    <option value="Koltuk">Koltuk</option>
-                                    <option value="Grup">Grup</option>
-                                    <option value="Diðer">Diðer</option>
+                                    <option value="OtobÃ¼s">OtobÃ¼s</option>
+                                    <option value="Masa">Masa</option>
+                                    <option value="DiÄŸer">DiÄŸer</option>
                                 </select>
                                 <span asp-validation-for="DistributionType" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="DistributionDate" class="form-label fw-semibold">
-                                    <i class="bi bi-calendar me-1"></i>Daðýlým Tarihi <span class="text-danger">*</span>
+                            <div class="col-md-6">
+                                <label asp-for="DistributionDate" class="form-label">
+                                    <i class="bi bi-calendar me-1"></i>DaÄŸÄ±lÄ±m Tarihi <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="DistributionDate" type="datetime-local" class="form-control" required />
                                 <span asp-validation-for="DistributionDate" class="text-danger small"></span>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <label asp-for="Description" class="form-label fw-semibold">
-                                    <i class="bi bi-text-paragraph me-1"></i>Açýklama
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label">
+                                    <i class="bi bi-text-paragraph me-1"></i>AÃ§Ä±klama
                                 </label>
-                                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Müþteri daðýlýmý hakkýnda açýklama..."></textarea>
+                                <textarea asp-for="Description" class="form-control" rows="3" placeholder="MÃ¼ÅŸteri daÄŸÄ±lÄ±mÄ± hakkÄ±nda aÃ§Ä±klama..."></textarea>
                                 <span asp-validation-for="Description" class="text-danger small"></span>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
+                        <div class="row g-3">
+                            <div class="col-md-6">
                                 <div class="form-check form-switch">
-                                    <input asp-for="IsCompleted" class="form-check-input" type="checkbox" id="isCompletedSwitch">
-                                    <label class="form-check-label fw-semibold" for="isCompletedSwitch">
-                                        <i class="bi bi-check-circle me-1"></i>Tamamlandý
+                                    <input asp-for="IsCompleted" class="form-check-input" type="checkbox">
+                                    <label class="form-check-label">
+                                        <i class="bi bi-check-circle me-1"></i>TamamlandÄ±
                                     </label>
                                 </div>
-                                <small class="text-muted">Bu daðýlýmýn tamamlandýðýný iþaretleyin</small>
+                                <small class="text-muted">Bu daÄŸÄ±lÄ±mÄ±n tamamlandÄ±ÄŸÄ±nÄ± iÅŸaretleyin</small>
                             </div>
                         </div>
 
+                        <hr class="my-4">
+
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                                <i class="bi bi-x-circle me-2"></i>Ä°ptal
                             </a>
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-check-circle me-2"></i>Kaydet
@@ -114,22 +126,22 @@
         
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-info-circle me-2"></i>Bilgi
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-info">
+                    <div class="alert alert-info shadow-sm">
                         <h6 class="alert-heading">
-                            <i class="bi bi-lightbulb me-2"></i>Müþteri Daðýlýmý
+                            <i class="bi bi-lightbulb me-2"></i>MÃ¼ÅŸteri DaÄŸÄ±lÄ±mÄ±
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Tur müþterilerinin daðýlýmýný belirleyin</li>
-                            <li>Daðýlým tipini seçin (otel, oda, otobüs vb.)</li>
-                            <li>Daðýlým tarihini belirleyin</li>
-                            <li>Gerekirse açýklama ekleyin</li>
-                            <li>Tamamlanma durumunu iþaretleyin</li>
+                            <li>Tur mÃ¼ÅŸterilerinin daÄŸÄ±lÄ±mÄ±nÄ± belirleyin</li>
+                            <li>DaÄŸÄ±lÄ±m tipini seÃ§in (otel, oda, otobÃ¼s vb.)</li>
+                            <li>DaÄŸÄ±lÄ±m tarihini belirleyin</li>
+                            <li>Gerekirse aÃ§Ä±klama ekleyin</li>
+                            <li>Tamamlanma durumunu iÅŸaretleyin</li>
                         </ul>
                     </div>
                 </div>
@@ -137,49 +149,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        // Load tours dynamically
-        async function loadTours() {
-            try {
-                const response = await fetch('/api/tours');
-                const tours = await response.json();
-                const tourSelect = document.getElementById('tourSelect');
-                
-                tours.forEach(tour => {
-                    const option = document.createElement('option');
-                    option.value = tour.id;
-                    option.textContent = tour.name;
-                    tourSelect.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error loading tours:', error);
-            }
-        }
-
-        // Load customers dynamically
-        async function loadCustomers() {
-            try {
-                const response = await fetch('/api/customers');
-                const customers = await response.json();
-                const customerSelect = document.getElementById('customerSelect');
-                
-                customers.forEach(customer => {
-                    const option = document.createElement('option');
-                    option.value = customer.id;
-                    option.textContent = customer.name;
-                    customerSelect.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error loading customers:', error);
-            }
-        }
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            loadTours();
-            loadCustomers();
-        });
-    </script>
-}
