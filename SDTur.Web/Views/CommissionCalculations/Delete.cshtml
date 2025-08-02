@@ -1,6 +1,6 @@
 @model SDTur.Web.Models.Financial.Transactions.CommissionCalculationViewModel
 @{
-    ViewData["Title"] = "Komisyon Hesaplama Sil";
+    ViewData["Title"] = "Komisyon Hesaplaması Sil";
 }
 
 <div class="container-fluid">
@@ -8,106 +8,122 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-trash text-danger me-2"></i>Komisyon Hesaplama Sil
+                    <i class="bi bi-trash text-danger me-2"></i>Komisyon Hesaplaması Sil
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri D�n
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
                 </a>
             </div>
         </div>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="row">
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-danger text-white">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-exclamation-triangle me-2"></i>Silme Onay�
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0 text-danger">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Silme Onayı
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-warning" role="alert">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
-                        <strong>Dikkat!</strong> Bu komisyon hesaplamas�n� silmek istedi�inizden emin misiniz? Bu i�lem geri al�namaz.
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                        </h6>
+                        <p class="mb-0">
+                            Bu komisyon hesaplamasını silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+                        </p>
                     </div>
 
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Hesaplama T�r�</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="badge bg-primary">@Model.CalculationType</span>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Çalışan</label>
+                            <div class="form-control-plaintext">@(Model.EmployeeName ?? "Belirtilmemiş")</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Komisyon Türü</label>
+                            <div class="form-control-plaintext">
+                                <span class="badge bg-info">@Model.CommissionType</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Hesaplama Tarihi</label>
+                            <div class="form-control-plaintext">@Model.CalculationDate.ToString("dd.MM.yyyy")</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Komisyon Tutarı</label>
+                            <div class="form-control-plaintext fw-bold text-success">@Model.CommissionAmount.ToString("C")</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Para Birimi</label>
+                            <div class="form-control-plaintext">@Model.Currency</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Komisyon Oranı</label>
+                            <div class="form-control-plaintext">%@Model.CommissionRate</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">Durum</label>
-                            <div class="p-2 bg-light rounded">
-                                @if (Model.Status == "Hesapland�")
+                            <div class="form-control-plaintext">
+                                @if (Model.Status == "Hesaplandı")
                                 {
-                                    <span class="badge bg-success">
-                                        <i class="bi bi-check-circle me-1"></i>@Model.Status
-                                    </span>
+                                    <span class="badge bg-primary">Hesaplandı</span>
                                 }
-                                else if (Model.Status == "Hesaplan�yor")
+                                else if (Model.Status == "Onaylandı")
                                 {
-                                    <span class="badge bg-warning">
-                                        <i class="bi bi-clock me-1"></i>@Model.Status
-                                    </span>
+                                    <span class="badge bg-success">Onaylandı</span>
+                                }
+                                else if (Model.Status == "Ödendi")
+                                {
+                                    <span class="badge bg-info">Ödendi</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">
-                                        <i class="bi bi-x-circle me-1"></i>@Model.Status
-                                    </span>
+                                    <span class="badge bg-secondary">@Model.Status</span>
                                 }
                             </div>
                         </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold text-muted">Toplam Tutar</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="fw-bold text-success">@Model.TotalAmount.ToString("C")</span>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Aktiflik Durumu</label>
+                            <div class="form-control-plaintext">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success">Aktif</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Pasif</span>
+                                }
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold text-muted">Komisyon Oran�</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="fw-bold text-primary">%@Model.CommissionRate</span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold text-muted">Komisyon Tutar�</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="fw-bold text-primary">@Model.CommissionAmount.ToString("C")</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Para Birimi</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="badge bg-outline-secondary">@Model.Currency</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Olu�turma Tarihi</label>
-                            <div class="p-2 bg-light rounded">
-                                <i class="bi bi-clock me-2"></i>@Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")
-                            </div>
-                        </div>
-                        @if (!string.IsNullOrEmpty(Model.Description))
-                        {
-                            <div class="col-12">
-                                <label class="form-label fw-semibold text-muted">A��klama</label>
-                                <div class="p-2 bg-light rounded">
-                                    <p class="mb-0">@Model.Description</p>
-                                </div>
-                            </div>
-                        }
                     </div>
 
-                    <form asp-action="Delete" method="post" class="mt-4">
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted">Notlar</label>
+                            <div class="form-control-plaintext">@Model.Notes</div>
+                        </div>
+                    }
+
+                    <form asp-action="Delete" method="post">
                         <input type="hidden" asp-for="Id" />
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-2"></i>�ptal
+                                <i class="bi bi-x-circle me-2"></i>İptal
                             </a>
                             <button type="submit" class="btn btn-danger">
                                 <i class="bi bi-trash me-2"></i>Sil
@@ -117,5 +133,40 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle text-info me-2"></i>Bilgi
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarı
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Bu işlem geri alınamaz</li>
+                            <li>Finansal raporlar etkilenebilir</li>
+                            <li>İşlem geçmişi kaybolur</li>
+                            <li>Silmeden önce yedek alın</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Alternatif
+                        </h6>
+                        <p class="mb-0 small">
+                            Hesaplamayı silmek yerine pasif hale getirmeyi düşünebilirsiniz. 
+                            Bu şekilde veri kaybı yaşamazsınız.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+

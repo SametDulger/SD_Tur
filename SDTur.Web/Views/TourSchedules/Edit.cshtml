@@ -34,8 +34,15 @@
                             <label asp-for="TourId" class="form-label fw-semibold">
                                 <i class="bi bi-airplane me-1"></i>Tur
                             </label>
-                            <select asp-for="TourId" class="form-select" id="tourSelect">
+                            <select asp-for="TourId" class="form-select">
                                 <option value="">Tur seçiniz...</option>
+                                @if (ViewBag.Tours != null)
+                                {
+                                    @foreach (var tour in ViewBag.Tours)
+                                    {
+                                        <option value="@tour.Id" selected="@(Model.TourId == tour.Id)">@tour.Name</option>
+                                    }
+                                }
                             </select>
                             <span asp-validation-for="TourId" class="text-danger small"></span>
                         </div>
@@ -149,32 +156,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Load tours dynamically
-        document.addEventListener('DOMContentLoaded', function() {
-            loadTours();
-        });
-
-        async function loadTours() {
-            try {
-                const response = await fetch('/api/tours');
-                const tours = await response.json();
-                const select = document.getElementById('tourSelect');
-                
-                tours.forEach(tour => {
-                    const option = document.createElement('option');
-                    option.value = tour.id;
-                    option.textContent = tour.name;
-                    select.appendChild(option);
-                });
-                
-                // Set selected value
-                select.value = '@Model.TourId';
-            } catch (error) {
-                console.error('Turlar yüklenirken hata oluştu:', error);
-            }
-        }
-    </script>
-    
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-} 
+}

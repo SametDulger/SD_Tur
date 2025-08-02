@@ -18,22 +18,25 @@
 
 <!-- Filtreler -->
 <div class="card border-0 shadow-sm mb-4">
-    <div class="card-header bg-white">
+    <div class="card-header border-0">
         <h6 class="card-title mb-0">
             <i class="bi bi-funnel text-info me-2"></i>Filtreler
         </h6>
     </div>
     <div class="card-body">
-        <form id="filterForm" class="row g-3">
+        <form class="row g-3">
             <div class="col-lg-3 col-md-6">
                 <label class="form-label">Tur Türü</label>
-                <select class="form-select" id="tourTypeFilter">
+                <select class="form-select">
                     <option value="">Tüm Tur Türleri</option>
+                    <option value="Domestic">Yurt İçi</option>
+                    <option value="International">Yurt Dışı</option>
+                    <option value="DayTrip">Günübirlik</option>
                 </select>
             </div>
             <div class="col-lg-3 col-md-6">
                 <label class="form-label">Durum</label>
-                <select class="form-select" id="statusFilter">
+                <select class="form-select">
                     <option value="">Tüm Durumlar</option>
                     <option value="Active">Aktif</option>
                     <option value="Inactive">Pasif</option>
@@ -43,17 +46,17 @@
             </div>
             <div class="col-lg-2 col-md-6">
                 <label class="form-label">Başlangıç Tarihi</label>
-                <input type="date" class="form-control" id="startDateFilter">
+                <input type="date" class="form-control">
             </div>
             <div class="col-lg-2 col-md-6">
                 <label class="form-label">Bitiş Tarihi</label>
-                <input type="date" class="form-control" id="endDateFilter">
+                <input type="date" class="form-control">
             </div>
             <div class="col-lg-2 col-md-12">
                 <label class="form-label">&nbsp;</label>
                 <div class="d-grid">
-                    <button type="button" class="btn btn-outline-primary" onclick="applyFilters()">
-                        <i class="bi bi-search me-2"></i>Filtrele
+                    <button type="button" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Filtreleri Temizle
                     </button>
                 </div>
             </div>
@@ -62,7 +65,7 @@
 </div>
 
 <!-- İstatistikler -->
-<div class="row g-4 mb-4" id="statisticsCards">
+<div class="row g-4 mb-4">
     <div class="col-xl-3 col-md-6">
         <div class="card border-0 shadow-sm">
             <div class="card-body">
@@ -74,7 +77,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Toplam Tur</h6>
-                        <h3 class="mb-0 fw-bold" id="totalTours">0</h3>
+                        <h3 class="mb-0 fw-bold">@Model.Count()</h3>
                     </div>
                 </div>
             </div>
@@ -92,25 +95,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Aktif Tur</h6>
-                        <h3 class="mb-0 fw-bold text-success" id="activeTours">0</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-xl-3 col-md-6">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <div class="bg-info bg-opacity-10 rounded-circle p-3">
-                            <i class="bi bi-ticket-perforated text-info fs-4"></i>
-                        </div>
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                        <h6 class="card-title text-muted mb-1">Toplam Bilet</h6>
-                        <h3 class="mb-0 fw-bold text-info" id="totalTickets">0</h3>
+                        <h3 class="mb-0 fw-bold text-success">@Model.Count(t => t.IsActive)</h3>
                     </div>
                 </div>
             </div>
@@ -123,12 +108,30 @@
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0">
                         <div class="bg-warning bg-opacity-10 rounded-circle p-3">
-                            <i class="bi bi-currency-dollar text-warning fs-4"></i>
+                            <i class="bi bi-calendar-event text-warning fs-4"></i>
                         </div>
                     </div>
                     <div class="flex-grow-1 ms-3">
-                        <h6 class="card-title text-muted mb-1">Toplam Gelir</h6>
-                        <h3 class="mb-0 fw-bold text-warning" id="totalRevenue">₺0</h3>
+                        <h6 class="card-title text-muted mb-1">Yaklaşan Tur</h6>
+                        <h3 class="mb-0 fw-bold text-warning">@Model.Count(t => t.StartDate > DateTime.Now)</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-info bg-opacity-10 rounded-circle p-3">
+                            <i class="bi bi-people text-info fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title text-muted mb-1">Toplam Kapasite</h6>
+                        <h3 class="mb-0 fw-bold text-info">@Model.Sum(t => t.TotalSeats)</h3>
                     </div>
                 </div>
             </div>
@@ -138,7 +141,7 @@
 
 <!-- Tur Listesi -->
 <div class="card border-0 shadow-sm">
-    <div class="card-header bg-white">
+    <div class="card-header border-0">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h5 class="card-title mb-0">
@@ -151,17 +154,17 @@
                         <span class="input-group-text bg-light border-end-0">
                             <i class="bi bi-search text-muted"></i>
                         </span>
-                        <input type="text" class="form-control border-start-0" id="searchInput" placeholder="Tur ara..." data-search="toursTable">
+                        <input type="text" class="form-control border-start-0" placeholder="Tur ara...">
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="bi bi-download me-1"></i>Dışa Aktar
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="exportToExcel()">
+                        <ul class="dropdown-menu shadow border-0">
+                            <li><a class="dropdown-item" href="@Url.Action("ExportToExcel")">
                                 <i class="bi bi-file-earmark-excel me-2"></i>Excel
                             </a></li>
-                            <li><a class="dropdown-item" href="#" onclick="exportToPDF()">
+                            <li><a class="dropdown-item" href="@Url.Action("ExportToPDF")">
                                 <i class="bi bi-file-earmark-pdf me-2"></i>PDF
                             </a></li>
                         </ul>
@@ -171,23 +174,100 @@
         </div>
     </div>
     <div class="card-body p-0">
-        <div class="table-responsive" id="toursTable">
-            <!-- Dinamik olarak yüklenecek -->
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Tur Adı</th>
+                        <th>Tur Türü</th>
+                        <th>Başlangıç Tarihi</th>
+                        <th>Süre</th>
+                        <th>Kapasite</th>
+                        <th>Fiyat</th>
+                        <th>Durum</th>
+                        <th class="text-end">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var tour in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">@tour.Name</div>
+                                    <small class="text-muted">@tour.Destination</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">@tour.TourType</span>
+                                </td>
+                                <td>@tour.StartDate.ToString("dd.MM.yyyy")</td>
+                                <td>@tour.Duration gün</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                                            @{
+                                                var capacityPercentage = tour.TotalSeats > 0 ? (tour.BookedSeats * 100.0 / tour.TotalSeats) : 0;
+                                            }
+                                            <div class="progress-bar bg-@(capacityPercentage > 80 ? "success" : capacityPercentage > 50 ? "warning" : "danger")" 
+                                                 style="width: @capacityPercentage%"></div>
+                                        </div>
+                                        <small>@tour.BookedSeats/@tour.TotalSeats</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="fw-semibold">@tour.Price.ToString("C")</span>
+                                </td>
+                                <td>
+                                    @if (tour.IsActive)
+                                    {
+                                        <span class="badge bg-success">Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Pasif</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Details" asp-route-id="@tour.Id" class="btn btn-outline-info" title="Detay">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@tour.Id" class="btn btn-outline-primary" title="Düzenle">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@tour.Id" class="btn btn-outline-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <i class="bi bi-inbox text-muted fs-1"></i>
+                                <p class="text-muted mt-2">Tur bulunamadı</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="card-footer bg-light">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <small class="text-muted">
-                    Toplam <strong id="recordCount">0</strong> tur bulundu
+                    Toplam <strong>@Model.Count()</strong> tur bulundu
                 </small>
             </div>
             <div class="col-md-6 text-end">
-                <nav aria-label="Sayfa navigasyonu">
-                    <ul class="pagination pagination-sm mb-0 justify-content-end" id="pagination">
-                        <!-- Dinamik olarak oluşturulacak -->
-                    </ul>
-                </nav>
+                <small class="text-muted">
+                    Son güncelleme: @DateTime.Now.ToString("dd.MM.yyyy HH:mm")
+                </small>
             </div>
         </div>
     </div>
@@ -197,127 +277,79 @@
 <div class="row mt-4">
     <div class="col-12">
         <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
+            <div class="card-header border-0">
                 <h5 class="card-title mb-0">
                     <i class="bi bi-calendar-event text-success me-2"></i>Yaklaşan Turlar
                 </h5>
             </div>
             <div class="card-body">
-                <div class="row g-3" id="upcomingTours">
-                    <!-- Dinamik olarak yüklenecek -->
+                <div class="row g-3">
+                    @{
+                        var upcomingTours = Model.Where(t => t.StartDate > DateTime.Now && t.IsActive).Take(6);
+                    }
+                    @if (upcomingTours.Any())
+                    {
+                        @foreach (var tour in upcomingTours)
+                        {
+                            var capacityPercentage = tour.TotalSeats > 0 ? (tour.BookedSeats * 100.0 / tour.TotalSeats) : 0;
+                            <div class="col-lg-4 col-md-6">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h6 class="card-title mb-0">@tour.Name</h6>
+                                            <span class="badge bg-success">Aktif</span>
+                                        </div>
+                                        <p class="card-text text-muted small">@tour.Destination</p>
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-6">
+                                                <small class="text-muted">Başlangıç</small>
+                                                <div class="fw-semibold">@tour.StartDate.ToString("dd.MM.yyyy")</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <small class="text-muted">Süre</small>
+                                                <div class="fw-semibold">@tour.Duration gün</div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <small class="text-muted">Kapasite</small>
+                                            <div class="d-flex align-items-center">
+                                                <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                                                    <div class="progress-bar bg-@(capacityPercentage > 80 ? "success" : capacityPercentage > 50 ? "warning" : "danger")" 
+                                                         style="width: @capacityPercentage%"></div>
+                                                </div>
+                                                <small class="fw-semibold">@tour.BookedSeats/@tour.TotalSeats</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <small class="text-muted">Doluluk</small>
+                                                <div class="fw-semibold">%@capacityPercentage.ToString("F0")</div>
+                                            </div>
+                                            <div class="btn-group btn-group-sm">
+                                                <a asp-action="Details" asp-route-id="@tour.Id" class="btn btn-outline-info" title="Görüntüle">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a asp-action="Edit" asp-route-id="@tour.Id" class="btn btn-outline-primary" title="Düzenle">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-12">
+                            <div class="text-center py-4 text-muted">
+                                <i class="bi bi-calendar-x fs-1"></i>
+                                <p class="mt-2">Yaklaşan tur bulunamadı</p>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        let currentFilters = {};
-        
-        function applyFilters() {
-            currentFilters = {
-                tourTypeId: document.getElementById('tourTypeFilter').value,
-                status: document.getElementById('statusFilter').value,
-                startDate: document.getElementById('startDateFilter').value,
-                endDate: document.getElementById('endDateFilter').value
-            };
-            
-            // Reload data with filters
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const endpoint = queryString ? `/api/tour/tours?${queryString}` : '/api/tour/tours';
-            
-            console.log("Load data handled server-side"););
-            updateStatistics();
-        }
-        
-        function updateStatistics() {
-            // Load statistics based on current filters
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const endpoint = queryString ? `/api/tour/tours/statistics?${queryString}` : '/api/tour/tours/statistics';
-            
-            console.log("API call handled server-side");
-            // Statistics are loaded server-side
-        }
-        
-        function exportToExcel() {
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const url = queryString ? `/Tours/Export/Excel?${queryString}` : '/Tours/Export/Excel';
-            window.location.href = url;
-        }
-        
-        function exportToPDF() {
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const url = queryString ? `/Tours/Export/PDF?${queryString}` : '/Tours/Export/PDF';
-            window.location.href = url;
-        }
-        
-        // Setup search functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Setup search functionality
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const table = document.getElementById('toursTable');
-                    const rows = table.querySelectorAll('tbody tr');
-                    
-                    rows.forEach(row => {
-                        const text = row.textContent.toLowerCase();
-                        row.style.display = text.includes(searchTerm) ? '' : 'none';
-                    });
-                });
-            }
-        });
-        
-        // Custom render function for upcoming tours
-        window.renderUpcomingTours = function(data, element) {
-            if (!data || !data.length) {
-                element.innerHTML = '<div class="text-center py-4 text-muted">Yaklaşan tur bulunamadı</div>';
-                return;
-            }
-
-            const html = data.map(tour => `
-                <div class="col-lg-4 col-md-6">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h6 class="card-title mb-0">${tour.name}</h6>
-                                <span class="badge bg-${tour.status === 'Active' ? 'success' : tour.status === 'Upcoming' ? 'warning' : 'secondary'}">
-                                    ${tour.status}
-                                </span>
-                            </div>
-                            <p class="card-text text-muted small">${tour.destination}</p>
-                            <div class="row g-2 mb-3">
-                                <div class="col-6">
-                                    <small class="text-muted">Başlangıç</small>
-                                    <div class="fw-semibold">${app.formatDate(tour.startDate)}</div>
-                                </div>
-                                <div class="col-6">
-                                    <small class="text-muted">Süre</small>
-                                    <div class="fw-semibold">${tour.duration} gün</div>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <small class="text-muted">Kapasite</small>
-                                    <div class="fw-semibold">${tour.bookedSeats}/${tour.totalSeats}</div>
-                                </div>
-                                <div class="btn-group btn-group-sm">
-                                    <a href="/Tour/Tours/Details/${tour.id}" class="btn btn-outline-info" title="Görüntüle">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="/Tour/Tours/Edit/${tour.id}" class="btn btn-outline-primary" title="Düzenle">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
-            element.innerHTML = html;
-        };
-    </script>
-} 

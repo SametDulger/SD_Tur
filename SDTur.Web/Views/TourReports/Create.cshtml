@@ -3,121 +3,132 @@
     ViewData["Title"] = "Yeni Tur Raporu";
 }
 
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="h3 mb-0">
-                <i class="bi bi-plus-circle text-primary me-2"></i>Yeni Tur Raporu
-            </h1>
-            <a asp-action="Index" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-2"></i>Geri Dön
-            </a>
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-plus-circle text-primary me-2"></i>Yeni Tur Raporu
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-lg-8">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-form me-2"></i>Rapor Bilgileri
-                </h5>
-            </div>
-            <div class="card-body">
-                <form asp-action="Create" method="post">
-                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="TourId" class="form-label fw-semibold">
-                                <i class="bi bi-airplane me-1"></i>Tur
-                            </label>
-                            <select asp-for="TourId" class="form-select" id="tourSelect">
-                                <option value="">Tur seçiniz...</option>
-                            </select>
-                            <span asp-validation-for="TourId" class="text-danger small"></span>
-                        </div>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-form me-2"></i>Rapor Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm" role="alert"></div>
                         
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="ReportType" class="form-label fw-semibold">
-                                <i class="bi bi-file-earmark-text me-1"></i>Rapor Türü
-                            </label>
-                            <select asp-for="ReportType" class="form-select">
-                                <option value="">Rapor türü seçiniz...</option>
-                                <option value="Müþteri Listesi">Müþteri Listesi</option>
-                                <option value="Finansal">Finansal</option>
-                                <option value="Operasyonel">Operasyonel</option>
-                                <option value="Genel">Genel</option>
-                            </select>
-                            <span asp-validation-for="ReportType" class="text-danger small"></span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="ReportDate" class="form-label fw-semibold">
-                                <i class="bi bi-calendar me-1"></i>Rapor Tarihi
-                            </label>
-                            <input asp-for="ReportDate" class="form-control" type="date">
-                            <span asp-validation-for="ReportDate" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold">
-                                <i class="bi bi-check-circle me-1"></i>Onay Durumu
-                            </label>
-                            <div class="form-check form-switch mt-2">
-                                <input asp-for="IsApproved" class="form-check-input" type="checkbox">
-                                <label asp-for="IsApproved" class="form-check-label">
-                                    Rapor onaylandý
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="TourId" class="form-label">
+                                    <i class="bi bi-airplane me-1"></i>Tur
                                 </label>
+                                <select asp-for="TourId" class="form-select">
+                                    <option value="">Tur seÃ§iniz...</option>
+                                    @if (ViewBag.Tours != null)
+                                    {
+                                        @foreach (var tour in ViewBag.Tours)
+                                        {
+                                            <option value="@tour.Id">@tour.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="TourId" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="ReportType" class="form-label">
+                                    <i class="bi bi-file-earmark-text me-1"></i>Rapor TÃ¼rÃ¼
+                                </label>
+                                <select asp-for="ReportType" class="form-select">
+                                    <option value="">Rapor tÃ¼rÃ¼ seÃ§iniz...</option>
+                                    <option value="MÃ¼ÅŸteri Listesi">MÃ¼ÅŸteri Listesi</option>
+                                    <option value="Finansal">Finansal</option>
+                                    <option value="Operasyonel">Operasyonel</option>
+                                    <option value="Genel">Genel</option>
+                                </select>
+                                <span asp-validation-for="ReportType" class="text-danger small"></span>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mb-3">
-                        <label asp-for="Content" class="form-label fw-semibold">
-                            <i class="bi bi-text-paragraph me-1"></i>Rapor Ýçeriði
-                        </label>
-                        <textarea asp-for="Content" class="form-control" rows="8" 
-                                  placeholder="Rapor içeriðini detaylý olarak giriniz..."></textarea>
-                        <span asp-validation-for="Content" class="text-danger small"></span>
-                    </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="ReportDate" class="form-label">
+                                    <i class="bi bi-calendar me-1"></i>Rapor Tarihi
+                                </label>
+                                <input asp-for="ReportDate" class="form-control" type="date">
+                                <span asp-validation-for="ReportDate" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <i class="bi bi-check-circle me-1"></i>Onay Durumu
+                                </label>
+                                <div class="form-check form-switch mt-2">
+                                    <input asp-for="IsApproved" class="form-check-input" type="checkbox">
+                                    <label asp-for="IsApproved" class="form-check-label">
+                                        Rapor onaylandÄ±
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="d-flex justify-content-end gap-2">
-                        <a asp-action="Index" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-circle me-2"></i>Ýptal
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-circle me-2"></i>Kaydet
-                        </button>
-                    </div>
-                </form>
+                        <div class="mb-3">
+                            <label asp-for="Content" class="form-label">
+                                <i class="bi bi-text-paragraph me-1"></i>Rapor Ä°Ã§eriÄŸi
+                            </label>
+                            <textarea asp-for="Content" class="form-control" rows="8" 
+                                      placeholder="Rapor iÃ§eriÄŸini detaylÄ± olarak giriniz..."></textarea>
+                            <span asp-validation-for="Content" class="text-danger small"></span>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Ä°ptal
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="col-lg-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-info-circle me-2"></i>Bilgi
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="alert alert-info">
-                    <h6 class="alert-heading">
-                        <i class="bi bi-lightbulb me-2"></i>Önemli Notlar
-                    </h6>
-                    <ul class="mb-0 small">
-                        <li>Tüm alanlar doðru þekilde doldurulmalýdýr</li>
-                        <li>Rapor tarihi bugün veya geçmiþ bir tarih olmalýdýr</li>
-                        <li>Tur seçimi zorunludur</li>
-                        <li>Rapor türü belirtilmelidir</li>
-                        <li>Rapor içeriði detaylý olmalýdýr</li>
-                        <li>Onay durumu opsiyoneldir</li>
-                    </ul>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info shadow-sm">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Ã–nemli Notlar
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>TÃ¼m alanlar doÄŸru ÅŸekilde doldurulmalÄ±dÄ±r</li>
+                            <li>Rapor tarihi bugÃ¼n veya geÃ§miÅŸ bir tarih olmalÄ±dÄ±r</li>
+                            <li>Tur seÃ§imi zorunludur</li>
+                            <li>Rapor tÃ¼rÃ¼ belirtilmelidir</li>
+                            <li>Rapor iÃ§eriÄŸi detaylÄ± olmalÄ±dÄ±r</li>
+                            <li>Onay durumu opsiyoneldir</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -125,29 +136,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Load tours dynamically
-        document.addEventListener('DOMContentLoaded', function() {
-            loadTours();
-        });
-
-        async function loadTours() {
-            try {
-                const response = await fetch('/api/tours');
-                const tours = await response.json();
-                const select = document.getElementById('tourSelect');
-                
-                tours.forEach(tour => {
-                    const option = document.createElement('option');
-                    option.value = tour.id;
-                    option.textContent = tour.name;
-                    select.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Turlar yüklenirken hata oluþtu:', error);
-            }
-        }
-    </script>
-    
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

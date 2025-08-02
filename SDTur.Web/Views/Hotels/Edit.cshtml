@@ -1,6 +1,6 @@
 @model SDTur.Web.Models.Master.Accommodation.HotelEditViewModel
 @{
-    ViewData["Title"] = "Otel Düzenle";
+    ViewData["Title"] = "Otel DÃ¼zenle";
 }
 
 <div class="container-fluid">
@@ -8,10 +8,10 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-pencil text-primary me-2"></i>Otel Düzenle
+                    <i class="bi bi-pencil text-primary me-2"></i>Otel DÃ¼zenle
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                 </a>
             </div>
         </div>
@@ -34,23 +34,23 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="Name" class="form-label fw-semibold">
-                                    <i class="bi bi-building me-1"></i>Otel Adý <span class="text-danger">*</span>
+                                    <i class="bi bi-building me-1"></i>Otel AdÄ± <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="Name" class="form-control" placeholder="Otel adý..." required />
+                                <input asp-for="Name" class="form-control" placeholder="Otel adÄ±..." required />
                                 <span asp-validation-for="Name" class="text-danger small"></span>
                             </div>
                             
                             <div class="col-md-6 mb-3">
                                 <label asp-for="StarRating" class="form-label fw-semibold">
-                                    <i class="bi bi-star me-1"></i>Yýldýz Sayýsý <span class="text-danger">*</span>
+                                    <i class="bi bi-star me-1"></i>YÄ±ldÄ±z SayÄ±sÄ± <span class="text-danger">*</span>
                                 </label>
                                 <select asp-for="StarRating" class="form-select" required>
-                                    <option value="">Yýldýz seçiniz...</option>
-                                    <option value="1">1 Yýldýz</option>
-                                    <option value="2">2 Yýldýz</option>
-                                    <option value="3">3 Yýldýz</option>
-                                    <option value="4">4 Yýldýz</option>
-                                    <option value="5">5 Yýldýz</option>
+                                    <option value="">YÄ±ldÄ±z seÃ§iniz...</option>
+                                    <option value="1">1 YÄ±ldÄ±z</option>
+                                    <option value="2">2 YÄ±ldÄ±z</option>
+                                    <option value="3">3 YÄ±ldÄ±z</option>
+                                    <option value="4">4 YÄ±ldÄ±z</option>
+                                    <option value="5">5 YÄ±ldÄ±z</option>
                                 </select>
                                 <span asp-validation-for="StarRating" class="text-danger small"></span>
                             </div>
@@ -61,7 +61,7 @@
                                 <label asp-for="Phone" class="form-label fw-semibold">
                                     <i class="bi bi-telephone me-1"></i>Telefon <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="Phone" class="form-control" placeholder="Telefon numarasý..." required />
+                                <input asp-for="Phone" class="form-control" placeholder="Telefon numarasÄ±..." required />
                                 <span asp-validation-for="Phone" class="text-danger small"></span>
                             </div>
                             
@@ -77,18 +77,25 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="ContactPerson" class="form-label fw-semibold">
-                                    <i class="bi bi-person me-1"></i>Ýletiþim Kiþisi
+                                    <i class="bi bi-person me-1"></i>Ä°letiÅŸim KiÅŸisi
                                 </label>
-                                <input asp-for="ContactPerson" class="form-control" placeholder="Ýletiþim kiþisi..." />
+                                <input asp-for="ContactPerson" class="form-control" placeholder="Ä°letiÅŸim kiÅŸisi..." />
                                 <span asp-validation-for="ContactPerson" class="text-danger small"></span>
                             </div>
                             
                             <div class="col-md-6 mb-3">
                                 <label asp-for="RegionId" class="form-label fw-semibold">
-                                    <i class="bi bi-geo-alt me-1"></i>Bölge <span class="text-danger">*</span>
+                                    <i class="bi bi-geo-alt me-1"></i>BÃ¶lge <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="RegionId" id="regionSelect" class="form-select" required>
-                                    <option value="">Bölge seçiniz...</option>
+                                <select asp-for="RegionId" class="form-select" required>
+                                    <option value="">BÃ¶lge seÃ§iniz...</option>
+                                    @if (ViewBag.Regions != null)
+                                    {
+                                        @foreach (var region in ViewBag.Regions)
+                                        {
+                                            <option value="@region.Id" selected="@(Model.RegionId == region.Id)">@region.Name</option>
+                                        }
+                                    }
                                 </select>
                                 <span asp-validation-for="RegionId" class="text-danger small"></span>
                             </div>
@@ -97,7 +104,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="Order" class="form-label fw-semibold">
-                                    <i class="bi bi-sort-numeric-up me-1"></i>Sýralama <span class="text-danger">*</span>
+                                    <i class="bi bi-sort-numeric-up me-1"></i>SÄ±ralama <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="Order" type="number" class="form-control" placeholder="0" required />
                                 <span asp-validation-for="Order" class="text-danger small"></span>
@@ -110,7 +117,7 @@
                                         <i class="bi bi-toggle-on me-1"></i>Aktif
                                     </label>
                                 </div>
-                                <small class="text-muted">Bu otelin aktif olduðunu iþaretleyin</small>
+                                <small class="text-muted">Bu otelin aktif olduÄŸunu iÅŸaretleyin</small>
                             </div>
                         </div>
 
@@ -126,10 +133,10 @@
 
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                                <i class="bi bi-x-circle me-2"></i>Ä°ptal
                             </a>
                             <button type="submit" class="btn btn-warning">
-                                <i class="bi bi-check-circle me-2"></i>Güncelle
+                                <i class="bi bi-check-circle me-2"></i>GÃ¼ncelle
                             </button>
                         </div>
                     </form>
@@ -147,13 +154,13 @@
                 <div class="card-body">
                     <div class="alert alert-info">
                         <h6 class="alert-heading">
-                            <i class="bi bi-lightbulb me-2"></i>Otel Düzenleme
+                            <i class="bi bi-lightbulb me-2"></i>Otel DÃ¼zenleme
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Otel adý ve yýldýz sayýsýný güncelleyin</li>
-                            <li>Ýletiþim bilgilerini düzenleyin</li>
-                            <li>Adres ve bölge bilgilerini deðiþtirebilirsiniz</li>
-                            <li>Ýletiþim kiþisi ve sýralama bilgilerini güncelleyin</li>
+                            <li>Otel adÄ± ve yÄ±ldÄ±z sayÄ±sÄ±nÄ± gÃ¼ncelleyin</li>
+                            <li>Ä°letiÅŸim bilgilerini dÃ¼zenleyin</li>
+                            <li>Adres ve bÃ¶lge bilgilerini deÄŸiÅŸtirebilirsiniz</li>
+                            <li>Ä°letiÅŸim kiÅŸisi ve sÄ±ralama bilgilerini gÃ¼ncelleyin</li>
                         </ul>
                     </div>
                 </div>
@@ -163,31 +170,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Load regions dynamically
-        async function loadRegions() {
-            try {
-                const response = await fetch('/api/regions');
-                const regions = await response.json();
-                const regionSelect = document.getElementById('regionSelect');
-                
-                regions.forEach(region => {
-                    const option = document.createElement('option');
-                    option.value = region.id;
-                    option.textContent = region.name;
-                    if (region.id == @Model.RegionId) {
-                        option.selected = true;
-                    }
-                    regionSelect.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error loading regions:', error);
-            }
-        }
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            loadRegions();
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

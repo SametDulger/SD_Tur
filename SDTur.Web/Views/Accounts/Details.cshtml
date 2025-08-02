@@ -45,7 +45,7 @@
                     <div class="col-md-6">
                         <label class="form-label text-muted">Hesap Türü</label>
                         <div>
-                            <span class="badge bg-light text-dark">@Model.AccountType</span>
+                            <span class="badge bg-secondary">@Model.AccountType</span>
                         </div>
                     </div>
                     
@@ -74,7 +74,7 @@
                             }
                             else
                             {
-                                <span class="badge bg-secondary">
+                                <span class="badge bg-danger">
                                     <i class="bi bi-x-circle me-1"></i>Pasif
                                 </span>
                             }
@@ -109,14 +109,19 @@
                         <div>@(Model.CreatedDate?.ToString("dd.MM.yyyy HH:mm"))</div>
                     </div>
                     
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Son Güncelleme</label>
+                        <div>@(Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm"))</div>
+                    </div>
+                    
                     <div class="col-12">
                         <label class="form-label text-muted">Adres</label>
-                        <div>@Model.Address</div>
+                        <div>@(string.IsNullOrEmpty(Model.Address) ? "Adres bilgisi girilmemiş" : Model.Address)</div>
                     </div>
                     
                     <div class="col-12">
                         <label class="form-label text-muted">Açıklama</label>
-                        <div>@Model.Description</div>
+                        <div>@(string.IsNullOrEmpty(Model.Description) ? "Açıklama girilmemiş" : Model.Description)</div>
                     </div>
                 </div>
             </div>
@@ -140,12 +145,12 @@
                     <a asp-controller="AccountTransactions" asp-action="Index" asp-route-accountId="@Model.Id" class="btn btn-outline-primary btn-sm">
                         <i class="bi bi-list-ul me-2"></i>İşlem Geçmişi
                     </a>
-                    <button type="button" class="btn btn-outline-info btn-sm" onclick="printAccountDetails()">
+                    <button type="button" class="btn btn-outline-info btn-sm">
                         <i class="bi bi-printer me-2"></i>Yazdır
                     </button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="exportAccountData()">
+                    <a href="#" class="btn btn-outline-secondary btn-sm">
                         <i class="bi bi-download me-2"></i>Dışa Aktar
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -179,16 +184,36 @@
             </div>
         </div>
         
-        <!-- Son İşlemler -->
+        <!-- Hesap Durumu -->
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white">
                 <h6 class="card-title mb-0">
-                    <i class="bi bi-clock-history text-info me-2"></i>Son İşlemler
+                    <i class="bi bi-pie-chart text-info me-2"></i>Hesap Durumu
                 </h6>
             </div>
-            <div class="card-body p-0">
-                <div class="list-group list-group-flush" id="recentTransactions">
-                    <!-- Dinamik olarak yüklenecek -->
+            <div class="card-body">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <div class="fs-1 @(Model.CurrentBalance >= 0 ? "text-success" : "text-danger")">
+                            @Model.CurrentBalance.ToString("C")
+                        </div>
+                        <div class="text-muted">Mevcut Bakiye</div>
+                    </div>
+                    
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="border rounded p-2">
+                                <div class="fw-bold text-success">@Model.TotalIncome.ToString("C")</div>
+                                <div class="small text-muted">Toplam Gelir</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2">
+                                <div class="fw-bold text-danger">@Model.TotalExpense.ToString("C")</div>
+                                <div class="small text-muted">Toplam Gider</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -203,43 +228,61 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <h5 class="card-title mb-0">
-                            <i class="bi bi-list-ul text-primary me-2"></i>İşlem Geçmişi
+                            <i class="bi bi-list-ul text-primary me-2"></i>Son İşlemler
                         </h5>
                     </div>
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0">
-                                <i class="bi bi-search text-muted"></i>
-                            </span>
-                            <input type="text" class="form-control border-start-0" id="transactionSearch" placeholder="İşlem ara..." data-search="transactionsTable">
-                        </div>
+                    <div class="col-md-6 text-end">
+                        <a asp-controller="AccountTransactions" asp-action="Index" asp-route-accountId="@Model.Id" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-arrow-right me-2"></i>Tüm İşlemleri Görüntüle
+                        </a>
                     </div>
                 </div>
             </div>
             <div class="card-body p-0">
-                <div class="table-responsive" id="transactionsTable">
-                    <!-- Dinamik olarak yüklenecek -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Tarih</th>
+                                <th>İşlem Türü</th>
+                                <th>Açıklama</th>
+                                <th>Tutar</th>
+                                <th>Bakiye</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.RecentTransactions != null && ((IEnumerable<dynamic>)ViewBag.RecentTransactions).Any())
+                            {
+                                @foreach (var transaction in ViewBag.RecentTransactions)
+                                {
+                                    <tr>
+                                        <td>@transaction.TransactionDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                        <td>
+                                            <span class="badge @(transaction.TransactionType == "Income" ? "bg-success" : "bg-danger")">
+                                                @transaction.TransactionType
+                                            </span>
+                                        </td>
+                                        <td>@transaction.Description</td>
+                                        <td class="@(transaction.TransactionType == "Income" ? "text-success" : "text-danger")">
+                                            @transaction.Amount.ToString("C")
+                                        </td>
+                                        <td>@transaction.BalanceAfterTransaction.ToString("C")</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">
+                                        <i class="bi bi-inbox text-muted fs-1"></i>
+                                        <p class="text-muted mt-2">Henüz işlem bulunmuyor</p>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-@section Scripts {
-    <script>
-        function printAccountDetails() {
-            window.print();
-        }
-        
-        function exportAccountData() {
-            // Export functionality
-            console.log("Export to Excel handled server-side");;
-        }
-        
-        // Auto-load data
-        document.addEventListener('DOMContentLoaded', function() {
-            // Recent transactions will be loaded automatically via data-load attribute
-            // Full transactions table will be loaded automatically via data-load attribute
-        });
-    </script>
-} 
+</div> 

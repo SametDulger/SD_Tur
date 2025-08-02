@@ -44,5 +44,36 @@ namespace SDTur.Web.Models.Financial.Transactions
         
         [Display(Name = "Oluşturma Tarihi")]
         public DateTime CreatedDate { get; set; }
+        
+        [Display(Name = "Bilet ID")]
+        public int? TicketId { get; set; }
+        
+        [Display(Name = "Tur Programı ID")]
+        public int? TourScheduleId { get; set; }
+        
+        [Display(Name = "Aktif")]
+        public bool IsActive { get; set; }
+        
+        [Display(Name = "Komisyon Tipi")]
+        public string CommissionType { get; set; } = string.Empty;
+        
+        [Display(Name = "Notlar")]
+        public string Notes { get; set; } = string.Empty;
+        
+        [Display(Name = "Güncelleme Tarihi")]
+        public DateTime? UpdatedDate { get; set; }
+        
+        // Additional properties needed for the view
+        [Display(Name = "Onaylandı")]
+        public bool IsApproved { get; set; }
+        
+        [Display(Name = "Hesaplama Numarası")]
+        public string CalculationNumber { get; set; } = string.Empty;
+        
+        [Display(Name = "Tur Tarihi")]
+        public DateTime TourDate { get; set; }
+        
+        [Display(Name = "Satış Tutarı")]
+        public decimal SalesAmount { get; set; }
     }
 } 

@@ -1,16 +1,16 @@
 @model SDTur.Web.Models.Tour.Financial.TourIncomeEditViewModel
 @{
-    ViewData["Title"] = "Tur Geliri Düzenle";
+    ViewData["Title"] = "Tur Geliri DÃ¼zenle";
 }
 
 <div class="row mb-4">
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="h3 mb-0">
-                <i class="bi bi-pencil text-primary me-2"></i>Tur Geliri Düzenle
+                <i class="bi bi-pencil text-primary me-2"></i>Tur Geliri DÃ¼zenle
             </h1>
             <a asp-action="Index" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
             </a>
         </div>
     </div>
@@ -34,21 +34,28 @@
                             <label asp-for="TourId" class="form-label fw-semibold">
                                 <i class="bi bi-airplane me-1"></i>Tur
                             </label>
-                            <select asp-for="TourId" class="form-select" id="tourSelect">
-                                <option value="">Tur seçiniz...</option>
+                            <select asp-for="TourId" class="form-select">
+                                <option value="">Tur seÃ§iniz...</option>
+                                @if (ViewBag.Tours != null)
+                                {
+                                    @foreach (var tour in ViewBag.Tours)
+                                    {
+                                        <option value="@tour.Id" selected="@(Model.TourId == tour.Id)">@tour.Name</option>
+                                    }
+                                }
                             </select>
                             <span asp-validation-for="TourId" class="text-danger small"></span>
                         </div>
                         
                         <div class="col-md-6 mb-3">
                             <label asp-for="IncomeType" class="form-label fw-semibold">
-                                <i class="bi bi-tag me-1"></i>Gelir Türü
+                                <i class="bi bi-tag me-1"></i>Gelir TÃ¼rÃ¼
                             </label>
                             <select asp-for="IncomeType" class="form-select">
-                                <option value="">Gelir türü seçiniz...</option>
+                                <option value="">Gelir tÃ¼rÃ¼ seÃ§iniz...</option>
                                 <option value="Bilet">Bilet</option>
                                 <option value="Komisyon">Komisyon</option>
-                                <option value="Diðer">Diðer</option>
+                                <option value="DiÄŸer">DiÄŸer</option>
                             </select>
                             <span asp-validation-for="IncomeType" class="text-danger small"></span>
                         </div>
@@ -61,7 +68,7 @@
                             </label>
                             <div class="input-group">
                                 <input asp-for="Amount" class="form-control" type="number" step="0.01" placeholder="0.00">
-                                <span class="input-group-text">?</span>
+                                <span class="input-group-text">â‚º</span>
                             </div>
                             <span asp-validation-for="Amount" class="text-danger small"></span>
                         </div>
@@ -78,15 +85,15 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label asp-for="PaymentMethod" class="form-label fw-semibold">
-                                <i class="bi bi-credit-card me-1"></i>Ödeme Yöntemi
+                                <i class="bi bi-credit-card me-1"></i>Ã–deme YÃ¶ntemi
                             </label>
                             <select asp-for="PaymentMethod" class="form-select">
-                                <option value="">Ödeme yöntemi seçiniz...</option>
+                                <option value="">Ã–deme yÃ¶ntemi seÃ§iniz...</option>
                                 <option value="Nakit">Nakit</option>
-                                <option value="Kredi Kartý">Kredi Kartý</option>
+                                <option value="Kredi KartÄ±">Kredi KartÄ±</option>
                                 <option value="Banka Transferi">Banka Transferi</option>
-                                <option value="Çek">Çek</option>
-                                <option value="Diðer">Diðer</option>
+                                <option value="Ã‡ek">Ã‡ek</option>
+                                <option value="DiÄŸer">DiÄŸer</option>
                             </select>
                             <span asp-validation-for="PaymentMethod" class="text-danger small"></span>
                         </div>
@@ -106,19 +113,19 @@
 
                     <div class="mb-3">
                         <label asp-for="Description" class="form-label fw-semibold">
-                            <i class="bi bi-text-paragraph me-1"></i>Açýklama
+                            <i class="bi bi-text-paragraph me-1"></i>AÃ§Ä±klama
                         </label>
                         <textarea asp-for="Description" class="form-control" rows="3" 
-                                  placeholder="Gelir ile ilgili açýklama giriniz..."></textarea>
+                                  placeholder="Gelir ile ilgili aÃ§Ä±klama giriniz..."></textarea>
                         <span asp-validation-for="Description" class="text-danger small"></span>
                     </div>
 
                     <div class="d-flex justify-content-end gap-2">
                         <a asp-action="Index" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-circle me-2"></i>Ýptal
+                            <i class="bi bi-x-circle me-2"></i>Ä°ptal
                         </a>
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-circle me-2"></i>Güncelle
+                            <i class="bi bi-check-circle me-2"></i>GÃ¼ncelle
                         </button>
                     </div>
                 </form>
@@ -136,14 +143,14 @@
             <div class="card-body">
                 <div class="alert alert-info">
                     <h6 class="alert-heading">
-                        <i class="bi bi-lightbulb me-2"></i>Önemli Notlar
+                        <i class="bi bi-lightbulb me-2"></i>Ã–nemli Notlar
                     </h6>
                     <ul class="mb-0 small">
-                        <li>Tüm alanlar doðru þekilde doldurulmalýdýr</li>
-                        <li>Gelir tarihi bugünden önceki bir tarih olmalýdýr</li>
-                        <li>Tutar pozitif bir deðer olmalýdýr</li>
-                        <li>Tahsilat durumu iþaretlenirse gelir tahsil edilmiþ sayýlýr</li>
-                        <li>Deðiþiklikler anýnda kaydedilir</li>
+                        <li>TÃ¼m alanlar doÄŸru ÅŸekilde doldurulmalÄ±dÄ±r</li>
+                        <li>Gelir tarihi bugÃ¼nden Ã¶nceki bir tarih olmalÄ±dÄ±r</li>
+                        <li>Tutar pozitif bir deÄŸer olmalÄ±dÄ±r</li>
+                        <li>Tahsilat durumu iÅŸaretlenirse gelir tahsil edilmiÅŸ sayÄ±lÄ±r</li>
+                        <li>DeÄŸiÅŸiklikler anÄ±nda kaydedilir</li>
                     </ul>
                 </div>
             </div>
@@ -152,32 +159,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Load tours dynamically
-        document.addEventListener('DOMContentLoaded', function() {
-            loadTours();
-        });
-
-        async function loadTours() {
-            try {
-                const response = await fetch('/api/tours');
-                const tours = await response.json();
-                const select = document.getElementById('tourSelect');
-                
-                tours.forEach(tour => {
-                    const option = document.createElement('option');
-                    option.value = tour.id;
-                    option.textContent = tour.name;
-                    select.appendChild(option);
-                });
-                
-                // Set selected value
-                select.value = '@Model.TourId';
-            } catch (error) {
-                console.error('Turlar yüklenirken hata oluþtu:', error);
-            }
-        }
-    </script>
-    
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

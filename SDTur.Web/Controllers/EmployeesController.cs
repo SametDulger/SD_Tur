@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SDTur.Web.Models.Master.People;
-using SDTur.Web.Models.Master.Locations;
+using SDTur.Web.Models.Master.Branches;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers

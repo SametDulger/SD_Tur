@@ -1,135 +1,166 @@
 @model SDTur.Web.Models.Tour.Operations.BusAssignmentEditViewModel
 @{
-    ViewData["Title"] = "Otobüs Atamasý Düzenle";
+    ViewData["Title"] = "OtobÃ¼s AtamasÄ± DÃ¼zenle";
 }
 
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="h3 mb-0">
-                <i class="bi bi-pencil text-primary me-2"></i>Otobüs Atamasý Düzenle
-            </h1>
-            <a asp-action="Index" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-2"></i>Geri Dön
-            </a>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-8">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-form me-2"></i>Atama Bilgileri
-                </h5>
-            </div>
-            <div class="card-body">
-                <form asp-action="Edit" method="post">
-                    <input type="hidden" asp-for="Id" />
-                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="TourScheduleId" class="form-label fw-semibold">
-                                <i class="bi bi-airplane me-1"></i>Tur Programý
-                            </label>
-                            <select asp-for="TourScheduleId" class="form-select" id="tourScheduleSelect">
-                                <option value="">Tur programý seçiniz...</option>
-                            </select>
-                            <span asp-validation-for="TourScheduleId" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="BusId" class="form-label fw-semibold">
-                                <i class="bi bi-bus-front me-1"></i>Otobüs
-                            </label>
-                            <select asp-for="BusId" class="form-select" id="busSelect">
-                                <option value="">Otobüs seçiniz...</option>
-                            </select>
-                            <span asp-validation-for="BusId" class="text-danger small"></span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="EmployeeId" class="form-label fw-semibold">
-                                <i class="bi bi-person me-1"></i>Sürücü
-                            </label>
-                            <select asp-for="EmployeeId" class="form-select" id="employeeSelect">
-                                <option value="">Sürücü seçiniz...</option>
-                            </select>
-                            <span asp-validation-for="EmployeeId" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="AssignmentDate" class="form-label fw-semibold">
-                                <i class="bi bi-calendar me-1"></i>Atama Tarihi
-                            </label>
-                            <input asp-for="AssignmentDate" class="form-control" type="date">
-                            <span asp-validation-for="AssignmentDate" class="text-danger small"></span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="Status" class="form-label fw-semibold">
-                                <i class="bi bi-flag me-1"></i>Durum
-                            </label>
-                            <select asp-for="Status" class="form-select">
-                                <option value="">Durum seçiniz...</option>
-                                <option value="Atandý">Atandý</option>
-                                <option value="Tamamlandý">Tamamlandý</option>
-                                <option value="Ýptal">Ýptal</option>
-                            </select>
-                            <span asp-validation-for="Status" class="text-danger small"></span>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="Notes" class="form-label fw-semibold">
-                            <i class="bi bi-text-paragraph me-1"></i>Notlar
-                        </label>
-                        <textarea asp-for="Notes" class="form-control" rows="3" 
-                                  placeholder="Atama ile ilgili notlar giriniz..."></textarea>
-                        <span asp-validation-for="Notes" class="text-danger small"></span>
-                    </div>
-
-                    <div class="d-flex justify-content-end gap-2">
-                        <a asp-action="Index" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-circle me-2"></i>Ýptal
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-circle me-2"></i>Güncelle
-                        </button>
-                    </div>
-                </form>
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-pencil text-primary me-2"></i>OtobÃ¼s AtamasÄ± DÃ¼zenle
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
+                </a>
             </div>
         </div>
     </div>
-    
-    <div class="col-lg-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-info-circle me-2"></i>Bilgi
-                </h5>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-form me-2"></i>Atama Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm" role="alert"></div>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="TourScheduleId" class="form-label">
+                                    <i class="bi bi-airplane me-1"></i>Tur ProgramÄ±
+                                </label>
+                                <select asp-for="TourScheduleId" class="form-select">
+                                    <option value="">Tur programÄ± seÃ§iniz...</option>
+                                    @if (ViewBag.TourSchedules != null)
+                                    {
+                                        @foreach (var schedule in ViewBag.TourSchedules)
+                                        {
+                                            <option value="@schedule.Id" selected="@(Model.TourScheduleId == schedule.Id)">
+                                                @schedule.TourName - @schedule.TourDate.ToString("dd.MM.yyyy")
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="TourScheduleId" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="BusId" class="form-label">
+                                    <i class="bi bi-bus-front me-1"></i>OtobÃ¼s
+                                </label>
+                                <select asp-for="BusId" class="form-select">
+                                    <option value="">OtobÃ¼s seÃ§iniz...</option>
+                                    @if (ViewBag.Buses != null)
+                                    {
+                                        @foreach (var bus in ViewBag.Buses)
+                                        {
+                                            <option value="@bus.Id" selected="@(Model.BusId == bus.Id)">
+                                                @bus.PlateNumber - @bus.Capacity KiÅŸilik
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="BusId" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="EmployeeId" class="form-label">
+                                    <i class="bi bi-person me-1"></i>ÅžofÃ¶r
+                                </label>
+                                <select asp-for="EmployeeId" class="form-select">
+                                    <option value="">ÅžofÃ¶r seÃ§iniz...</option>
+                                    @if (ViewBag.Employees != null)
+                                    {
+                                        @foreach (var employee in ViewBag.Employees)
+                                        {
+                                            <option value="@employee.Id" selected="@(Model.EmployeeId == employee.Id)">
+                                                @employee.FirstName @employee.LastName
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="EmployeeId" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="AssignmentDate" class="form-label">
+                                    <i class="bi bi-calendar me-1"></i>Atama Tarihi
+                                </label>
+                                <input asp-for="AssignmentDate" class="form-control" type="date">
+                                <span asp-validation-for="AssignmentDate" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Status" class="form-label">
+                                    <i class="bi bi-flag me-1"></i>Durum
+                                </label>
+                                <select asp-for="Status" class="form-select">
+                                    <option value="">Durum seÃ§iniz...</option>
+                                    <option value="AtandÄ±">AtandÄ±</option>
+                                    <option value="TamamlandÄ±">TamamlandÄ±</option>
+                                    <option value="Ä°ptal">Ä°ptal</option>
+                                </select>
+                                <span asp-validation-for="Status" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label">
+                                <i class="bi bi-text-paragraph me-1"></i>Notlar
+                            </label>
+                            <textarea asp-for="Notes" class="form-control" rows="3" 
+                                      placeholder="Atama ile ilgili notlar giriniz..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger small"></span>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Ä°ptal
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>GÃ¼ncelle
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="alert alert-info">
-                    <h6 class="alert-heading">
-                        <i class="bi bi-lightbulb me-2"></i>Önemli Notlar
-                    </h6>
-                    <ul class="mb-0 small">
-                        <li>Tüm alanlar doðru þekilde doldurulmalýdýr</li>
-                        <li>Tur programý seçimi zorunludur</li>
-                        <li>Otobüs seçimi zorunludur</li>
-                        <li>Sürücü seçimi zorunludur</li>
-                        <li>Atama tarihi gelecek bir tarih olmalýdýr</li>
-                        <li>Durum belirtilmelidir</li>
-                        <li>Notlar alaný opsiyoneldir</li>
-                        <li>Deðiþiklikler anýnda kaydedilir</li>
-                    </ul>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header border-0">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info shadow-sm">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Ã–nemli Notlar
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>TÃ¼m alanlar doÄŸru ÅŸekilde doldurulmalÄ±dÄ±r</li>
+                            <li>Tur programÄ± seÃ§imi zorunludur</li>
+                            <li>OtobÃ¼s seÃ§imi zorunludur</li>
+                            <li>ÅžofÃ¶r seÃ§imi zorunludur</li>
+                            <li>Atama tarihi gelecek bir tarih olmalÄ±dÄ±r</li>
+                            <li>Durum belirtilmelidir</li>
+                            <li>Notlar alanÄ± opsiyoneldir</li>
+                            <li>DeÄŸiÅŸiklikler anÄ±nda kaydedilir</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -137,74 +168,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Load data dynamically
-        document.addEventListener('DOMContentLoaded', function() {
-            loadTourSchedules();
-            loadBuses();
-            loadEmployees();
-        });
-
-        async function loadTourSchedules() {
-            try {
-                const response = await fetch('/api/tourschedules');
-                const tourSchedules = await response.json();
-                const select = document.getElementById('tourScheduleSelect');
-                
-                tourSchedules.forEach(schedule => {
-                    const option = document.createElement('option');
-                    option.value = schedule.id;
-                    option.textContent = schedule.name;
-                    select.appendChild(option);
-                });
-                
-                // Set selected value
-                select.value = '@Model.TourScheduleId';
-            } catch (error) {
-                console.error('Tur programlarý yüklenirken hata oluþtu:', error);
-            }
-        }
-
-        async function loadBuses() {
-            try {
-                const response = await fetch('/api/buses');
-                const buses = await response.json();
-                const select = document.getElementById('busSelect');
-                
-                buses.forEach(bus => {
-                    const option = document.createElement('option');
-                    option.value = bus.id;
-                    option.textContent = bus.plateNumber;
-                    select.appendChild(option);
-                });
-                
-                // Set selected value
-                select.value = '@Model.BusId';
-            } catch (error) {
-                console.error('Otobüsler yüklenirken hata oluþtu:', error);
-            }
-        }
-
-        async function loadEmployees() {
-            try {
-                const response = await fetch('/api/employees');
-                const employees = await response.json();
-                const select = document.getElementById('employeeSelect');
-                
-                employees.forEach(employee => {
-                    const option = document.createElement('option');
-                    option.value = employee.id;
-                    option.textContent = employee.name;
-                    select.appendChild(option);
-                });
-                
-                // Set selected value
-                select.value = '@Model.EmployeeId';
-            } catch (error) {
-                console.error('Çalýþanlar yüklenirken hata oluþtu:', error);
-            }
-        }
-    </script>
-    
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

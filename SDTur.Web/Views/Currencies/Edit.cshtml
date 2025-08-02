@@ -1,114 +1,106 @@
-@model CurrencyEditViewModel
+@model SDTur.Web.Models.Master.References.CurrencyEditViewModel
 @{
-    ViewData["Title"] = "Para Birimi Düzenle";
+    ViewData["Title"] = "Para Birimi DÃ¼zenle";
 }
 
-<div class="container-fluid">
+<div class="container">
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-pencil text-primary me-2"></i>Para Birimi Düzenle
+                    <i class="bi bi-pencil text-primary me-2"></i>Para Birimi DÃ¼zenle
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                 </a>
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-form me-2"></i>Para Birimi Bilgileri
                     </h5>
                 </div>
                 <div class="card-body">
                     <form asp-action="Edit" method="post">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-                        
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm" role="alert"></div>
                         <input type="hidden" asp-for="Id" />
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Code" class="form-label fw-semibold">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Code" class="form-label">
                                     <i class="bi bi-hash me-1"></i>Kod <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="Code" class="form-control" placeholder="USD, EUR, TRY..." required />
                                 <span asp-validation-for="Code" class="text-danger small"></span>
                             </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Symbol" class="form-label fw-semibold">
+                            <div class="col-md-6">
+                                <label asp-for="Symbol" class="form-label">
                                     <i class="bi bi-symbol me-1"></i>Sembol <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="Symbol" class="form-control" placeholder="$, €, ?..." required />
+                                <input asp-for="Symbol" class="form-control" placeholder="$, â‚¬, â‚º..." required />
                                 <span asp-validation-for="Symbol" class="text-danger small"></span>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Name" class="form-label fw-semibold">
-                                    <i class="bi bi-currency-exchange me-1"></i>Para Birimi Adý <span class="text-danger">*</span>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label">
+                                    <i class="bi bi-currency-exchange me-1"></i>Para Birimi AdÄ± <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="Name" class="form-control" placeholder="Amerikan Dolarý, Euro, Türk Lirasý..." required />
+                                <input asp-for="Name" class="form-control" placeholder="Amerikan DolarÄ±, Euro, TÃ¼rk LirasÄ±..." required />
                                 <span asp-validation-for="Name" class="text-danger small"></span>
                             </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="ExchangeRate" class="form-label fw-semibold">
-                                    <i class="bi bi-graph-up me-1"></i>Döviz Kuru <span class="text-danger">*</span>
+                            <div class="col-md-6">
+                                <label asp-for="ExchangeRate" class="form-label">
+                                    <i class="bi bi-graph-up me-1"></i>DÃ¶viz Kuru <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="ExchangeRate" type="number" step="0.0001" class="form-control" placeholder="1.0000" required />
                                 <span asp-validation-for="ExchangeRate" class="text-danger small"></span>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
+                        <div class="row g-3">
+                            <div class="col-md-6">
                                 <div class="form-check form-switch">
-                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActiveSwitch">
-                                    <label class="form-check-label fw-semibold" for="isActiveSwitch">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox">
+                                    <label class="form-check-label" for="IsActive">
                                         <i class="bi bi-toggle-on me-1"></i>Aktif
                                     </label>
                                 </div>
-                                <small class="text-muted">Bu para biriminin aktif olduðunu iþaretleyin</small>
+                                <small class="text-muted">Bu para biriminin aktif olduÄŸunu iÅŸaretleyin</small>
                             </div>
                         </div>
-
+                        <hr class="my-4">
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                                <i class="bi bi-x-circle me-2"></i>Ä°ptal
                             </a>
                             <button type="submit" class="btn btn-warning">
-                                <i class="bi bi-check-circle me-2"></i>Güncelle
+                                <i class="bi bi-check-circle me-2"></i>GÃ¼ncelle
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-info-circle me-2"></i>Bilgi
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-info">
+                    <div class="alert alert-info shadow-sm">
                         <h6 class="alert-heading">
-                            <i class="bi bi-lightbulb me-2"></i>Para Birimi Düzenleme
+                            <i class="bi bi-lightbulb me-2"></i>Para Birimi DÃ¼zenleme
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Para birimi kodu ve sembolünü güncelleyin</li>
-                            <li>Para birimi adýný düzenleyin</li>
-                            <li>TL karþýlýðý döviz kurunu deðiþtirebilirsiniz</li>
-                            <li>Aktiflik durumunu güncelleyin</li>
+                            <li>Para birimi kodu ve sembolÃ¼nÃ¼ gÃ¼ncelleyin</li>
+                            <li>Para birimi adÄ±nÄ± dÃ¼zenleyin</li>
+                            <li>TL karÅŸÄ±lÄ±ÄŸÄ± dÃ¶viz kurunu deÄŸiÅŸtirebilirsiniz</li>
+                            <li>Aktiflik durumunu gÃ¼ncelleyin</li>
                         </ul>
                     </div>
                 </div>

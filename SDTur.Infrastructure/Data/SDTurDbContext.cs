@@ -3,6 +3,7 @@ using SDTur.Core.Entities.Financial;
 using SDTur.Core.Entities.Master;
 using SDTur.Core.Entities.System;
 using SDTur.Core.Entities.Tour;
+using SDTur.Infrastructure.SeedData;
 
 namespace SDTur.Infrastructure.Data
 {
@@ -266,6 +267,9 @@ namespace SDTur.Infrastructure.Data
                 .WithMany(ts => ts.CommissionCalculations)
                 .HasForeignKey(cc => cc.TourScheduleId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Seed Data
+            SDTur.Infrastructure.SeedData.SeedData.Seed(modelBuilder);
         }
     }
 } 

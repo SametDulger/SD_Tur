@@ -1,0 +1,169 @@
+@model SDTur.Web.Models.Tour.Core.TourViewModel
+@{
+    ViewData["Title"] = "Tur Detayları";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-airplane text-primary me-2"></i>Tur Detayları
+            </h1>
+            <div class="btn-group">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                    <i class="bi bi-pencil me-2"></i>Düzenle
+                </a>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Tur Bilgileri -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-info-circle text-info me-2"></i>Tur Bilgileri
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Tur Adı</label>
+                        <div class="fw-bold text-primary">@Model.Name</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Tur Tarihi</label>
+                        <div class="fw-semibold">@Model.TourDate.ToString("dd.MM.yyyy")</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Fiyat</label>
+                        <div class="fw-bold fs-5 text-success">@Model.Price.ToString("C")</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Kapasite</label>
+                        <div class="fw-bold">@Model.Capacity kişi</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Müsait Koltuk</label>
+                        <div class="fw-bold @(Model.AvailableSeats > 0 ? "text-success" : "text-danger")">
+                            @Model.AvailableSeats kişi
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Durum</label>
+                        <div>
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle me-1"></i>Aktif
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="bi bi-x-circle me-1"></i>Pasif
+                                </span>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label class="form-label text-muted">Açıklama</label>
+                        <div>@(string.IsNullOrEmpty(Model.Description) ? "Açıklama girilmemiş" : Model.Description)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- İstatistikler -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-graph-up text-success me-2"></i>İstatistikler
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-3">
+                                    <i class="bi bi-ticket text-primary"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="card-title text-muted mb-1">Toplam Bilet</h6>
+                                <h4 class="mb-0 fw-bold">@Model.TotalTickets</h4>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <div class="bg-success bg-opacity-10 rounded-circle p-3">
+                                    <i class="bi bi-currency-dollar text-success"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="card-title text-muted mb-1">Toplam Gelir</h6>
+                                <h4 class="mb-0 fw-bold text-success">@Model.TotalRevenue.ToString("C")</h4>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <div class="bg-info bg-opacity-10 rounded-circle p-3">
+                                    <i class="bi bi-percent text-info"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="card-title text-muted mb-1">Doluluk Oranı</h6>
+                                <h4 class="mb-0 fw-bold text-info">%@(Model.Capacity > 0 ? ((Model.Capacity - Model.AvailableSeats) * 100 / Model.Capacity).ToString("F1") : "0")</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Biletler Listesi -->
+@if (Model.HasTickets)
+{
+    <div class="row g-4 mt-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-ticket text-warning me-2"></i>Biletler
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Bu tura ait biletler bulunmaktadır. Detayları görmek için biletler sayfasını ziyaret ediniz.
+                    </div>
+                    <a asp-controller="Tickets" asp-action="Index" asp-route-tourId="@Model.Id" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-right me-2"></i>Biletleri Görüntüle
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+} 

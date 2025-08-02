@@ -21,5 +21,20 @@ namespace SDTur.Web.Models.Master.Transport
         public bool IsOwned { get; set; }
         public bool IsActive { get; set; }
         public DateTime LastMaintenance { get; set; }
+        
+        [Display(Name = "Sürücü Ehliyeti")]
+        public string DriverLicense { get; set; } = string.Empty;
+        
+        [Display(Name = "Son Bakım Tarihi")]
+        public DateTime LastMaintenanceDate { get; set; }
+        
+        [Display(Name = "Sonraki Bakım Tarihi")]
+        public DateTime NextMaintenanceDate { get; set; }
+        
+        [Display(Name = "Açıklama")]
+        public string Description { get; set; } = string.Empty;
+        
+        [Display(Name = "Notlar")]
+        public string Notes { get; set; } = string.Empty;
     }
 } 

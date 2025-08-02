@@ -50,5 +50,8 @@ namespace SDTur.Web.Models.Financial.Transactions
 
         [Display(Name = "Aktif")]
         public bool IsActive { get; set; } = true;
+        
+        [Display(Name = "KDV Oranı")]
+        public decimal TaxRate { get; set; }
     }
 } 

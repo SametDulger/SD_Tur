@@ -8,6 +8,19 @@ namespace SDTur.Web.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = "Ana Sayfa";
+            
+            // Set ViewBag properties to prevent runtime binding exceptions
+            ViewBag.ActiveToursCount = 0;
+            ViewBag.ToursGrowth = 0;
+            ViewBag.SoldTicketsCount = 0;
+            ViewBag.TicketsGrowth = 0;
+            ViewBag.MonthlyIncome = 0m;
+            ViewBag.IncomeGrowth = 0;
+            ViewBag.ActiveCustomersCount = 0;
+            ViewBag.CustomersGrowth = 0;
+            ViewBag.RecentActivities = new List<dynamic>();
+            ViewBag.UpcomingTours = new List<dynamic>();
+            
             return View();
         }
 

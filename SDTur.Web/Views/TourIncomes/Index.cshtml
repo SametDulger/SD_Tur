@@ -1,4 +1,4 @@
-@model IEnumerable<TourIncomeViewModel>
+@model IEnumerable<SDTur.Web.Models.Tour.Financial.TourIncomeViewModel>
 @{
     ViewData["Title"] = "Tur Gelirleri";
 }
@@ -16,50 +16,8 @@
     </div>
 </div>
 
-<!-- Filtreler -->
-<div class="card border-0 shadow-sm mb-4">
-    <div class="card-header bg-white">
-        <h6 class="card-title mb-0">
-            <i class="bi bi-funnel text-info me-2"></i>Filtreler
-        </h6>
-    </div>
-    <div class="card-body">
-        <form id="filterForm" class="row g-3">
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label">Tur</label>
-                <select class="form-select" id="tourFilter">
-                    <option value="">Tüm Turlar</option>
-                </select>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label">Gelir Türü</label>
-                <select class="form-select" id="incomeTypeFilter">
-                    <option value="">Tüm Türler</option>
-                    <option value="Ticket">Bilet</option>
-                    <option value="Service">Hizmet</option>
-                    <option value="Commission">Komisyon</option>
-                    <option value="Other">Diðer</option>
-                </select>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label">Baþlangýç Tarihi</label>
-                <input type="date" class="form-control" id="startDateFilter">
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label">Bitiþ Tarihi</label>
-                <input type="date" class="form-control" id="endDateFilter">
-            </div>
-            <div class="col-12">
-                <button type="button" class="btn btn-outline-primary" onclick="applyFilters()">
-                    <i class="bi bi-search me-2"></i>Filtrele
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Ýstatistikler -->
-<div class="row g-4 mb-4" id="statisticsCards">
+<!-- Ä°statistikler -->
+<div class="row g-4 mb-4">
     <div class="col-xl-3 col-md-6">
         <div class="card border-0 shadow-sm">
             <div class="card-body">
@@ -71,7 +29,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Toplam Gelir</h6>
-                        <h3 class="mb-0 fw-bold" id="totalIncomes">0</h3>
+                        <h3 class="mb-0 fw-bold">@Model.Count()</h3>
                     </div>
                 </div>
             </div>
@@ -89,7 +47,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Tahsil Edilen</h6>
-                        <h3 class="mb-0 fw-bold text-success" id="receivedIncomes">0</h3>
+                        <h3 class="mb-0 fw-bold text-success">@Model.Count(x => x.Status == "Received")</h3>
                     </div>
                 </div>
             </div>
@@ -107,7 +65,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Bekleyen</h6>
-                        <h3 class="mb-0 fw-bold text-warning" id="pendingIncomes">0</h3>
+                        <h3 class="mb-0 fw-bold text-warning">@Model.Count(x => x.Status == "Pending")</h3>
                     </div>
                 </div>
             </div>
@@ -125,7 +83,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Ortalama Gelir</h6>
-                        <h3 class="mb-0 fw-bold text-info" id="averageIncome">0</h3>
+                        <h3 class="mb-0 fw-bold text-info">â‚º@(Model.Any() ? Model.Average(x => x.Amount).ToString("N2") : "0.00")</h3>
                     </div>
                 </div>
             </div>
@@ -135,7 +93,7 @@
 
 <!-- Gelir Listesi -->
 <div class="card border-0 shadow-sm">
-    <div class="card-header bg-white">
+    <div class="card-header border-0">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h5 class="card-title mb-0">
@@ -148,17 +106,17 @@
                         <span class="input-group-text bg-light border-end-0">
                             <i class="bi bi-search text-muted"></i>
                         </span>
-                        <input type="text" class="form-control border-start-0" id="searchInput" placeholder="Gelir ara..." data-search="incomesTable">
+                        <input type="text" class="form-control border-start-0" placeholder="Gelir ara...">
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="bi bi-download me-1"></i>Dýþa Aktar
+                            <i class="bi bi-download me-1"></i>DÄ±ÅŸa Aktar
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="exportToExcel()">
+                        <ul class="dropdown-menu shadow border-0">
+                            <li><a class="dropdown-item" href="@Url.Action("ExportToExcel")">
                                 <i class="bi bi-file-earmark-excel me-2"></i>Excel
                             </a></li>
-                            <li><a class="dropdown-item" href="#" onclick="exportToPDF()">
+                            <li><a class="dropdown-item" href="@Url.Action("ExportToPDF")">
                                 <i class="bi bi-file-earmark-pdf me-2"></i>PDF
                             </a></li>
                         </ul>
@@ -168,40 +126,141 @@
         </div>
     </div>
     <div class="card-body p-0">
-        <div class="table-responsive" id="incomesTable">
-            <!-- Dinamik olarak yüklenecek -->
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Gelir No</th>
+                        <th>Tur</th>
+                        <th>Gelir TÃ¼rÃ¼</th>
+                        <th>AÃ§Ä±klama</th>
+                        <th>Tutar</th>
+                        <th>Tarih</th>
+                        <th>Durum</th>
+                        <th>Ä°ÅŸlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var income in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="fw-semibold">@income.IncomeNumber</span>
+                                </td>
+                                <td>@income.TourName</td>
+                                <td>
+                                    @{
+                                        var incomeTypeText = income.IncomeType switch
+                                        {
+                                            "Ticket" => "Bilet",
+                                            "Service" => "Hizmet",
+                                            "Commission" => "Komisyon",
+                                            "Other" => "DiÄŸer",
+                                            _ => income.IncomeType
+                                        };
+                                    }
+                                    <span class="badge bg-secondary">@incomeTypeText</span>
+                                </td>
+                                <td>@income.Description</td>
+                                <td>
+                                    <span class="fw-semibold text-primary">â‚º@income.Amount.ToString("N2")</span>
+                                </td>
+                                <td>@income.IncomeDate.ToString("dd.MM.yyyy")</td>
+                                <td>
+                                    @{
+                                        var statusClass = income.Status switch
+                                        {
+                                            "Received" => "badge bg-success",
+                                            "Pending" => "badge bg-warning",
+                                            "Cancelled" => "badge bg-danger",
+                                            _ => "badge bg-light text-dark"
+                                        };
+                                        var statusText = income.Status switch
+                                        {
+                                            "Received" => "Tahsil Edildi",
+                                            "Pending" => "Beklemede",
+                                            "Cancelled" => "Ä°ptal",
+                                            _ => income.Status
+                                        };
+                                    }
+                                    <span class="@statusClass">@statusText</span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Details" asp-route-id="@income.Id" class="btn btn-outline-info" title="Detay">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@income.Id" class="btn btn-outline-primary" title="DÃ¼zenle">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@income.Id" class="btn btn-outline-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <i class="bi bi-inbox text-muted fs-1"></i>
+                                <p class="text-muted mt-2">Gelir bulunamadÄ±</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="card-footer bg-light">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <small class="text-muted">
-                    Toplam <strong id="recordCount">0</strong> gelir bulundu
+                    Toplam <strong>@Model.Count()</strong> gelir bulundu
                 </small>
             </div>
             <div class="col-md-6 text-end">
-                <nav aria-label="Sayfa navigasyonu">
-                    <ul class="pagination pagination-sm mb-0 justify-content-end" id="pagination">
-                        <!-- Dinamik olarak oluþturulacak -->
-                    </ul>
-                </nav>
+                <small class="text-muted">
+                    Son gÃ¼ncelleme: @DateTime.Now.ToString("dd.MM.yyyy HH:mm")
+                </small>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Gelir Daðýlýmý -->
+<!-- Gelir DaÄŸÄ±lÄ±mÄ± -->
 <div class="row mt-4">
     <div class="col-12">
         <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
+            <div class="card-header border-0">
                 <h5 class="card-title mb-0">
-                    <i class="bi bi-pie-chart text-info me-2"></i>Gelir Daðýlýmý
+                    <i class="bi bi-pie-chart text-info me-2"></i>Gelir DaÄŸÄ±lÄ±mÄ±
                 </h5>
             </div>
             <div class="card-body">
-                <div class="row g-3" id="incomeDistribution">
-                    <!-- Dinamik olarak yüklenecek -->
+                <div class="row g-3">
+                    @foreach (var incomeType in Model.GroupBy(x => x.IncomeType).Take(4))
+                    {
+                        var incomeTypeText = incomeType.Key switch
+                        {
+                            "Ticket" => "Bilet",
+                            "Service" => "Hizmet",
+                            "Commission" => "Komisyon",
+                            "Other" => "DiÄŸer",
+                            _ => incomeType.Key
+                        };
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h6 class="text-muted mb-1">@incomeTypeText</h6>
+                                <h4 class="text-primary mb-0">@incomeType.Count()</h4>
+                                <small class="text-muted">gelir</small>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -209,120 +268,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        let currentFilters = {};
-        
-        function applyFilters() {
-            currentFilters = {
-                tourId: document.getElementById('tourFilter').value,
-                incomeType: document.getElementById('incomeTypeFilter').value,
-                startDate: document.getElementById('startDateFilter').value,
-                endDate: document.getElementById('endDateFilter').value
-            };
-            
-            // Reload data with filters
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const endpoint = queryString ? `/api/tour/incomes?${queryString}` : '/api/tour/incomes';
-            
-            console.log("Load data handled server-side"););
-            updateStatistics();
-        }
-        
-        function updateStatistics() {
-            // Load statistics based on current filters
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const endpoint = queryString ? `/api/tour/incomes/statistics?${queryString}` : '/api/tour/incomes/statistics';
-            
-            console.log("API call handled server-side");
-                .then(data => {
-                    document.getElementById('totalIncomes').textContent = app.formatCurrency(data.totalIncomes || 0);
-                    document.getElementById('receivedIncomes').textContent = app.formatCurrency(data.receivedIncomes || 0);
-                    document.getElementById('pendingIncomes').textContent = app.formatCurrency(data.pendingIncomes || 0);
-                    document.getElementById('averageIncome').textContent = app.formatCurrency(data.averageIncome || 0);
-                    document.getElementById('recordCount').textContent = data.totalCount || 0;
-                })
-                .catch(error => {
-                    console.error('Statistics loading failed:', error);
-                });
-        }
-        
-        function exportToExcel() {
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const filename = `tur_gelirleri_${new Date().toISOString().split('T')[0]}`;
-            console.log("Export to Excel handled server-side");;
-        }
-        
-        function exportToPDF() {
-            const queryString = new URLSearchParams(currentFilters).toString();
-            const filename = `tur_gelirleri_${new Date().toISOString().split('T')[0]}`;
-            console.log("Export to PDF handled server-side");;
-        }
-        
-        // Auto-load data and setup
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load tour options
-            app.loadSelectOptions(document.getElementById('tourFilter'), '/api/tour/tours');
-            
-            // Load initial data
-            updateStatistics();
-            
-            // Apply initial filters
-            applyFilters();
-            
-            // Setup search functionality
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const table = document.getElementById('incomesTable');
-                    const rows = table.querySelectorAll('tbody tr');
-                    
-                    rows.forEach(row => {
-                        const text = row.textContent.toLowerCase();
-                        row.style.display = text.includes(searchTerm) ? '' : 'none';
-                    });
-                }, 300));
-            }
-        });
-        
-        // Custom render function for income distribution
-        window.renderIncomeDistribution = function(data, element) {
-            if (!data || !data.length) {
-                element.innerHTML = '<div class="text-center py-4 text-muted">Gelir daðýlýmý bulunamadý</div>';
-                return;
-            }
-
-            const html = data.map(item => `
-                <div class="col-lg-4 col-md-6">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body text-center">
-                            <div class="bg-${item.color} bg-opacity-10 rounded-circle p-3 d-inline-block mb-3">
-                                <i class="bi bi-${item.icon} text-${item.color} fs-4"></i>
-                            </div>
-                            <h6 class="fw-bold">${item.incomeType}</h6>
-                            <div class="h4 fw-bold text-${item.color} mb-2">${app.formatCurrency(item.totalAmount)}</div>
-                            <div class="row g-2 text-center">
-                                <div class="col-6">
-                                    <small class="text-muted">Adet</small>
-                                    <div class="fw-semibold text-primary">${item.count}</div>
-                                </div>
-                                <div class="col-6">
-                                    <small class="text-muted">Oran</small>
-                                    <div class="fw-semibold text-success">${item.percentage}%</div>
-                                </div>
-                            </div>
-                            <div class="mt-2">
-                                <div class="progress" style="height: 6px;">
-                                    <div class="progress-bar bg-${item.color}" style="width: ${item.percentage}%"></div>
-                                </div>
-                                <small class="text-muted">${item.percentage}% pay</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
-            element.innerHTML = html;
-        };
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

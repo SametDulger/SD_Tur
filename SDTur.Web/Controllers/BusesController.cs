@@ -15,88 +15,155 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var buses = await _apiService.GetAsync<IEnumerable<BusViewModel>>("api/buses");
-            return View(buses);
+            try
+            {
+                var buses = await _apiService.GetBusesAsync();
+                return View(buses);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Otobüsler yüklenirken hata oluştu: " + ex.Message;
+                return View(new List<BusViewModel>());
+            }
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var bus = await _apiService.GetAsync<BusViewModel>($"api/buses/{id}");
-            if (bus == null)
-                return NotFound();
-
-            return View(bus);
+            try
+            {
+                var bus = await _apiService.GetBusByIdAsync(id);
+                if (bus == null)
+                {
+                    TempData["Error"] = "Otobüs bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(bus);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Otobüs detayları yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public IActionResult Create()
         {
-            return View();
+            return View(new BusCreateViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlateNumber,Capacity,Model,DriverName,DriverPhone,IsOwned,IsActive")] BusCreateViewModel BusCreateViewModel)
+        public async Task<IActionResult> Create(BusCreateViewModel createViewModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await _apiService.PostAsync<BusCreateViewModel, BusViewModel>("api/buses", BusCreateViewModel);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    var result = await _apiService.CreateBusAsync(createViewModel);
+                    TempData["Success"] = "Otobüs başarıyla oluşturuldu.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(createViewModel);
             }
-            return View(BusCreateViewModel);
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Otobüs oluşturulurken hata oluştu: " + ex.Message;
+                return View(createViewModel);
+            }
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var bus = await _apiService.GetAsync<BusViewModel>($"api/buses/{id}");
-            if (bus == null)
-                return NotFound();
-
-            var updateDto = new BusEditViewModel
+            try
             {
-                Id = bus.Id,
-                PlateNumber = bus.PlateNumber,
-                Model = bus.Model,
-                Capacity = bus.Capacity,
-                DriverName = bus.DriverName,
-                DriverPhone = bus.DriverPhone,
-                IsOwned = bus.IsOwned,
-                IsActive = bus.IsActive
-            };
+                var bus = await _apiService.GetBusByIdAsync(id);
+                if (bus == null)
+                {
+                    TempData["Error"] = "Otobüs bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
 
-            return View(updateDto);
+                var updateViewModel = new BusEditViewModel
+                {
+                    Id = bus.Id,
+                    PlateNumber = bus.PlateNumber,
+                    Brand = bus.Brand,
+                    Model = bus.Model,
+                    Year = bus.Year,
+                    Capacity = bus.Capacity,
+                    DriverName = bus.DriverName,
+                    DriverPhone = bus.DriverPhone,
+                    DriverLicense = bus.DriverLicense,
+                    LastMaintenanceDate = bus.LastMaintenanceDate,
+                    NextMaintenanceDate = bus.NextMaintenanceDate,
+                    IsActive = bus.IsActive,
+                    Description = bus.Description
+                };
+
+                return View(updateViewModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Otobüs bilgileri yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, BusEditViewModel BusEditViewModel)
+        public async Task<IActionResult> Edit(BusEditViewModel updateViewModel)
         {
-            if (id != BusEditViewModel.Id)
-                return NotFound();
-
-            if (ModelState.IsValid)
+            try
             {
-                var result = await _apiService.PutAsync<BusEditViewModel, BusViewModel>($"api/buses/{id}", BusEditViewModel);
-                if (result != null)
+                if (ModelState.IsValid)
+                {
+                    var result = await _apiService.UpdateBusAsync(updateViewModel);
+                    TempData["Success"] = "Otobüs başarıyla güncellendi.";
                     return RedirectToAction(nameof(Index));
+                }
+                return View(updateViewModel);
             }
-            return View(BusEditViewModel);
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Otobüs güncellenirken hata oluştu: " + ex.Message;
+                return View(updateViewModel);
+            }
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var bus = await _apiService.GetAsync<BusViewModel>($"api/buses/{id}");
-            if (bus == null)
-                return NotFound();
-
-            return View(bus);
+            try
+            {
+                var bus = await _apiService.GetBusByIdAsync(id);
+                if (bus == null)
+                {
+                    TempData["Error"] = "Otobüs bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(bus);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Otobüs bilgileri yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _apiService.DeleteAsync($"api/buses/{id}");
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _apiService.DeleteBusAsync(id);
+                TempData["Success"] = "Otobüs başarıyla silindi.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Otobüs silinirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 } 

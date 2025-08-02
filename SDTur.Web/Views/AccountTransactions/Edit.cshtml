@@ -3,7 +3,7 @@
     ViewData["Title"] = "Hesap İşlemi Düzenle";
 }
 
-<div class="container-fluid">
+<div class="container">
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
@@ -20,30 +20,39 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-form me-2"></i>Hesap İşlemi Bilgileri
                     </h5>
                 </div>
                 <div class="card-body">
                     <form asp-action="Edit" method="post">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm" role="alert"></div>
                         
                         <input type="hidden" asp-for="Id" />
                         
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="AccountId" class="form-label fw-semibold">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="AccountId" class="form-label">
                                     <i class="bi bi-bank me-1"></i>Hesap <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="AccountId" id="accountSelect" class="form-select" required>
+                                <select asp-for="AccountId" class="form-select" required>
                                     <option value="">Hesap seçiniz...</option>
+                                    @if (ViewBag.Accounts != null)
+                                    {
+                                        @foreach (var account in ViewBag.Accounts)
+                                        {
+                                            <option value="@account.Id" selected="@(Model.AccountId == account.Id)">
+                                                @account.AccountName
+                                            </option>
+                                        }
+                                    }
                                 </select>
                                 <span asp-validation-for="AccountId" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="TransactionType" class="form-label fw-semibold">
+                            <div class="col-md-6">
+                                <label asp-for="TransactionType" class="form-label">
                                     <i class="bi bi-tag me-1"></i>İşlem Tipi <span class="text-danger">*</span>
                                 </label>
                                 <select asp-for="TransactionType" class="form-select" required>
@@ -59,17 +68,17 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Amount" class="form-label fw-semibold">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Amount" class="form-label">
                                     <i class="bi bi-currency-exchange me-1"></i>Tutar <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="Amount" type="number" step="0.01" class="form-control" placeholder="0.00" required />
                                 <span asp-validation-for="Amount" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="TransactionDate" class="form-label fw-semibold">
+                            <div class="col-md-6">
+                                <label asp-for="TransactionDate" class="form-label">
                                     <i class="bi bi-calendar me-1"></i>İşlem Tarihi <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="TransactionDate" type="datetime-local" class="form-control" required />
@@ -77,19 +86,19 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="ReferenceNumber" class="form-label fw-semibold">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="ReferenceNumber" class="form-label">
                                     <i class="bi bi-hash me-1"></i>Referans Numarası
                                 </label>
                                 <input asp-for="ReferenceNumber" class="form-control" placeholder="Referans numarası..." />
                                 <span asp-validation-for="ReferenceNumber" class="text-danger small"></span>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6">
                                 <div class="form-check form-switch">
-                                    <input asp-for="IsApproved" class="form-check-input" type="checkbox" id="isApprovedSwitch">
-                                    <label class="form-check-label fw-semibold" for="isApprovedSwitch">
+                                    <input asp-for="IsApproved" class="form-check-input" type="checkbox">
+                                    <label class="form-check-label" for="IsApproved">
                                         <i class="bi bi-check-circle me-1"></i>Onaylandı
                                     </label>
                                 </div>
@@ -97,15 +106,17 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <label asp-for="Description" class="form-label fw-semibold">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label">
                                     <i class="bi bi-text-paragraph me-1"></i>Açıklama
                                 </label>
                                 <textarea asp-for="Description" class="form-control" rows="3" placeholder="İşlem hakkında açıklama..."></textarea>
                                 <span asp-validation-for="Description" class="text-danger small"></span>
                             </div>
                         </div>
+
+                        <hr class="my-4">
 
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
@@ -122,13 +133,13 @@
         
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-info-circle me-2"></i>Bilgi
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-info">
+                    <div class="alert alert-info shadow-sm">
                         <h6 class="alert-heading">
                             <i class="bi bi-lightbulb me-2"></i>Hesap İşlemi Düzenleme
                         </h6>
@@ -146,31 +157,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Load accounts dynamically
-        async function loadAccounts() {
-            try {
-                const response = await fetch('/api/accounts');
-                const accounts = await response.json();
-                const accountSelect = document.getElementById('accountSelect');
-                
-                accounts.forEach(account => {
-                    const option = document.createElement('option');
-                    option.value = account.id;
-                    option.textContent = account.name;
-                    if (account.id == @Model.AccountId) {
-                        option.selected = true;
-                    }
-                    accountSelect.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error loading accounts:', error);
-            }
-        }
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            loadAccounts();
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 } 

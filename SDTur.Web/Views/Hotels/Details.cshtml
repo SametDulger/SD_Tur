@@ -1,6 +1,6 @@
-@model HotelViewModel
+@model SDTur.Web.Models.Master.Accommodation.HotelViewModel
 @{
-    ViewData["Title"] = "Otel Detayý";
+    ViewData["Title"] = "Otel DetayÄ±";
 }
 
 <div class="container-fluid">
@@ -8,14 +8,14 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-eye text-primary me-2"></i>Otel Detayý
+                    <i class="bi bi-eye text-primary me-2"></i>Otel DetayÄ±
                 </h1>
                 <div class="btn-group" role="group">
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
-                        <i class="bi bi-pencil me-2"></i>Düzenle
+                        <i class="bi bi-pencil me-2"></i>DÃ¼zenle
                     </a>
                     <a asp-action="Index" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                        <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                     </a>
                 </div>
             </div>
@@ -34,14 +34,14 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-building me-1"></i>Otel Adý
+                                <i class="bi bi-building me-1"></i>Otel AdÄ±
                             </label>
                             <div class="h5 mb-0 text-primary">@Model.Name</div>
                         </div>
                         
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-star me-1"></i>Yýldýz Sayýsý
+                                <i class="bi bi-star me-1"></i>YÄ±ldÄ±z SayÄ±sÄ±
                             </label>
                             <div class="d-flex align-items-center">
                                 @for (int i = 1; i <= 5; i++)
@@ -55,7 +55,7 @@
                                         <i class="bi bi-star text-muted me-1"></i>
                                     }
                                 }
-                                <span class="badge bg-warning ms-2">@Model.StarRating Yýldýz</span>
+                                <span class="badge bg-warning ms-2">@Model.StarRating YÄ±ldÄ±z</span>
                             </div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-person me-1"></i>Ýletiþim Kiþisi
+                                <i class="bi bi-person me-1"></i>Ä°letiÅŸim KiÅŸisi
                             </label>
                             <div class="d-flex align-items-center">
                                 <div class="bg-info bg-opacity-10 rounded-circle p-2 me-2">
@@ -95,7 +95,7 @@
                         
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-geo-alt me-1"></i>Bölge
+                                <i class="bi bi-geo-alt me-1"></i>BÃ¶lge
                             </label>
                             <div>
                                 <span class="badge bg-info fs-6">
@@ -108,7 +108,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-calendar me-1"></i>Oluþturulma Tarihi
+                                <i class="bi bi-calendar me-1"></i>OluÅŸturulma Tarihi
                             </label>
                             <div class="h6 mb-0">@Model.CreatedDate.ToString("dd MMMM yyyy")</div>
                             <small class="text-muted">@Model.CreatedDate.ToString("dddd")</small>
@@ -165,10 +165,10 @@
                             <i class="bi bi-lightbulb me-2"></i>Otel Bilgileri
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Otel adý ve yýldýz sayýsý</li>
-                            <li>Ýletiþim bilgileri</li>
-                            <li>Adres ve bölge bilgileri</li>
-                            <li>Ýletiþim kiþisi ve durum</li>
+                            <li>Otel adÄ± ve yÄ±ldÄ±z sayÄ±sÄ±</li>
+                            <li>Ä°letiÅŸim bilgileri</li>
+                            <li>Adres ve bÃ¶lge bilgileri</li>
+                            <li>Ä°letiÅŸim kiÅŸisi ve durum</li>
                         </ul>
                     </div>
                 </div>

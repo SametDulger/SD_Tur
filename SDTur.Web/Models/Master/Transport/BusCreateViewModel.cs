@@ -33,6 +33,9 @@ namespace SDTur.Web.Models.Master.Transport
         
         public string Description { get; set; } = string.Empty;
         
+        [Display(Name = "Notlar")]
+        public string Notes { get; set; } = string.Empty;
+        
         public bool IsActive { get; set; } = true;
     }
 } 

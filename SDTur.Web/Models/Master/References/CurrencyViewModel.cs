@@ -22,5 +22,11 @@ namespace SDTur.Web.Models.Master.References
         
         [Display(Name = "Son Güncelleme")]
         public DateTime LastUpdated { get; set; }
+        
+        // Additional property for compatibility
+        public DateTime UpdatedAt => LastUpdated;
+        
+        [Display(Name = "Ana Para Birimi")]
+        public bool IsMainCurrency { get; set; }
     }
 } 

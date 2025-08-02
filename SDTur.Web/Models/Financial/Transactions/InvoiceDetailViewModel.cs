@@ -59,5 +59,21 @@ namespace SDTur.Web.Models.Financial.Transactions
         
         [Display(Name = "Toplam Tutar")]
         public decimal TotalAmount { get; set; }
+        
+        [Display(Name = "Müşteri Adı")]
+        public string CustomerName { get; set; } = string.Empty;
+        
+        [Display(Name = "Oluşturma Tarihi")]
+        public DateTime CreatedDate { get; set; }
+        
+        [Display(Name = "Güncelleme Tarihi")]
+        public DateTime? UpdatedDate { get; set; }
+        
+        // Additional properties needed for the view
+        [Display(Name = "Onaylandı")]
+        public bool IsApproved { get; set; }
+        
+        [Display(Name = "Ürün/Hizmet")]
+        public string ProductOrService { get; set; } = string.Empty;
     }
 } 

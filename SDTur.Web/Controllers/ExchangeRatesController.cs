@@ -15,86 +15,172 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var exchangeRates = await _apiService.GetAsync<List<ExchangeRateViewModel>>("api/exchangerates");
-            return View(exchangeRates);
+            try
+            {
+                var exchangeRates = await _apiService.GetExchangeRatesAsync();
+                return View(exchangeRates);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Döviz kurları yüklenirken hata oluştu: " + ex.Message;
+                return View(new List<ExchangeRateViewModel>());
+            }
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var exchangeRate = await _apiService.GetAsync<ExchangeRateViewModel>($"api/exchangerates/{id}");
-            if (exchangeRate == null)
-                return NotFound();
-
-            return View(exchangeRate);
+            try
+            {
+                var exchangeRate = await _apiService.GetExchangeRateByIdAsync(id);
+                if (exchangeRate == null)
+                {
+                    TempData["Error"] = "Döviz kuru bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(exchangeRate);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Döviz kuru detayları yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            try
+            {
+                var currencies = await _apiService.GetCurrenciesAsync();
+                ViewBag.Currencies = currencies;
+                return View(new ExchangeRateCreateViewModel());
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Sayfa yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FromCurrency,ToCurrency,Rate,RateDate,Date")] ExchangeRateCreateViewModel createExchangeRateViewModel)
+        public async Task<IActionResult> Create(ExchangeRateCreateViewModel createViewModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await _apiService.PostAsync<ExchangeRateCreateViewModel, ExchangeRateViewModel>("api/exchangerates", createExchangeRateViewModel);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    var result = await _apiService.CreateExchangeRateAsync(createViewModel);
+                    TempData["Success"] = "Döviz kuru başarıyla oluşturuldu.";
+                    return RedirectToAction(nameof(Index));
+                }
+                
+                var currencies = await _apiService.GetCurrenciesAsync();
+                ViewBag.Currencies = currencies;
+                return View(createViewModel);
             }
-            return View(createExchangeRateViewModel);
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Döviz kuru oluşturulurken hata oluştu: " + ex.Message;
+                var currencies = await _apiService.GetCurrenciesAsync();
+                ViewBag.Currencies = currencies;
+                return View(createViewModel);
+            }
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var exchangeRate = await _apiService.GetAsync<ExchangeRateViewModel>($"api/exchangerates/{id}");
-            if (exchangeRate == null)
-                return NotFound();
-
-            var updateDto = new ExchangeRateEditViewModel
+            try
             {
-                Id = exchangeRate.Id,
-                FromCurrency = exchangeRate.FromCurrency,
-                ToCurrency = exchangeRate.ToCurrency,
-                Rate = exchangeRate.Rate,
-                RateDate = exchangeRate.RateDate,
-                Date = exchangeRate.Date,
-                IsActive = exchangeRate.IsActive
-            };
+                var exchangeRate = await _apiService.GetExchangeRateByIdAsync(id);
+                if (exchangeRate == null)
+                {
+                    TempData["Error"] = "Döviz kuru bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
 
-            return View(updateDto);
+                var currencies = await _apiService.GetCurrenciesAsync();
+                ViewBag.Currencies = currencies;
+
+                var updateViewModel = new ExchangeRateEditViewModel
+                {
+                    Id = exchangeRate.Id,
+                    FromCurrency = exchangeRate.FromCurrency,
+                    ToCurrency = exchangeRate.ToCurrency,
+                    Rate = exchangeRate.Rate,
+                    RateDate = exchangeRate.RateDate,
+                    Date = exchangeRate.Date,
+                    IsActive = exchangeRate.IsActive
+                };
+
+                return View(updateViewModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Döviz kuru yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FromCurrency,ToCurrency,Rate,RateDate,Date,IsActive")] ExchangeRateEditViewModel updateDto)
+        public async Task<IActionResult> Edit(ExchangeRateEditViewModel updateViewModel)
         {
-            if (id != updateDto.Id)
-                return NotFound();
-
-            if (ModelState.IsValid)
+            try
             {
-                await _apiService.PutAsync<ExchangeRateEditViewModel, ExchangeRateViewModel>($"api/exchangerates/{id}", updateDto);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    var result = await _apiService.UpdateExchangeRateAsync(updateViewModel);
+                    TempData["Success"] = "Döviz kuru başarıyla güncellendi.";
+                    return RedirectToAction(nameof(Index));
+                }
+                
+                var currencies = await _apiService.GetCurrenciesAsync();
+                ViewBag.Currencies = currencies;
+                return View(updateViewModel);
             }
-            return View(updateDto);
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Döviz kuru güncellenirken hata oluştu: " + ex.Message;
+                var currencies = await _apiService.GetCurrenciesAsync();
+                ViewBag.Currencies = currencies;
+                return View(updateViewModel);
+            }
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var exchangeRate = await _apiService.GetAsync<ExchangeRateViewModel>($"api/exchangerates/{id}");
-            if (exchangeRate == null)
-                return NotFound();
-
-            return View(exchangeRate);
+            try
+            {
+                var exchangeRate = await _apiService.GetExchangeRateByIdAsync(id);
+                if (exchangeRate == null)
+                {
+                    TempData["Error"] = "Döviz kuru bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(exchangeRate);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Döviz kuru yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _apiService.DeleteAsync($"api/exchangerates/{id}");
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _apiService.DeleteExchangeRateAsync(id);
+                TempData["Success"] = "Döviz kuru başarıyla silindi.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Döviz kuru silinirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 } 

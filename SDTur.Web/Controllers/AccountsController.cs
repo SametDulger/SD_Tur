@@ -15,85 +15,182 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var accounts = await _apiService.GetAsync<List<AccountViewModel>>("api/accounts");
-            return View(accounts);
+            try
+            {
+                var accounts = await _apiService.GetAccountsAsync();
+                var currencies = await _apiService.GetCurrenciesAsync();
+                
+                ViewBag.Currencies = currencies;
+                return View(accounts);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Hesaplar yüklenirken hata oluştu: " + ex.Message;
+                return View(new List<AccountViewModel>());
+            }
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var account = await _apiService.GetAsync<AccountViewModel>($"api/accounts/{id}/with-transactions");
-            if (account == null)
-                return NotFound();
-            return View(account);
+            try
+            {
+                var account = await _apiService.GetAccountByIdAsync(id);
+                if (account == null)
+                {
+                    TempData["Error"] = "Hesap bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(account);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Hesap detayları yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            try
+            {
+                var currencies = await _apiService.GetCurrenciesAsync();
+                ViewBag.Currencies = currencies;
+                return View(new AccountCreateViewModel());
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Sayfa yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AccountCreateViewModel createViewModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var result = await _apiService.PostAsync<AccountCreateViewModel, AccountViewModel>("api/accounts", createViewModel);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    var result = await _apiService.CreateAccountAsync(createViewModel);
+                    TempData["Success"] = "Hesap başarıyla oluşturuldu.";
+                    return RedirectToAction(nameof(Index));
+                }
+                
+                var currencies = await _apiService.GetCurrenciesAsync();
+                ViewBag.Currencies = currencies;
+                return View(createViewModel);
             }
-            return View(createViewModel);
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Hesap oluşturulurken hata oluştu: " + ex.Message;
+                var currencies = await _apiService.GetCurrenciesAsync();
+                ViewBag.Currencies = currencies;
+                return View(createViewModel);
+            }
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var account = await _apiService.GetAsync<AccountViewModel>($"api/accounts/{id}");
-            if (account == null)
-                return NotFound();
-
-            var updateViewModel = new AccountEditViewModel
+            try
             {
-                Id = account.Id,
-                AccountNumber = account.AccountNumber,
-                AccountName = account.AccountName,
-                AccountType = account.AccountType,
-                ContactPerson = account.ContactPerson,
-                Phone = account.Phone,
-                Email = account.Email,
-                Address = account.Address,
-                CurrentBalance = account.CurrentBalance,
-                Currency = account.Currency,
-                IsActive = account.IsActive
-            };
+                var account = await _apiService.GetAccountByIdAsync(id);
+                if (account == null)
+                {
+                    TempData["Error"] = "Hesap bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
 
-            return View(updateViewModel);
+                var updateViewModel = new AccountEditViewModel
+                {
+                    Id = account.Id,
+                    AccountNumber = account.AccountNumber,
+                    AccountName = account.AccountName,
+                    AccountType = account.AccountType,
+                    ContactPerson = account.ContactPerson,
+                    Phone = account.Phone,
+                    Email = account.Email,
+                    Address = account.Address,
+                    CurrentBalance = account.CurrentBalance,
+                    CurrencyId = account.CurrencyId,
+                    IsActive = account.IsActive,
+                    Description = account.Description,
+                    CreatedDate = account.CreatedDate,
+                    UpdatedDate = account.UpdatedDate
+                };
+
+                var currencies = await _apiService.GetCurrenciesAsync();
+                ViewBag.Currencies = currencies;
+
+                return View(updateViewModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Hesap bilgileri yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(AccountEditViewModel updateViewModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var result = await _apiService.PutAsync<AccountEditViewModel, AccountViewModel>($"api/accounts/{updateViewModel.Id}", updateViewModel);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    var result = await _apiService.UpdateAccountAsync(updateViewModel);
+                    TempData["Success"] = "Hesap başarıyla güncellendi.";
+                    return RedirectToAction(nameof(Index));
+                }
+                
+                var currencies = await _apiService.GetCurrenciesAsync();
+                ViewBag.Currencies = currencies;
+                return View(updateViewModel);
             }
-            return View(updateViewModel);
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Hesap güncellenirken hata oluştu: " + ex.Message;
+                var currencies = await _apiService.GetCurrenciesAsync();
+                ViewBag.Currencies = currencies;
+                return View(updateViewModel);
+            }
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var account = await _apiService.GetAsync<AccountViewModel>($"api/accounts/{id}");
-            if (account == null)
-                return NotFound();
-            return View(account);
+            try
+            {
+                var account = await _apiService.GetAccountByIdAsync(id);
+                if (account == null)
+                {
+                    TempData["Error"] = "Hesap bulunamadı.";
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(account);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Hesap bilgileri yüklenirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _apiService.DeleteAsync($"api/accounts/{id}");
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _apiService.DeleteAccountAsync(id);
+                TempData["Success"] = "Hesap başarıyla silindi.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Hesap silinirken hata oluştu: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 } 

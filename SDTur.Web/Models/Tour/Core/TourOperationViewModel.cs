@@ -17,5 +17,8 @@ namespace SDTur.Web.Models.Tour.Core
         public string Status { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
         public bool IsActive { get; set; }
+        
+        // Additional property for compatibility
+        public string OperationNumber { get; set; } = string.Empty;
     }
 } 

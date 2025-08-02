@@ -43,5 +43,17 @@ namespace SDTur.Web.Models.Financial.Transactions
         
         [Display(Name = "Durum")]
         public string Status { get; set; } = string.Empty;
+        
+        [Display(Name = "Komisyon Tipi")]
+        public string CommissionType { get; set; } = string.Empty;
+        
+        [Display(Name = "Tur Programı")]
+        public int? TourScheduleId { get; set; }
+        
+        [Display(Name = "Bilet")]
+        public int? TicketId { get; set; }
+        
+        [Display(Name = "Notlar")]
+        public string Notes { get; set; } = string.Empty;
     }
 }

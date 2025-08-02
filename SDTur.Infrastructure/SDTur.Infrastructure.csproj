@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SDTur.Core\SDTur.Core.csproj" />
+    <ProjectReference Include="..\SDTur.Application\SDTur.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

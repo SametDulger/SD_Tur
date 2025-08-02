@@ -1,6 +1,6 @@
 @model SDTur.Web.Models.Master.Pass.PassAgreementViewModel
 @{
-    ViewData["Title"] = "Pas Anlaþmasý Detayý";
+    ViewData["Title"] = "Pas AnlaÅŸmasÄ± DetayÄ±";
 }
 
 <div class="container-fluid">
@@ -8,14 +8,14 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-eye text-primary me-2"></i>Pas Anlaþmasý Detayý
+                    <i class="bi bi-eye text-primary me-2"></i>Pas AnlaÅŸmasÄ± DetayÄ±
                 </h1>
                 <div class="btn-group" role="group">
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
-                        <i class="bi bi-pencil me-2"></i>Düzenle
+                        <i class="bi bi-pencil me-2"></i>DÃ¼zenle
                     </a>
                     <a asp-action="Index" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                        <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                     </a>
                 </div>
             </div>
@@ -27,21 +27,21 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
                     <h5 class="card-title mb-0">
-                        <i class="bi bi-info-circle me-2"></i>Anlaþma Bilgileri
+                        <i class="bi bi-info-circle me-2"></i>AnlaÅŸma Bilgileri
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-hash me-1"></i>Anlaþma Numarasý
+                                <i class="bi bi-hash me-1"></i>AnlaÅŸma NumarasÄ±
                             </label>
                             <div class="h5 mb-0 text-primary">@Model.AgreementNumber</div>
                         </div>
                         
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-building me-1"></i>Pas Þirketi
+                                <i class="bi bi-building me-1"></i>Pas Åžirketi
                             </label>
                             <div class="d-flex align-items-center">
                                 <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
@@ -55,7 +55,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-calendar me-1"></i>Baþlangýç Tarihi
+                                <i class="bi bi-calendar me-1"></i>BaÅŸlangÄ±Ã§ Tarihi
                             </label>
                             <div class="h6 mb-0">@Model.StartDate.ToString("dd MMMM yyyy")</div>
                             <small class="text-muted">@Model.StartDate.ToString("dddd")</small>
@@ -63,7 +63,7 @@
                         
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-calendar me-1"></i>Bitiþ Tarihi
+                                <i class="bi bi-calendar me-1"></i>BitiÅŸ Tarihi
                             </label>
                             <div class="h6 mb-0">@Model.EndDate.ToString("dd MMMM yyyy")</div>
                             <small class="text-muted">@Model.EndDate.ToString("dddd")</small>
@@ -73,7 +73,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-percent me-1"></i>Komisyon Oraný
+                                <i class="bi bi-percent me-1"></i>Komisyon OranÄ±
                             </label>
                             <div>
                                 <span class="badge bg-info fs-6">
@@ -106,14 +106,14 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-currency-exchange me-1"></i>Gidiþ Tam Fiyat
+                                <i class="bi bi-currency-exchange me-1"></i>GidiÅŸ Tam Fiyat
                             </label>
                             <div class="h4 mb-0 text-success">@Model.OutgoingFullPrice @Model.Currency</div>
                         </div>
                         
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-currency-exchange me-1"></i>Gidiþ Yarým Fiyat
+                                <i class="bi bi-currency-exchange me-1"></i>GidiÅŸ YarÄ±m Fiyat
                             </label>
                             <div class="h4 mb-0 text-info">@Model.OutgoingHalfPrice @Model.Currency</div>
                         </div>
@@ -122,14 +122,14 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-currency-exchange me-1"></i>Dönüþ Tam Fiyat
+                                <i class="bi bi-currency-exchange me-1"></i>DÃ¶nÃ¼ÅŸ Tam Fiyat
                             </label>
                             <div class="h4 mb-0 text-success">@Model.IncomingFullPrice @Model.Currency</div>
                         </div>
                         
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-currency-exchange me-1"></i>Dönüþ Yarým Fiyat
+                                <i class="bi bi-currency-exchange me-1"></i>DÃ¶nÃ¼ÅŸ YarÄ±m Fiyat
                             </label>
                             <div class="h4 mb-0 text-info">@Model.IncomingHalfPrice @Model.Currency</div>
                         </div>
@@ -140,7 +140,7 @@
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label class="form-label fw-semibold text-muted">
-                                    <i class="bi bi-file-text me-1"></i>Anlaþma Þartlarý
+                                    <i class="bi bi-file-text me-1"></i>AnlaÅŸma ÅžartlarÄ±
                                 </label>
                                 <div class="p-3 bg-light rounded">
                                     @Model.Terms
@@ -162,13 +162,13 @@
                 <div class="card-body">
                     <div class="alert alert-info">
                         <h6 class="alert-heading">
-                            <i class="bi bi-lightbulb me-2"></i>Pas Anlaþmasý Bilgileri
+                            <i class="bi bi-lightbulb me-2"></i>Pas AnlaÅŸmasÄ± Bilgileri
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Anlaþma numarasý ve pas þirketi</li>
-                            <li>Tarih aralýðý ve komisyon oraný</li>
-                            <li>Gidiþ-dönüþ fiyatlarý</li>
-                            <li>Anlaþma þartlarý ve durum</li>
+                            <li>AnlaÅŸma numarasÄ± ve pas ÅŸirketi</li>
+                            <li>Tarih aralÄ±ÄŸÄ± ve komisyon oranÄ±</li>
+                            <li>GidiÅŸ-dÃ¶nÃ¼ÅŸ fiyatlarÄ±</li>
+                            <li>AnlaÅŸma ÅŸartlarÄ± ve durum</li>
                         </ul>
                     </div>
                 </div>

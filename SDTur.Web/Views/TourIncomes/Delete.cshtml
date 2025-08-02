@@ -10,7 +10,7 @@
                 <i class="bi bi-trash text-danger me-2"></i>Tur Geliri Sil
             </h1>
             <a asp-action="Index" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
             </a>
         </div>
     </div>
@@ -21,7 +21,7 @@
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white">
                 <h5 class="card-title mb-0">
-                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme Onayý
+                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme OnayÄ±
                 </h5>
             </div>
             <div class="card-body">
@@ -29,7 +29,7 @@
                     <h6 class="alert-heading">
                         <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
                     </h6>
-                    <p class="mb-0">Bu gelir kaydýný silmek istediðinizden emin misiniz? Bu iþlem geri alýnamaz.</p>
+                    <p class="mb-0">Bu gelir kaydÄ±nÄ± silmek istediÄŸinizden emin misiniz? Bu iÅŸlem geri alÄ±namaz.</p>
                 </div>
 
                 <div class="row">
@@ -50,7 +50,7 @@
                     
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-tag me-1"></i>Gelir Türü
+                            <i class="bi bi-tag me-1"></i>Gelir TÃ¼rÃ¼
                         </label>
                         <div>
                             <span class="badge bg-info bg-opacity-75 fs-6">@Model.IncomeType</span>
@@ -81,7 +81,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-credit-card me-1"></i>Ödeme Yöntemi
+                            <i class="bi bi-credit-card me-1"></i>Ã–deme YÃ¶ntemi
                         </label>
                         <div>
                             <span class="badge bg-light text-dark fs-6">@Model.PaymentMethod</span>
@@ -113,7 +113,7 @@
                 {
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-text-paragraph me-1"></i>Açýklama
+                            <i class="bi bi-text-paragraph me-1"></i>AÃ§Ä±klama
                         </label>
                         <div class="p-3 bg-light rounded">
                             @Model.Description
@@ -125,9 +125,9 @@
                     <input type="hidden" asp-for="Id" />
                     <div class="d-flex justify-content-end gap-2">
                         <a asp-action="Index" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-circle me-2"></i>Ýptal
+                            <i class="bi bi-x-circle me-2"></i>Ä°ptal
                         </a>
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bu kaydý silmek istediðinizden emin misiniz?')">
+                        <button type="submit" class="btn btn-danger">
                             <i class="bi bi-trash me-2"></i>Sil
                         </button>
                     </div>
@@ -146,13 +146,13 @@
             <div class="card-body">
                 <div class="alert alert-danger">
                     <h6 class="alert-heading">
-                        <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarý
+                        <i class="bi bi-exclamation-triangle me-2"></i>Ã–nemli UyarÄ±
                     </h6>
                     <ul class="mb-0 small">
-                        <li>Bu iþlem geri alýnamaz</li>
-                        <li>Gelir kaydý kalýcý olarak silinecektir</li>
-                        <li>Ýlgili finansal raporlar etkilenebilir</li>
-                        <li>Silme iþlemi öncesi yedek almanýz önerilir</li>
+                        <li>Bu iÅŸlem geri alÄ±namaz</li>
+                        <li>Gelir kaydÄ± kalÄ±cÄ± olarak silinecektir</li>
+                        <li>Ä°lgili finansal raporlar etkilenebilir</li>
+                        <li>Silme iÅŸlemi Ã¶ncesi yedek almanÄ±z Ã¶nerilir</li>
                     </ul>
                 </div>
             </div>

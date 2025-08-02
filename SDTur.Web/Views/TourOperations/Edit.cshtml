@@ -1,16 +1,16 @@
 @model SDTur.Web.Models.Tour.Core.TourOperationEditViewModel
 @{
-    ViewData["Title"] = "Tur Operasyonu Düzenle";
+    ViewData["Title"] = "Tur Operasyonu DÃ¼zenle";
 }
 
 <div class="row mb-4">
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="h3 mb-0">
-                <i class="bi bi-pencil text-primary me-2"></i>Tur Operasyonu Düzenle
+                <i class="bi bi-pencil text-primary me-2"></i>Tur Operasyonu DÃ¼zenle
             </h1>
             <a asp-action="Index" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
             </a>
         </div>
     </div>
@@ -32,24 +32,31 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label asp-for="TourScheduleId" class="form-label fw-semibold">
-                                <i class="bi bi-airplane me-1"></i>Tur Programý
+                                <i class="bi bi-airplane me-1"></i>Tur ProgramÄ±
                             </label>
-                            <select asp-for="TourScheduleId" class="form-select" id="tourScheduleSelect">
-                                <option value="">Tur programý seçiniz...</option>
+                            <select asp-for="TourScheduleId" class="form-select">
+                                <option value="">Tur programÄ± seÃ§iniz...</option>
+                                @if (ViewBag.TourSchedules != null)
+                                {
+                                    @foreach (var schedule in ViewBag.TourSchedules)
+                                    {
+                                        <option value="@schedule.Id" selected="@(Model.TourScheduleId == schedule.Id)">@schedule.Name</option>
+                                    }
+                                }
                             </select>
                             <span asp-validation-for="TourScheduleId" class="text-danger small"></span>
                         </div>
                         
                         <div class="col-md-6 mb-3">
                             <label asp-for="OperationType" class="form-label fw-semibold">
-                                <i class="bi bi-gear me-1"></i>Operasyon Türü
+                                <i class="bi bi-gear me-1"></i>Operasyon TÃ¼rÃ¼
                             </label>
                             <select asp-for="OperationType" class="form-select">
-                                <option value="">Operasyon türü seçiniz...</option>
-                                <option value="Baþlangýç">Baþlangýç</option>
-                                <option value="Bitiþ">Bitiþ</option>
-                                <option value="Ýptal">Ýptal</option>
-                                <option value="Deðiþiklik">Deðiþiklik</option>
+                                <option value="">Operasyon tÃ¼rÃ¼ seÃ§iniz...</option>
+                                <option value="BaÅŸlangÄ±Ã§">BaÅŸlangÄ±Ã§</option>
+                                <option value="BitiÅŸ">BitiÅŸ</option>
+                                <option value="Ä°ptal">Ä°ptal</option>
+                                <option value="DeÄŸiÅŸiklik">DeÄŸiÅŸiklik</option>
                             </select>
                             <span asp-validation-for="OperationType" class="text-danger small"></span>
                         </div>
@@ -58,10 +65,17 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label asp-for="EmployeeId" class="form-label fw-semibold">
-                                <i class="bi bi-person me-1"></i>Çalýþan
+                                <i class="bi bi-person me-1"></i>Ã‡alÄ±ÅŸan
                             </label>
-                            <select asp-for="EmployeeId" class="form-select" id="employeeSelect">
-                                <option value="">Çalýþan seçiniz...</option>
+                            <select asp-for="EmployeeId" class="form-select">
+                                <option value="">Ã‡alÄ±ÅŸan seÃ§iniz...</option>
+                                @if (ViewBag.Employees != null)
+                                {
+                                    @foreach (var employee in ViewBag.Employees)
+                                    {
+                                        <option value="@employee.Id" selected="@(Model.EmployeeId == employee.Id)">@employee.Name</option>
+                                    }
+                                }
                             </select>
                             <span asp-validation-for="EmployeeId" class="text-danger small"></span>
                         </div>
@@ -81,11 +95,11 @@
                                 <i class="bi bi-flag me-1"></i>Durum
                             </label>
                             <select asp-for="Status" class="form-select">
-                                <option value="">Durum seçiniz...</option>
+                                <option value="">Durum seÃ§iniz...</option>
                                 <option value="Beklemede">Beklemede</option>
                                 <option value="Devam Ediyor">Devam Ediyor</option>
-                                <option value="Tamamlandý">Tamamlandý</option>
-                                <option value="Baþarýsýz">Baþarýsýz</option>
+                                <option value="TamamlandÄ±">TamamlandÄ±</option>
+                                <option value="BaÅŸarÄ±sÄ±z">BaÅŸarÄ±sÄ±z</option>
                             </select>
                             <span asp-validation-for="Status" class="text-danger small"></span>
                         </div>
@@ -97,7 +111,7 @@
                             <div class="form-check form-switch mt-2">
                                 <input asp-for="IsCompleted" class="form-check-input" type="checkbox">
                                 <label asp-for="IsCompleted" class="form-check-label">
-                                    Operasyon tamamlandý
+                                    Operasyon tamamlandÄ±
                                 </label>
                             </div>
                         </div>
@@ -114,10 +128,10 @@
 
                     <div class="d-flex justify-content-end gap-2">
                         <a asp-action="Index" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-circle me-2"></i>Ýptal
+                            <i class="bi bi-x-circle me-2"></i>Ä°ptal
                         </a>
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-circle me-2"></i>Güncelle
+                            <i class="bi bi-check-circle me-2"></i>GÃ¼ncelle
                         </button>
                     </div>
                 </form>
@@ -135,15 +149,15 @@
             <div class="card-body">
                 <div class="alert alert-info">
                     <h6 class="alert-heading">
-                        <i class="bi bi-lightbulb me-2"></i>Önemli Notlar
+                        <i class="bi bi-lightbulb me-2"></i>Ã–nemli Notlar
                     </h6>
                     <ul class="mb-0 small">
-                        <li>Tüm alanlar doðru þekilde doldurulmalýdýr</li>
-                        <li>Operasyon tarihi gelecek bir tarih olmalýdýr</li>
-                        <li>Çalýþan ve tur programý seçimi zorunludur</li>
-                        <li>Operasyon türü ve durum belirtilmelidir</li>
-                        <li>Notlar alaný opsiyoneldir</li>
-                        <li>Deðiþiklikler anýnda kaydedilir</li>
+                        <li>TÃ¼m alanlar doÄŸru ÅŸekilde doldurulmalÄ±dÄ±r</li>
+                        <li>Operasyon tarihi gelecek bir tarih olmalÄ±dÄ±r</li>
+                        <li>Ã‡alÄ±ÅŸan ve tur programÄ± seÃ§imi zorunludur</li>
+                        <li>Operasyon tÃ¼rÃ¼ ve durum belirtilmelidir</li>
+                        <li>Notlar alanÄ± opsiyoneldir</li>
+                        <li>DeÄŸiÅŸiklikler anÄ±nda kaydedilir</li>
                     </ul>
                 </div>
             </div>
@@ -152,53 +166,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Load tour schedules and employees dynamically
-        document.addEventListener('DOMContentLoaded', function() {
-            loadTourSchedules();
-            loadEmployees();
-        });
-
-        async function loadTourSchedules() {
-            try {
-                const response = await fetch('/api/tourschedules');
-                const tourSchedules = await response.json();
-                const select = document.getElementById('tourScheduleSelect');
-                
-                tourSchedules.forEach(schedule => {
-                    const option = document.createElement('option');
-                    option.value = schedule.id;
-                    option.textContent = schedule.name;
-                    select.appendChild(option);
-                });
-                
-                // Set selected value
-                select.value = '@Model.TourScheduleId';
-            } catch (error) {
-                console.error('Tur programlarý yüklenirken hata oluþtu:', error);
-            }
-        }
-
-        async function loadEmployees() {
-            try {
-                const response = await fetch('/api/employees');
-                const employees = await response.json();
-                const select = document.getElementById('employeeSelect');
-                
-                employees.forEach(employee => {
-                    const option = document.createElement('option');
-                    option.value = employee.id;
-                    option.textContent = employee.name;
-                    select.appendChild(option);
-                });
-                
-                // Set selected value
-                select.value = '@Model.EmployeeId';
-            } catch (error) {
-                console.error('Çalýþanlar yüklenirken hata oluþtu:', error);
-            }
-        }
-    </script>
-    
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

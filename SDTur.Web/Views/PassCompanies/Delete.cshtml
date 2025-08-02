@@ -1,25 +1,116 @@
-@model PassCompanyViewModel
+@model SDTur.Web.Models.Master.Pass.PassCompanyViewModel
 @{
     ViewData["Title"] = "Pas Şirketi Sil";
 }
 
-<div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1 class="h3 mb-0">
-                    <i class="bi bi-list-ul text-primary me-2"></i>Pas Şirketi Sil
-                </h1>
-                <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
-                </a>
-            </div>
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-exclamation-triangle text-danger me-2"></i>Pas Şirketi Sil
+            </h1>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+            </a>
         </div>
     </div>
+</div>
 
-    <div class="card border-0 shadow-sm">
-        <div class="card-body">
-            <p class="text-muted">Bu sayfa henüz tamamlanmamıştır.</p>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Silme Onayı
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                    </h6>
+                    <p class="mb-0">
+                        Bu pas şirketini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve şirkete ait tüm veriler kalıcı olarak silinecektir.
+                    </p>
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Şirket Adı</label>
+                        <div class="fw-bold text-primary">@Model.Name</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">İletişim Kişisi</label>
+                        <div class="fw-bold">@Model.ContactPerson</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Telefon</label>
+                        <div>
+                            <a href="tel:@Model.Phone" class="text-decoration-none">
+                                <i class="bi bi-telephone me-1"></i>@Model.Phone
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">E-posta</label>
+                        <div>
+                            <a href="mailto:@Model.Email" class="text-decoration-none">
+                                <i class="bi bi-envelope me-1"></i>@Model.Email
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label class="form-label text-muted">Adres</label>
+                        <div>@(string.IsNullOrEmpty(Model.Address) ? "Adres girilmemiş" : Model.Address)</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Durum</label>
+                        <div>
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle me-1"></i>Aktif
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="bi bi-x-circle me-1"></i>Pasif
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+                
+                @if (Model.HasActiveAgreements)
+                {
+                    <div class="alert alert-warning mt-3">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Aktif Anlaşmalar Mevcut
+                        </h6>
+                        <p class="mb-0">
+                            Bu şirkete ait aktif anlaşmalar bulunmaktadır. Şirketi silmeden önce tüm anlaşmaları tamamlamanız veya iptal etmeniz önerilir.
+                        </p>
+                    </div>
+                }
+                
+                <form asp-action="Delete" method="post" class="mt-4">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-x-circle me-2"></i>İptal
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash me-2"></i>Sil
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

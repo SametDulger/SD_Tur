@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-list-ul text-primary me-2"></i>Fatura Detayı Sil
+                    <i class="bi bi-trash text-danger me-2"></i>Fatura Detayı Sil
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left me-2"></i>Geri Dön
@@ -17,9 +17,131 @@
         </div>
     </div>
 
-    <div class="card border-0 shadow-sm">
-        <div class="card-body">
-            <p class="text-muted">Bu sayfa henüz tamamlanmamıştır.</p>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0 text-danger">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Silme Onayı
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                        </h6>
+                        <p class="mb-0">
+                            Bu fatura detayını silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+                        </p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Fatura Numarası</label>
+                            <div class="form-control-plaintext">
+                                <span class="badge bg-primary">@Model.InvoiceNumber</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Müşteri</label>
+                            <div class="form-control-plaintext">@Model.CustomerName</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Ürün/Hizmet Adı</label>
+                            <div class="form-control-plaintext fw-bold">@Model.ProductName</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Miktar</label>
+                            <div class="form-control-plaintext">@Model.Quantity</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Birim Fiyat</label>
+                            <div class="form-control-plaintext fw-bold text-success">@Model.UnitPrice.ToString("C")</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Toplam Tutar</label>
+                            <div class="form-control-plaintext fw-bold text-info">@Model.TotalAmount.ToString("C")</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">KDV Oranı</label>
+                            <div class="form-control-plaintext">%@Model.TaxRate</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Aktiflik Durumu</label>
+                            <div class="form-control-plaintext">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success">Aktif</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Pasif</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>İptal
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-2"></i>Sil
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle text-info me-2"></i>Bilgi
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarı
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Bu işlem geri alınamaz</li>
+                            <li>Fatura toplamı etkilenebilir</li>
+                            <li>İşlem geçmişi kaybolur</li>
+                            <li>Silmeden önce yedek alın</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Alternatif
+                        </h6>
+                        <p class="mb-0 small">
+                            Detayı silmek yerine pasif hale getirmeyi düşünebilirsiniz. 
+                            Bu şekilde veri kaybı yaşamazsınız.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+

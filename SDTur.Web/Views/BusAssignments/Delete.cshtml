@@ -1,120 +1,120 @@
-@model BusAssignmentViewModel
+@model SDTur.Web.Models.Tour.Operations.BusAssignmentViewModel
 @{
-    ViewData["Title"] = "Otobüs Atamasý Sil";
+    ViewData["Title"] = "OtobÃ¼s AtamasÄ± Sil";
 }
 
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="h3 mb-0">
-                <i class="bi bi-trash text-danger me-2"></i>Otobüs Atamasý Sil
-            </h1>
-            <a asp-action="Index" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-2"></i>Geri Dön
-            </a>
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-trash text-danger me-2"></i>OtobÃ¼s AtamasÄ± Sil
+                </h1>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-lg-8">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">
-                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme Onayý
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="alert alert-warning">
-                    <h6 class="alert-heading">
-                        <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
-                    </h6>
-                    <p class="mb-0">Bu otobüs atamasýný silmek istediðinizden emin misiniz? Bu iþlem geri alýnamaz.</p>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle text-warning me-2"></i>Silme OnayÄ±
+                    </h5>
                 </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                        </h6>
+                        <p class="mb-0">Bu otobÃ¼s atamasÄ±nÄ± silmek istediÄŸinizden emin misiniz? Bu iÅŸlem geri alÄ±namaz.</p>
+                    </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-airplane me-1"></i>Tur
-                        </label>
-                        <div class="d-flex align-items-center">
-                            <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
-                                <i class="bi bi-airplane text-primary"></i>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-airplane me-1"></i>Tur
+                            </label>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                    <i class="bi bi-airplane text-primary"></i>
+                                </div>
+                                <span class="fw-semibold">@Model.TourName</span>
                             </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-bus-front me-1"></i>OtobÃ¼s
+                            </label>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-info bg-opacity-10 rounded-circle p-2 me-2">
+                                    <i class="bi bi-bus-front text-info"></i>
+                                </div>
+                                <span class="fw-semibold">@Model.BusPlate</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-person me-1"></i>SÃ¼rÃ¼cÃ¼
+                            </label>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
+                                    <i class="bi bi-person text-success"></i>
+                                </div>
+                                <span class="fw-semibold">@Model.DriverName</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-calendar me-1"></i>Atama Tarihi
+                            </label>
+                            <div class="h6 mb-0">@Model.AssignmentDate.ToString("dd MMMM yyyy")</div>
+                            <small class="text-muted">@Model.AssignmentDate.ToString("dddd")</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                                <i class="bi bi-check-circle me-1"></i>Durum
+                            </label>
                             <div>
-                                <div class="fw-semibold">@Model.TourName</div>
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success fs-6">
+                                        <i class="bi bi-check-circle me-1"></i>Aktif
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fs-6">
+                                        <i class="bi bi-x-circle me-1"></i>Pasif
+                                    </span>
+                                }
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-bus-front me-1"></i>Otobüs
-                        </label>
-                        <div class="d-flex align-items-center">
-                            <div class="bg-info bg-opacity-10 rounded-circle p-2 me-2">
-                                <i class="bi bi-bus-front text-info"></i>
-                            </div>
-                            <span class="fw-semibold">@Model.BusPlate</span>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-person me-1"></i>Sürücü
-                        </label>
-                        <div class="d-flex align-items-center">
-                            <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
-                                <i class="bi bi-person text-success"></i>
-                            </div>
-                            <span class="fw-semibold">@Model.DriverName</span>
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Ä°ptal
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-2"></i>Sil
+                            </button>
                         </div>
-                    </div>
-                    
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-calendar me-1"></i>Atama Tarihi
-                        </label>
-                        <div class="h6 mb-0">@Model.AssignmentDate.ToString("dd MMMM yyyy")</div>
-                        <small class="text-muted">@Model.AssignmentDate.ToString("dddd")</small>
-                    </div>
+                    </form>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-check-circle me-1"></i>Durum
-                        </label>
-                        <div>
-                            @if (Model.IsActive)
-                            {
-                                <span class="badge bg-success fs-6">
-                                    <i class="bi bi-check-circle me-1"></i>Aktif
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary fs-6">
-                                    <i class="bi bi-x-circle me-1"></i>Pasif
-                                </span>
-                            }
-                        </div>
-                    </div>
-                </div>
-
-                <form asp-action="Delete" method="post">
-                    <input type="hidden" asp-for="Id" />
-                    <div class="d-flex justify-content-end gap-2">
-                        <a asp-action="Index" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-circle me-2"></i>Ýptal
-                        </a>
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bu kaydý silmek istediðinizden emin misiniz?')">
-                            <i class="bi bi-trash me-2"></i>Sil
-                        </button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -129,13 +129,13 @@
             <div class="card-body">
                 <div class="alert alert-danger">
                     <h6 class="alert-heading">
-                        <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarý
+                        <i class="bi bi-exclamation-triangle me-2"></i>Ã–nemli UyarÄ±
                     </h6>
                     <ul class="mb-0 small">
-                        <li>Bu iþlem geri alýnamaz</li>
-                        <li>Otobüs atamasý kalýcý olarak silinecektir</li>
-                        <li>Ýlgili tur programlarý etkilenebilir</li>
-                        <li>Silme iþlemi öncesi yedek almanýz önerilir</li>
+                        <li>Bu iÅŸlem geri alÄ±namaz</li>
+                        <li>OtobÃ¼s atamasÄ± kalÄ±cÄ± olarak silinecektir</li>
+                        <li>Ä°lgili tur programlarÄ± etkilenebilir</li>
+                        <li>Silme iÅŸlemi Ã¶ncesi yedek almanÄ±z Ã¶nerilir</li>
                     </ul>
                 </div>
             </div>

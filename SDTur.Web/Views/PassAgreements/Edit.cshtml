@@ -1,6 +1,6 @@
-@model PassAgreementEditViewModel
+@model SDTur.Web.Models.Master.Pass.PassAgreementEditViewModel
 @{
-    ViewData["Title"] = "Pas Anlaþmasý Düzenle";
+    ViewData["Title"] = "Pas AnlaÅŸmasÄ± DÃ¼zenle";
 }
 
 <div class="container-fluid">
@@ -8,10 +8,10 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-pencil text-primary me-2"></i>Pas Anlaþmasý Düzenle
+                    <i class="bi bi-pencil text-primary me-2"></i>Pas AnlaÅŸmasÄ± DÃ¼zenle
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                 </a>
             </div>
         </div>
@@ -22,7 +22,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
                     <h5 class="card-title mb-0">
-                        <i class="bi bi-form me-2"></i>Anlaþma Bilgileri
+                        <i class="bi bi-form me-2"></i>AnlaÅŸma Bilgileri
                     </h5>
                 </div>
                 <div class="card-body">
@@ -34,19 +34,26 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="PassCompanyId" class="form-label fw-semibold">
-                                    <i class="bi bi-building me-1"></i>Pas Þirketi <span class="text-danger">*</span>
+                                    <i class="bi bi-building me-1"></i>Pas Åžirketi <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="PassCompanyId" id="passCompanySelect" class="form-select" required>
-                                    <option value="">Pas þirketi seçiniz...</option>
+                                <select asp-for="PassCompanyId" class="form-select" required>
+                                    <option value="">Pas Åžirketi seÃ§iniz...</option>
+                                    @if (ViewBag.PassCompanies != null)
+                                    {
+                                        @foreach (var company in ViewBag.PassCompanies)
+                                        {
+                                            <option value="@company.Id" selected="@(Model.PassCompanyId == company.Id)">@company.Name</option>
+                                        }
+                                    }
                                 </select>
                                 <span asp-validation-for="PassCompanyId" class="text-danger small"></span>
                             </div>
                             
                             <div class="col-md-6 mb-3">
                                 <label asp-for="AgreementNumber" class="form-label fw-semibold">
-                                    <i class="bi bi-hash me-1"></i>Anlaþma Numarasý <span class="text-danger">*</span>
+                                    <i class="bi bi-hash me-1"></i>AnlaÅŸma NumarasÄ± <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="AgreementNumber" class="form-control" placeholder="Anlaþma numarasý..." required />
+                                <input asp-for="AgreementNumber" class="form-control" placeholder="AnlaÅŸma numarasÄ±..." required />
                                 <span asp-validation-for="AgreementNumber" class="text-danger small"></span>
                             </div>
                         </div>
@@ -54,7 +61,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="StartDate" class="form-label fw-semibold">
-                                    <i class="bi bi-calendar me-1"></i>Baþlangýç Tarihi <span class="text-danger">*</span>
+                                    <i class="bi bi-calendar me-1"></i>BaÅŸlangÄ±Ã§ Tarihi <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="StartDate" type="date" class="form-control" required />
                                 <span asp-validation-for="StartDate" class="text-danger small"></span>
@@ -62,7 +69,7 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label asp-for="EndDate" class="form-label fw-semibold">
-                                    <i class="bi bi-calendar me-1"></i>Bitiþ Tarihi <span class="text-danger">*</span>
+                                    <i class="bi bi-calendar me-1"></i>BitiÅŸ Tarihi <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="EndDate" type="date" class="form-control" required />
                                 <span asp-validation-for="EndDate" class="text-danger small"></span>
@@ -72,7 +79,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="CommissionRate" class="form-label fw-semibold">
-                                    <i class="bi bi-percent me-1"></i>Komisyon Oraný <span class="text-danger">*</span>
+                                    <i class="bi bi-percent me-1"></i>Komisyon OranÄ± <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="CommissionRate" type="number" step="0.01" class="form-control" placeholder="0.00" required />
                                 <span asp-validation-for="CommissionRate" class="text-danger small"></span>
@@ -83,11 +90,11 @@
                                     <i class="bi bi-currency-exchange me-1"></i>Para Birimi <span class="text-danger">*</span>
                                 </label>
                                 <select asp-for="Currency" class="form-select" required>
-                                    <option value="">Para birimi seçiniz...</option>
-                                    <option value="TRY">TRY - Türk Lirasý</option>
-                                    <option value="USD">USD - Amerikan Dolarý</option>
+                                    <option value="">Para birimi seÃ§iniz...</option>
+                                    <option value="TRY">TRY - TÃ¼rk LirasÄ±</option>
+                                    <option value="USD">USD - Amerikan DolarÄ±</option>
                                     <option value="EUR">EUR - Euro</option>
-                                    <option value="GBP">GBP - Ýngiliz Sterlini</option>
+                                    <option value="GBP">GBP - Ä°ngiliz Sterlini</option>
                                 </select>
                                 <span asp-validation-for="Currency" class="text-danger small"></span>
                             </div>
@@ -96,7 +103,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="OutgoingFullPrice" class="form-label fw-semibold">
-                                    <i class="bi bi-currency-exchange me-1"></i>Gidiþ Tam Fiyat <span class="text-danger">*</span>
+                                    <i class="bi bi-currency-exchange me-1"></i>GidiÅŸ Tam Fiyat <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="OutgoingFullPrice" type="number" step="0.01" class="form-control" placeholder="0.00" required />
                                 <span asp-validation-for="OutgoingFullPrice" class="text-danger small"></span>
@@ -104,7 +111,7 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label asp-for="OutgoingHalfPrice" class="form-label fw-semibold">
-                                    <i class="bi bi-currency-exchange me-1"></i>Gidiþ Yarým Fiyat <span class="text-danger">*</span>
+                                    <i class="bi bi-currency-exchange me-1"></i>GidiÅŸ YarÄ±m Fiyat <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="OutgoingHalfPrice" type="number" step="0.01" class="form-control" placeholder="0.00" required />
                                 <span asp-validation-for="OutgoingHalfPrice" class="text-danger small"></span>
@@ -114,7 +121,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="IncomingFullPrice" class="form-label fw-semibold">
-                                    <i class="bi bi-currency-exchange me-1"></i>Dönüþ Tam Fiyat <span class="text-danger">*</span>
+                                    <i class="bi bi-currency-exchange me-1"></i>DÃ¶nÃ¼ÅŸ Tam Fiyat <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="IncomingFullPrice" type="number" step="0.01" class="form-control" placeholder="0.00" required />
                                 <span asp-validation-for="IncomingFullPrice" class="text-danger small"></span>
@@ -122,7 +129,7 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label asp-for="IncomingHalfPrice" class="form-label fw-semibold">
-                                    <i class="bi bi-currency-exchange me-1"></i>Dönüþ Yarým Fiyat <span class="text-danger">*</span>
+                                    <i class="bi bi-currency-exchange me-1"></i>DÃ¶nÃ¼ÅŸ YarÄ±m Fiyat <span class="text-danger">*</span>
                                 </label>
                                 <input asp-for="IncomingHalfPrice" type="number" step="0.01" class="form-control" placeholder="0.00" required />
                                 <span asp-validation-for="IncomingHalfPrice" class="text-danger small"></span>
@@ -137,26 +144,26 @@
                                         <i class="bi bi-toggle-on me-1"></i>Aktif
                                     </label>
                                 </div>
-                                <small class="text-muted">Bu anlaþmanýn aktif olduðunu iþaretleyin</small>
+                                <small class="text-muted">Bu anlaÅŸmanÄ±n aktif olduÄŸunu iÅŸaretleyin</small>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label asp-for="Terms" class="form-label fw-semibold">
-                                    <i class="bi bi-file-text me-1"></i>Anlaþma Þartlarý
+                                    <i class="bi bi-file-text me-1"></i>AnlaÅŸma ÅžartlarÄ±
                                 </label>
-                                <textarea asp-for="Terms" class="form-control" rows="4" placeholder="Anlaþma þartlarý..."></textarea>
+                                <textarea asp-for="Terms" class="form-control" rows="4" placeholder="AnlaÅŸma ÅŸartlarÄ±..."></textarea>
                                 <span asp-validation-for="Terms" class="text-danger small"></span>
                             </div>
                         </div>
 
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-2"></i>Ýptal
+                                <i class="bi bi-x-circle me-2"></i>Ä°ptal
                             </a>
                             <button type="submit" class="btn btn-warning">
-                                <i class="bi bi-check-circle me-2"></i>Güncelle
+                                <i class="bi bi-check-circle me-2"></i>GÃ¼ncelle
                             </button>
                         </div>
                     </form>
@@ -174,13 +181,13 @@
                 <div class="card-body">
                     <div class="alert alert-info">
                         <h6 class="alert-heading">
-                            <i class="bi bi-lightbulb me-2"></i>Pas Anlaþmasý Düzenleme
+                            <i class="bi bi-lightbulb me-2"></i>Pas AnlaÅŸmasÄ± DÃ¼zenleme
                         </h6>
                         <ul class="mb-0 small">
-                            <li>Pas þirketi ve anlaþma numarasýný güncelleyin</li>
-                            <li>Tarih aralýðý ve komisyon oranýný düzenleyin</li>
-                            <li>Gidiþ-dönüþ fiyatlarýný deðiþtirebilirsiniz</li>
-                            <li>Para birimi ve þartlarý güncelleyin</li>
+                            <li>Pas ÅŸirketi ve anlaÅŸma numarasÄ±nÄ± gÃ¼ncelleyin</li>
+                            <li>Tarih aralÄ±ÄŸÄ± ve komisyon oranÄ±nÄ± dÃ¼zenleyin</li>
+                            <li>GidiÅŸ-dÃ¶nÃ¼ÅŸ fiyatlarÄ±nÄ± deÄŸiÅŸtirebilirsiniz</li>
+                            <li>Para birimi ve ÅŸartlarÄ± gÃ¼ncelleyin</li>
                         </ul>
                     </div>
                 </div>
@@ -190,31 +197,5 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Load pass companies dynamically
-        async function loadPassCompanies() {
-            try {
-                const response = await fetch('/api/passcompanies');
-                const passCompanies = await response.json();
-                const passCompanySelect = document.getElementById('passCompanySelect');
-                
-                passCompanies.forEach(company => {
-                    const option = document.createElement('option');
-                    option.value = company.id;
-                    option.textContent = company.name;
-                    if (company.id == @Model.PassCompanyId) {
-                        option.selected = true;
-                    }
-                    passCompanySelect.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error loading pass companies:', error);
-            }
-        }
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            loadPassCompanies();
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

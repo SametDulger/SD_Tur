@@ -1,0 +1,114 @@
+@model SDTur.Web.Models.Tour.Core.TourViewModel
+@{
+    ViewData["Title"] = "Tur Sil";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-exclamation-triangle text-danger me-2"></i>Tur Sil
+            </h1>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Silme Onayı
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                    </h6>
+                    <p class="mb-0">
+                        Bu turu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve tura ait tüm veriler kalıcı olarak silinecektir.
+                    </p>
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Tur Adı</label>
+                        <div class="fw-bold text-primary">@Model.Name</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Tur Tarihi</label>
+                        <div class="fw-semibold">@Model.TourDate.ToString("dd.MM.yyyy")</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Fiyat</label>
+                        <div class="fw-bold fs-5 text-success">@Model.Price.ToString("C")</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Kapasite</label>
+                        <div class="fw-bold">@Model.Capacity kişi</div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Müsait Koltuk</label>
+                        <div class="fw-bold @(Model.AvailableSeats > 0 ? "text-success" : "text-danger")">
+                            @Model.AvailableSeats kişi
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label text-muted">Toplam Bilet</label>
+                        <div class="fw-bold">@Model.TotalTickets</div>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label class="form-label text-muted">Açıklama</label>
+                        <div>@(string.IsNullOrEmpty(Model.Description) ? "Açıklama girilmemiş" : Model.Description)</div>
+                    </div>
+                </div>
+                
+                @if (Model.HasTickets)
+                {
+                    <div class="alert alert-warning mt-3">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Aktif Biletler Mevcut
+                        </h6>
+                        <p class="mb-0">
+                            Bu tura ait aktif biletler bulunmaktadır. Turu silmeden önce tüm biletleri iptal etmeniz önerilir.
+                        </p>
+                    </div>
+                }
+                
+                @if (Model.AvailableSeats < Model.Capacity)
+                {
+                    <div class="alert alert-info mt-3">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-info-circle me-2"></i>Rezervasyon Uyarısı
+                        </h6>
+                        <p class="mb-0">
+                            Bu tura rezervasyon yapılmıştır. Silme işlemi öncesinde tüm rezervasyonları iptal etmeniz önerilir.
+                        </p>
+                    </div>
+                }
+                
+                <form asp-action="Delete" method="post" class="mt-4">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-x-circle me-2"></i>İptal
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash me-2"></i>Sil
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 

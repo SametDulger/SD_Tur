@@ -1,6 +1,6 @@
 @model SDTur.Web.Models.Financial.Transactions.InvoiceDetailViewModel
 @{
-    ViewData["Title"] = "Fatura Detayý";
+    ViewData["Title"] = "Fatura DetayÄ± DetaylarÄ±";
 }
 
 <div class="container-fluid">
@@ -8,14 +8,14 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-receipt text-primary me-2"></i>Fatura Detayý
+                    <i class="bi bi-eye text-primary me-2"></i>Fatura DetayÄ± DetaylarÄ±
                 </h1>
-                <div>
-                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
-                        <i class="bi bi-pencil me-2"></i>Düzenle
+                <div class="btn-group" role="group">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">
+                        <i class="bi bi-pencil me-2"></i>DÃ¼zenle
                     </a>
                     <a asp-action="Index" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                        <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                     </a>
                 </div>
             </div>
@@ -24,76 +24,90 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm mb-4">
+            <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-info-circle me-2"></i>Detay Bilgileri
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Fatura Numarasý</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="fw-semibold text-primary">@Model.InvoiceNumber</span>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Fatura NumarasÄ±</label>
+                            <div class="form-control-plaintext">
+                                <span class="badge bg-primary">@Model.InvoiceNumber</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Ürün/Hizmet Adý</label>
-                            <div class="p-2 bg-light rounded">
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
-                                        <i class="bi bi-box text-primary"></i>
-                                    </div>
-                                    <span class="fw-semibold">@Model.ProductName</span>
-                                </div>
-                            </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">MÃ¼ÅŸteri</label>
+                            <div class="form-control-plaintext">@Model.CustomerName</div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Ürün Kodu</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="badge bg-outline-secondary">@Model.ProductCode</span>
-                            </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">ÃœrÃ¼n/Hizmet AdÄ±</label>
+                            <div class="form-control-plaintext fw-bold">@Model.ProductName</div>
                         </div>
-                        <div class="col-md-6">
+                        
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">Miktar</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="badge bg-light text-dark">@Model.Quantity @Model.Unit</span>
-                            </div>
+                            <div class="form-control-plaintext">@Model.Quantity</div>
                         </div>
-                        <div class="col-md-6">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">Birim Fiyat</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="fw-bold text-success">@Model.UnitPrice.ToString("C")</span>
-                            </div>
+                            <div class="form-control-plaintext fw-bold text-success">@Model.UnitPrice.ToString("C")</div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">KDV Oraný</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="badge bg-outline-warning">%@Model.VatRate</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">KDV Tutarý</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="fw-bold text-warning">@Model.VatAmount.ToString("C")</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                        
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">Toplam Tutar</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="fw-bold text-primary fs-4">@Model.TotalAmount.ToString("C")</span>
+                            <div class="form-control-plaintext fw-bold text-info">@Model.TotalAmount.ToString("C")</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">KDV OranÄ±</label>
+                            <div class="form-control-plaintext">%@Model.TaxRate</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Aktiflik Durumu</label>
+                            <div class="form-control-plaintext">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success">Aktif</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Pasif</span>
+                                }
                             </div>
                         </div>
-                        @if (!string.IsNullOrEmpty(Model.Description))
-                        {
-                            <div class="col-12">
-                                <label class="form-label fw-semibold text-muted">Açýklama</label>
-                                <div class="p-2 bg-light rounded">
-                                    <p class="mb-0">@Model.Description</p>
-                                </div>
-                            </div>
-                        }
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted">AÃ§Ä±klama</label>
+                            <div class="form-control-plaintext">@Model.Description</div>
+                        </div>
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">OluÅŸturulma Tarihi</label>
+                            <div class="form-control-plaintext">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">GÃ¼ncellenme Tarihi</label>
+                            <div class="form-control-plaintext">@(Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm") ?? "-")</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,28 +116,45 @@
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-calculator me-2"></i>Hesaplama Özeti
-                    </h5>
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-gear text-info me-2"></i>Ä°ÅŸlemler
+                    </h6>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-muted">Ara Toplam:</span>
-                        <span class="fw-bold text-success">@((Model.Quantity * Model.UnitPrice).ToString("C"))</span>
+                    <div class="d-grid gap-2">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                            <i class="bi bi-pencil me-2"></i>DÃ¼zenle
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
+                            <i class="bi bi-trash me-2"></i>Sil
+                        </a>
+                        <button type="button" class="btn btn-outline-secondary">
+                            <i class="bi bi-printer me-2"></i>YazdÄ±r
+                        </button>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-muted">KDV (@Model.VatRate%):</span>
-                        <span class="fw-bold text-warning">@Model.VatAmount.ToString("C")</span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-semibold">Genel Toplam:</span>
-                        <span class="fw-bold text-primary fs-4">
-                            @Model.TotalAmount.ToString("C")
-                        </span>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-header bg-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle text-info me-2"></i>Bilgi
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Fatura DetayÄ±
+                        </h6>
+                        <p class="mb-0 small">
+                            Bu sayfa fatura detayÄ±nÄ±n bilgilerini gÃ¶stermektedir. Detay bilgilerini 
+                            dÃ¼zenlemek iÃ§in "DÃ¼zenle" butonunu kullanabilirsiniz.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+

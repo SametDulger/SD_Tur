@@ -1,6 +1,6 @@
 @model SDTur.Web.Models.Financial.Transactions.ExchangeRateViewModel
 @{
-    ViewData["Title"] = "D�viz Kuru Sil";
+    ViewData["Title"] = "Döviz Kuru Sil";
 }
 
 <div class="container-fluid">
@@ -8,94 +8,87 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h3 mb-0">
-                    <i class="bi bi-trash text-danger me-2"></i>D�viz Kuru Sil
+                    <i class="bi bi-trash text-danger me-2"></i>Döviz Kuru Sil
                 </h1>
                 <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri D�n
+                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
                 </a>
             </div>
         </div>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="row">
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-danger text-white">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-exclamation-triangle me-2"></i>Silme Onay�
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0 text-danger">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Silme Onayı
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-warning" role="alert">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
-                        <strong>Dikkat!</strong> Bu d�viz kurunu silmek istedi�inizden emin misiniz? Bu i�lem geri al�namaz.
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Dikkat!
+                        </h6>
+                        <p class="mb-0">
+                            Bu döviz kurunu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+                        </p>
                     </div>
 
-                    <div class="row g-3">
-                        <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">Kaynak Para Birimi</label>
-                            <div class="p-2 bg-light rounded">
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
-                                        <i class="bi bi-currency-dollar text-primary"></i>
-                                    </div>
-                                    <span class="fw-semibold">@Model.FromCurrency</span>
-                                </div>
+                            <div class="form-control-plaintext">
+                                <span class="badge bg-primary">@Model.FromCurrency</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold text-muted">Hedef Para Birimi</label>
-                            <div class="p-2 bg-light rounded">
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-success bg-opacity-10 rounded-circle p-2 me-2">
-                                        <i class="bi bi-arrow-right text-success"></i>
-                                    </div>
-                                    <span class="fw-semibold">@Model.ToCurrency</span>
-                                </div>
+                            <div class="form-control-plaintext">
+                                <span class="badge bg-success">@Model.ToCurrency</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Kur De�eri</label>
-                            <div class="p-2 bg-light rounded">
-                                <span class="fw-bold text-primary fs-4">@Model.Rate.ToString("F4")</span>
-                            </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Kur</label>
+                            <div class="form-control-plaintext fw-bold text-info">@Model.Rate.ToString("F4")</div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Durum</label>
-                            <div class="p-2 bg-light rounded">
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Kur Tarihi</label>
+                            <div class="form-control-plaintext">@Model.RateDate.ToString("dd.MM.yyyy")</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Aktiflik Durumu</label>
+                            <div class="form-control-plaintext">
                                 @if (Model.IsActive)
                                 {
-                                    <span class="badge bg-success">
-                                        <i class="bi bi-check-circle me-1"></i>Aktif
-                                    </span>
+                                    <span class="badge bg-success">Aktif</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary">
-                                        <i class="bi bi-x-circle me-1"></i>Pasif
-                                    </span>
+                                    <span class="badge bg-secondary">Pasif</span>
                                 }
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Kur Tarihi</label>
-                            <div class="p-2 bg-light rounded">
-                                <i class="bi bi-calendar me-2"></i>@Model.RateDate.ToString("dd/MM/yyyy HH:mm")
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold text-muted">Olu�turma Tarihi</label>
-                            <div class="p-2 bg-light rounded">
-                                <i class="bi bi-clock me-2"></i>@Model.Date.ToString("dd/MM/yyyy HH:mm")
-                            </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold text-muted">Oluşturulma Tarihi</label>
+                            <div class="form-control-plaintext">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</div>
                         </div>
                     </div>
 
-                    <form asp-action="Delete" method="post" class="mt-4">
+                    <form asp-action="Delete" method="post">
                         <input type="hidden" asp-for="Id" />
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-2"></i>�ptal
+                                <i class="bi bi-x-circle me-2"></i>İptal
                             </a>
                             <button type="submit" class="btn btn-danger">
                                 <i class="bi bi-trash me-2"></i>Sil
@@ -105,5 +98,40 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle text-info me-2"></i>Bilgi
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Önemli Uyarı
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Bu işlem geri alınamaz</li>
+                            <li>Finansal hesaplamalar etkilenebilir</li>
+                            <li>İşlem geçmişi kaybolur</li>
+                            <li>Silmeden önce yedek alın</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Alternatif
+                        </h6>
+                        <p class="mb-0 small">
+                            Kuru silmek yerine pasif hale getirmeyi düşünebilirsiniz. 
+                            Bu şekilde veri kaybı yaşamazsınız.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+

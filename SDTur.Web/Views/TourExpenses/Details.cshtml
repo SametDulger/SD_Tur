@@ -1,20 +1,20 @@
-@model TourExpenseViewModel
+@model SDTur.Web.Models.Tour.Financial.TourExpenseViewModel
 @{
-    ViewData["Title"] = "Tur Gideri Detayý";
+    ViewData["Title"] = "Tur Gideri DetayÄ±";
 }
 
 <div class="row mb-4">
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="h3 mb-0">
-                <i class="bi bi-eye text-primary me-2"></i>Tur Gideri Detayý
+                <i class="bi bi-eye text-primary me-2"></i>Tur Gideri DetayÄ±
             </h1>
             <div class="btn-group" role="group">
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
-                    <i class="bi bi-pencil me-2"></i>Düzenle
+                    <i class="bi bi-pencil me-2"></i>DÃ¼zenle
                 </a>
                 <a asp-action="Index" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-2"></i>Geri Dön
+                    <i class="bi bi-arrow-left me-2"></i>Geri DÃ¶n
                 </a>
             </div>
         </div>
@@ -48,7 +48,7 @@
                     
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-tag me-1"></i>Gider Türü
+                            <i class="bi bi-tag me-1"></i>Gider TÃ¼rÃ¼
                         </label>
                         <div>
                             <span class="badge bg-warning bg-opacity-75 fs-6">@Model.ExpenseType</span>
@@ -79,7 +79,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-receipt me-1"></i>Makbuz Numarasý
+                            <i class="bi bi-receipt me-1"></i>Makbuz NumarasÄ±
                         </label>
                         <div>
                             @if (!string.IsNullOrEmpty(Model.ReceiptNumber))
@@ -88,7 +88,7 @@
                             }
                             else
                             {
-                                <span class="text-muted">Makbuz numarasý yok</span>
+                                <span class="text-muted">Makbuz numarasÄ± yok</span>
                             }
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                             @if (Model.IsApproved)
                             {
                                 <span class="badge bg-success fs-6">
-                                    <i class="bi bi-check-circle me-1"></i>Onaylandý
+                                    <i class="bi bi-check-circle me-1"></i>OnaylandÄ±
                                 </span>
                             }
                             else
@@ -118,7 +118,7 @@
                 {
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-text-paragraph me-1"></i>Açýklama
+                            <i class="bi bi-text-paragraph me-1"></i>AÃ§Ä±klama
                         </label>
                         <div class="p-3 bg-light rounded">
                             @Model.Description
@@ -162,19 +162,19 @@
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white">
                 <h5 class="card-title mb-0">
-                    <i class="bi bi-lightning me-2"></i>Hýzlý Ýþlemler
+                    <i class="bi bi-lightning me-2"></i>HÄ±zlÄ± Ä°ÅŸlemler
                 </h5>
             </div>
             <div class="card-body">
                 <div class="d-grid gap-2">
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
-                        <i class="bi bi-pencil me-2"></i>Düzenle
+                        <i class="bi bi-pencil me-2"></i>DÃ¼zenle
                     </a>
                     <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
                         <i class="bi bi-trash me-2"></i>Sil
                     </a>
                     <a asp-action="Index" class="btn btn-outline-secondary">
-                        <i class="bi bi-list me-2"></i>Listeye Dön
+                        <i class="bi bi-list me-2"></i>Listeye DÃ¶n
                     </a>
                 </div>
             </div>

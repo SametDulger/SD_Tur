@@ -1,0 +1,121 @@
+@model SDTur.Web.Models.Tour.Core.TourEditViewModel
+@{
+    ViewData["Title"] = "Tur Düzenle";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-pencil-square text-primary me-2"></i>Tur Düzenle
+            </h1>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Geri Dön
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-airplane text-warning me-2"></i>Tur Bilgileri
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post" data-validate>
+                    <input asp-for="Id" type="hidden" />
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="Name" class="form-label">
+                                <i class="bi bi-airplane me-1"></i>Tur Adı
+                            </label>
+                            <input asp-for="Name" class="form-control" placeholder="Tur adını giriniz" required>
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="TourDate" class="form-label">
+                                <i class="bi bi-calendar me-1"></i>Tur Tarihi
+                            </label>
+                            <input asp-for="TourDate" type="date" class="form-control" required>
+                            <span asp-validation-for="TourDate" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="Price" class="form-label">
+                                <i class="bi bi-currency-dollar me-1"></i>Fiyat
+                            </label>
+                            <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="0.00" required>
+                            <span asp-validation-for="Price" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="Capacity" class="form-label">
+                                <i class="bi bi-people me-1"></i>Kapasite
+                            </label>
+                            <input asp-for="Capacity" type="number" class="form-control" placeholder="0" min="1" required>
+                            <span asp-validation-for="Capacity" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label">
+                                <i class="bi bi-text-paragraph me-1"></i>Açıklama
+                            </label>
+                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Tur açıklamasını giriniz"></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="IsActive" class="form-label">
+                                <i class="bi bi-toggle-on me-1"></i>Durum
+                            </label>
+                            <div class="form-check form-switch">
+                                <input asp-for="IsActive" class="form-check-input" type="checkbox">
+                                <label asp-for="IsActive" class="form-check-label">Aktif</label>
+                            </div>
+                            <span asp-validation-for="IsActive" class="text-danger small"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-x-circle me-2"></i>İptal
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Kaydet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Yardım Kartı -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-question-circle text-info me-2"></i>Yardım
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h6 class="alert-heading">
+                        <i class="bi bi-info-circle me-2"></i>Bilgi
+                    </h6>
+                    <ul class="mb-0 small">
+                        <li>Tur adı benzersiz olmalıdır</li>
+                        <li>Tur tarihi bugünden sonra olmalıdır</li>
+                        <li>Fiyat pozitif olmalıdır</li>
+                        <li>Kapasite en az 1 olmalıdır</li>
+                        <li>Pasif turlar rezervasyon alamaz</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
