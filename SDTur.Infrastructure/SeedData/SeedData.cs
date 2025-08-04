@@ -4,6 +4,7 @@ using SDTur.Core.Entities.System;
 using SDTur.Core.Entities.Financial;
 using SDTur.Core.Entities.Tour;
 using SDTur.Application.Enums;
+using SDTur.Infrastructure.Data;
 
 namespace SDTur.Infrastructure.SeedData
 {
@@ -1117,6 +1118,74 @@ namespace SDTur.Infrastructure.SeedData
                     IsDeleted = false
                 }
             );
+        }
+
+        public static async Task SeedUsers(SDTurDbContext context)
+        {
+            Console.WriteLine("SeedUsers method called");
+            
+            // Check if users already exist
+            if (await context.Users.AnyAsync())
+            {
+                Console.WriteLine("Users already exist, skipping seed");
+                return;
+            }
+
+            Console.WriteLine("Creating seed users...");
+            
+            var users = new List<User>
+            {
+                new User { 
+                    Id = 1, 
+                    Username = "admin",
+                    Password = "admin123",
+                    FirstName = "Admin",
+                    LastName = "User",
+                    Email = "admin@sdtur.com", 
+                    Phone = "0532 000 00 01", 
+                    EmployeeId = 1,
+                    BranchId = 1,
+                    Role = "Admin",
+                    IsActive = true, 
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                },
+                new User { 
+                    Id = 2, 
+                    Username = "manager",
+                    Password = "manager123",
+                    FirstName = "Manager",
+                    LastName = "User",
+                    Email = "manager@sdtur.com", 
+                    Phone = "0532 000 00 02", 
+                    EmployeeId = 2,
+                    BranchId = 2,
+                    Role = "Manager",
+                    IsActive = true, 
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                },
+                new User { 
+                    Id = 3, 
+                    Username = "sales",
+                    Password = "sales123",
+                    FirstName = "Sales",
+                    LastName = "User",
+                    Email = "sales@sdtur.com", 
+                    Phone = "0532 000 00 03", 
+                    EmployeeId = 3,
+                    BranchId = 3,
+                    Role = "Sales",
+                    IsActive = true, 
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                }
+            };
+
+            await context.Users.AddRangeAsync(users);
+            await context.SaveChangesAsync();
+            
+            Console.WriteLine($"Seed users created successfully. Count: {users.Count}");
         }
     }
 } 

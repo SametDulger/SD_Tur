@@ -133,8 +133,8 @@ namespace SDTur.API.Controllers
                 var tours = allTours.Where(t => t.CreatedDate.Month == currentMonth && t.CreatedDate.Year == currentYear);
 
                 // Simple distribution based on tour types (you can modify this based on your actual tour types)
-                var domesticTours = tours.Count(t => t.Destination.Contains("Türkiye") || t.Destination.Contains("İstanbul") || t.Destination.Contains("Antalya"));
-                var internationalTours = tours.Count(t => !t.Destination.Contains("Türkiye") && !t.Destination.Contains("İstanbul") && !t.Destination.Contains("Antalya"));
+                var domesticTours = tours.Count(t => !string.IsNullOrEmpty(t.Destination) && (t.Destination.Contains("Türkiye") || t.Destination.Contains("İstanbul") || t.Destination.Contains("Antalya")));
+                var internationalTours = tours.Count(t => !string.IsNullOrEmpty(t.Destination) && !t.Destination.Contains("Türkiye") && !t.Destination.Contains("İstanbul") && !t.Destination.Contains("Antalya"));
                 var dayTours = tours.Count(t => t.Duration <= 1);
 
                 var labels = new[] { "Yurt İçi", "Yurt Dışı", "Günübirlik" };

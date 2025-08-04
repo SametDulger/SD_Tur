@@ -37,8 +37,29 @@ namespace SDTur.Application.Services.System.Implementations
 
         public async Task<UserDto> GetByUsernameAsync(string username)
         {
-            var user = await _unitOfWork.Users.GetUserByUsernameAsync(username);
-            return _mapper.Map<UserDto>(user);
+            Console.WriteLine($"UserService.GetByUsernameAsync called with username: {username}");
+            try
+            {
+                var user = await _unitOfWork.Users.GetUserByUsernameAsync(username);
+                Console.WriteLine($"UnitOfWork.Users.GetUserByUsernameAsync completed");
+                
+                if (user == null)
+                {
+                    Console.WriteLine("User entity is null");
+                    return null;
+                }
+                
+                Console.WriteLine($"User entity found: Id={user.Id}, Username={user.Username}");
+                var userDto = _mapper.Map<UserDto>(user);
+                Console.WriteLine($"UserDto mapped: Id={userDto.Id}, Username={userDto.Username}");
+                return userDto;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in GetByUsernameAsync: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<UserDto> CreateAsync(CreateUserDto createDto)

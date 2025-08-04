@@ -4,6 +4,7 @@ using SDTur.Web.Services;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace SDTur.Web.Controllers
 {
@@ -17,77 +18,100 @@ namespace SDTur.Web.Controllers
         }
 
         [HttpGet("login")]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login(string? returnUrl = null)
         {
-            ViewData["ReturnUrl"] = returnUrl;
+            ViewData["ReturnUrl"] = returnUrl ?? "";
             return View();
         }
 
         [HttpPost("login")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
-            ViewData["ReturnUrl"] = returnUrl;
+            ViewData["ReturnUrl"] = returnUrl ?? "";
 
-            if (ModelState.IsValid)
+            // Model validation
+            if (!ModelState.IsValid)
             {
-                try
+                Console.WriteLine("Login attempt with invalid model state");
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
                 {
-                    var loginDto = new
+                    Console.WriteLine($"Model error: {error.ErrorMessage}");
+                }
+                return View(model);
+            }
+
+            try
+            {
+                Console.WriteLine($"Login attempt for user: {model.Username}");
+                
+                var loginDto = new
+                {
+                    Username = model.Username,
+                    Password = model.Password,
+                    RememberMe = model.RememberMe
+                };
+
+                Console.WriteLine("Calling API with login data");
+                
+                var response = await _apiService.PostAsync<object, LoginResponseViewModel>("api/auth/login", loginDto);
+                
+                Console.WriteLine($"API response received: {response?.ToString()}");
+
+                if (response?.Success == true)
+                {
+                    // Token'ı session'a kaydet
+                    SessionExtensions.SetString(HttpContext.Session, "JWTToken", response.Token?.ToString() ?? "");
+                    SessionExtensions.SetString(HttpContext.Session, "RefreshToken", response.RefreshToken?.ToString() ?? "");
+
+                    // Kullanıcı bilgilerini session'a kaydet
+                    var user = response.User;
+                    SessionExtensions.SetString(HttpContext.Session, "UserId", user.Id.ToString());
+                    SessionExtensions.SetString(HttpContext.Session, "Username", user.Username ?? "");
+                    SessionExtensions.SetString(HttpContext.Session, "UserFullName", $"{user.FirstName ?? ""} {user.LastName ?? ""}");
+                    SessionExtensions.SetString(HttpContext.Session, "UserRole", user.Role ?? "");
+
+                    // Cookie authentication
+                    var claims = new List<Claim>
                     {
-                        Username = model.Username,
-                        Password = model.Password,
-                        RememberMe = model.RememberMe
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        new Claim(ClaimTypes.Name, user.Username ?? ""),
+                        new Claim(ClaimTypes.GivenName, user.FirstName ?? ""),
+                        new Claim(ClaimTypes.Surname, user.LastName ?? ""),
+                        new Claim(ClaimTypes.Email, user.Email ?? ""),
+                        new Claim(ClaimTypes.Role, user.Role ?? "")
                     };
 
-                    var response = await _apiService.PostAsync<object, dynamic>("api/auth/login", loginDto);
-
-                    if (response != null && response.Success)
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties
                     {
-                        // Token'ı session'a kaydet
-                        HttpContext.Session.SetString("JWTToken", response.Token);
-                        HttpContext.Session.SetString("RefreshToken", response.RefreshToken);
+                        IsPersistent = model.RememberMe,
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8)
+                    };
 
-                        // Kullanıcı bilgilerini session'a kaydet
-                        var user = response.User;
-                        HttpContext.Session.SetString("UserId", user.Id.ToString());
-                        HttpContext.Session.SetString("Username", user.Username);
-                        HttpContext.Session.SetString("UserFullName", $"{user.FirstName} {user.LastName}");
-                        HttpContext.Session.SetString("UserRole", user.Role);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
+                        new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                        // Cookie authentication
-                        var claims = new List<Claim>
-                        {
-                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                            new Claim(ClaimTypes.Name, user.Username),
-                            new Claim(ClaimTypes.GivenName, user.FirstName),
-                            new Claim(ClaimTypes.Surname, user.LastName),
-                            new Claim(ClaimTypes.Email, user.Email ?? ""),
-                            new Claim(ClaimTypes.Role, user.Role)
-                        };
-
-                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                        var authProperties = new AuthenticationProperties
-                        {
-                            IsPersistent = model.RememberMe,
-                            ExpiresUtc = DateTimeOffset.UtcNow.AddHours(8)
-                        };
-
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
-                            new ClaimsPrincipal(claimsIdentity), authProperties);
-
-                        TempData["Success"] = "Giriş başarılı!";
-                        return RedirectToLocal(returnUrl);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, response?.Message ?? "Giriş başarısız");
-                    }
+                    Console.WriteLine($"Login successful for user: {model.Username}");
+                    TempData["Success"] = "Giriş başarılı!";
+                    return RedirectToLocal(returnUrl);
                 }
-                catch (Exception ex)
+                else
                 {
-                    ModelState.AddModelError(string.Empty, "Giriş sırasında bir hata oluştu");
+                    var errorMessage = response?.Message ?? "Giriş başarısız";
+                    Console.WriteLine($"Login failed for user {model.Username}: {errorMessage}");
+                    ModelState.AddModelError(string.Empty, errorMessage);
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"HTTP request error during login for user: {model.Username} - {ex.Message}");
+                ModelState.AddModelError(string.Empty, "API sunucusuna bağlanılamıyor. Lütfen daha sonra tekrar deneyin.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error during login for user: {model.Username} - {ex.Message}");
+                ModelState.AddModelError(string.Empty, "Giriş sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyin.");
             }
 
             return View(model);
@@ -100,10 +124,11 @@ namespace SDTur.Web.Controllers
             try
             {
                 // API'ye logout isteği gönder
-                await _apiService.PostAsync<object, object>("api/auth/logout", null);
+                await _apiService.PostAsync<object, object>("api/auth/logout", new { });
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine($"Error during logout API call: {ex.Message}");
                 // Hata olsa bile devam et
             }
 
@@ -122,28 +147,29 @@ namespace SDTur.Web.Controllers
         {
             try
             {
-                var user = await _apiService.GetAsync<dynamic>("api/auth/current-user");
+                var user = await _apiService.GetAsync<UserInfoViewModel>("api/auth/current-user");
                 if (user != null)
                 {
                     var profileViewModel = new UserProfileViewModel
                     {
                         Id = user.Id,
-                        Username = user.Username,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Email = user.Email,
-                        Phone = user.Phone,
-                        Role = user.Role,
-                        BranchName = user.BranchName,
-                        EmployeeName = user.EmployeeName,
+                        Username = user.Username ?? "",
+                        FirstName = user.FirstName ?? "",
+                        LastName = user.LastName ?? "",
+                        Email = user.Email ?? "",
+                        Phone = user.Phone ?? "",
+                        Role = user.Role ?? "",
+                        BranchName = user.BranchName ?? "",
+                        EmployeeName = user.EmployeeName ?? "",
                         IsActive = user.IsActive
                     };
 
                     return View(profileViewModel);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine($"Error getting user profile: {ex.Message}");
                 TempData["Error"] = "Profil bilgileri alınamadı";
             }
 
@@ -160,6 +186,8 @@ namespace SDTur.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
+            Console.WriteLine("ChangePassword called");
+            
             if (ModelState.IsValid)
             {
                 try
@@ -171,30 +199,45 @@ namespace SDTur.Web.Controllers
                         ConfirmPassword = model.ConfirmPassword
                     };
 
-                    var response = await _apiService.PostAsync<object, dynamic>("api/auth/change-password", changePasswordDto);
+                    Console.WriteLine("Calling API with change password data");
+                    
+                    var response = await _apiService.PostAsync<object, ChangePasswordResponseViewModel>("api/auth/change-password", changePasswordDto);
+                    
+                    Console.WriteLine($"API response received: {response?.ToString()}");
 
-                    if (response != null && response.Success)
+                    if (response?.Success == true)
                     {
                         TempData["Success"] = "Şifre başarıyla değiştirildi!";
                         return RedirectToAction("Profile");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, response?.Message ?? "Şifre değiştirme başarısız");
+                        var errorMessage = response?.Message ?? "Şifre değiştirme başarısız";
+                        Console.WriteLine($"Password change failed: {errorMessage}");
+                        ModelState.AddModelError(string.Empty, errorMessage);
                     }
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine($"Error during password change: {ex.Message}");
                     ModelState.AddModelError(string.Empty, "Şifre değiştirme sırasında bir hata oluştu");
+                }
+            }
+            else
+            {
+                Console.WriteLine("ChangePassword called with invalid model state");
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine($"Model error: {error.ErrorMessage}");
                 }
             }
 
             return View(model);
         }
 
-        private IActionResult RedirectToLocal(string returnUrl)
+        private IActionResult RedirectToLocal(string? returnUrl)
         {
-            if (Url.IsLocalUrl(returnUrl))
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);
             }

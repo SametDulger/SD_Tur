@@ -36,7 +36,7 @@ namespace SDTur.API.Controllers
                 if (!string.IsNullOrEmpty(tourTypeId))
                 {
                     // Filter by tour type (you can modify this based on your actual tour type logic)
-                    filteredTours = filteredTours.Where(t => t.Destination.Contains(tourTypeId));
+                    filteredTours = filteredTours.Where(t => !string.IsNullOrEmpty(t.Destination) && t.Destination.Contains(tourTypeId));
                 }
 
                 if (!string.IsNullOrEmpty(status))
@@ -81,7 +81,7 @@ namespace SDTur.API.Controllers
                 // Apply same filters as GetTours
                 if (!string.IsNullOrEmpty(tourTypeId))
                 {
-                    filteredTours = filteredTours.Where(t => t.Destination.Contains(tourTypeId));
+                    filteredTours = filteredTours.Where(t => !string.IsNullOrEmpty(t.Destination) && t.Destination.Contains(tourTypeId));
                 }
 
                 if (!string.IsNullOrEmpty(status))
