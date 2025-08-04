@@ -6,8 +6,8 @@ namespace SDTur.Application.DTOs.Tour.CustomerDistribution
     {
         public int Id { get; set; }
         public DateTime DistributionDate { get; set; }
-        public string Status { get; set; }
-        public string Notes { get; set; }
+        public string? Status { get; set; }
+        public string? Notes { get; set; }
         public int TourScheduleId { get; set; }
         public int BusId { get; set; }
         public int TicketId { get; set; }
@@ -16,17 +16,17 @@ namespace SDTur.Application.DTOs.Tour.CustomerDistribution
         public DateTime CreatedDate { get; set; }
         
         // Navigation properties
-        public string TourName { get; set; }
+        public string? TourName { get; set; }
         public DateTime TourDate { get; set; }
-        public string BusPlateNumber { get; set; }
-        public string CustomerName { get; set; }
-        public string HotelName { get; set; }
-        public string RegionName { get; set; }
-        public string EmployeeName { get; set; }
+        public string? BusPlateNumber { get; set; }
+        public string? CustomerName { get; set; }
+        public string? HotelName { get; set; }
+        public string? RegionName { get; set; }
+        public string? EmployeeName { get; set; }
         public bool IsActive { get; set; }
         public DateTime? UpdatedDate { get; set; }
-        public string TourScheduleInfo { get; set; }
-        public string BusInfo { get; set; }
-        public string TicketInfo { get; set; }
+        public string? TourScheduleInfo { get; set; }
+        public string? BusInfo { get; set; }
+        public string? TicketInfo { get; set; }
     }
 } 

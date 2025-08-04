@@ -21,18 +21,18 @@ namespace SDTur.Application.DTOs.Financial.CommissionCalculation
         public decimal CommissionRate { get; set; }
 
         [Required]
-        public string Currency { get; set; }
+        public string? Currency { get; set; }
 
         [Required]
-        public string CommissionType { get; set; }
+        public string? CommissionType { get; set; }
 
         [Required]
         public DateTime CalculationDate { get; set; }
 
         [Required]
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
         public bool IsActive { get; set; } = true;
     }

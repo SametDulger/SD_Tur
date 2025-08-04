@@ -19,9 +19,9 @@ namespace SDTur.Application.DTOs.Tour.TourSchedule
         public decimal Price { get; set; }
         [Required]
         public int CurrencyId { get; set; }
-        public string Currency { get; set; }
+        public string? Currency { get; set; }
         [Required]
-        public string Status { get; set; }
-        public string Notes { get; set; }
+        public string? Status { get; set; }
+        public string? Notes { get; set; }
     }
 }

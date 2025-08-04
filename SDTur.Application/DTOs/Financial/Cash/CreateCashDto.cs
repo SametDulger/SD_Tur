@@ -8,20 +8,20 @@ namespace SDTur.Application.DTOs.Financial.Cash
         public DateTime TransactionDate { get; set; }
 
         [Required]
-        public string TransactionType { get; set; }
+        public string? TransactionType { get; set; }
 
         [Required]
         [Range(0, double.MaxValue)]
         public decimal Amount { get; set; }
 
         [Required]
-        public string Currency { get; set; }
+        public string? Currency { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Required]
-        public string Category { get; set; }
+        public string? Category { get; set; }
 
         public bool IsAutomatic { get; set; }
 
