@@ -8,7 +8,7 @@ namespace SDTur.Application.DTOs.Financial.FinancialReport
         public DateTime ReportDate { get; set; }
 
         [Required]
-        public string ReportType { get; set; }
+        public string? ReportType { get; set; }
 
         [Required]
         public DateTime StartDate { get; set; }
@@ -29,11 +29,11 @@ namespace SDTur.Application.DTOs.Financial.FinancialReport
         public decimal NetProfit { get; set; }
 
         [Required]
-        public string Currency { get; set; }
+        public string? Currency { get; set; }
 
-        public string ReportData { get; set; }
+        public string? ReportData { get; set; }
 
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         public int? EmployeeId { get; set; }
 

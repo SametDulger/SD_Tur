@@ -6,10 +6,10 @@ namespace SDTur.Application.DTOs.Master.PassAgreement
     {
         public int Id { get; set; }
         public int PassCompanyId { get; set; }
-        public string PassCompanyName { get; set; }
+        public string? PassCompanyName { get; set; }
         public int TourId { get; set; }
-        public string TourName { get; set; }
-        public string AgreementNumber { get; set; }
+        public string? TourName { get; set; }
+        public string? AgreementNumber { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime AgreementDate { get; set; }
@@ -20,10 +20,10 @@ namespace SDTur.Application.DTOs.Master.PassAgreement
         public decimal IncomingFullPrice { get; set; }
         public decimal IncomingHalfPrice { get; set; }
         public int CurrencyId { get; set; }
-        public string CurrencyCode { get; set; }
-        public string Currency { get; set; }
-        public string Status { get; set; }
-        public string Notes { get; set; }
+        public string? CurrencyCode { get; set; }
+        public string? Currency { get; set; }
+        public string? Status { get; set; }
+        public string? Notes { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }

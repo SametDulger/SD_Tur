@@ -29,7 +29,7 @@ cp SDTur.API/appsettings.example.json SDTur.API/appsettings.json
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=SDTurDB;Trusted_Connection=true;TrustServerCertificate=true;MultipleActiveResultSets=true"
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=SDTurDB;Trusted_Connection=true;MultipleActiveResultSets=true"
   }
 }
 ```
@@ -42,7 +42,10 @@ cp SDTur.Web/appsettings.example.json SDTur.Web/appsettings.json
 
 ```json
 {
-  "ApiBaseUrl": "https://localhost:7275/"
+  "ApiSettings": {
+    "BaseUrl": "https://localhost:7001",
+    "Timeout": 30
+  }
 }
 ```
 
@@ -61,9 +64,11 @@ dotnet run
 ```
 
 **Erişim:**
-- API: https://localhost:7275
-- Web: https://localhost:7290
-- Swagger: https://localhost:7275/swagger
+- API: https://localhost:7001
+- Web: https://localhost:7276
+- Swagger: https://localhost:7001/swagger
+
+**Not:** Eğer port çakışması yaşarsanız, `Properties/launchSettings.json` dosyalarında port numaralarını değiştirebilirsiniz.
 
 ## 🔍 Sorun Giderme
 

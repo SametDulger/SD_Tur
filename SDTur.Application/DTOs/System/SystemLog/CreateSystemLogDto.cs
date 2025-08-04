@@ -8,24 +8,24 @@ namespace SDTur.Application.DTOs.System.SystemLog
         public DateTime LogDate { get; set; }
 
         [Required]
-        public string LogLevel { get; set; }
+        public string? LogLevel { get; set; }
 
         [Required]
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
-        public string Details { get; set; }
+        public string? Details { get; set; }
 
-        public string Category { get; set; }
+        public string? Category { get; set; }
 
-        public string Action { get; set; }
+        public string? Action { get; set; }
 
         public int? UserId { get; set; }
 
         public int? EmployeeId { get; set; }
 
-        public string IpAddress { get; set; }
+        public string? IpAddress { get; set; }
 
-        public string UserAgent { get; set; }
+        public string? UserAgent { get; set; }
 
         public bool IsActive { get; set; } = true;
     }

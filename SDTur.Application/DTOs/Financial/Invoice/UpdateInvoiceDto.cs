@@ -9,10 +9,16 @@ namespace SDTur.Application.DTOs.Financial.Invoice
 
         [Required(ErrorMessage = "Fatura numarası zorunludur")]
         [StringLength(20, ErrorMessage = "Fatura numarası en fazla 20 karakter olabilir")]
-        public string InvoiceNumber { get; set; }
+        public string? InvoiceNumber { get; set; }
 
         [Required(ErrorMessage = "Fatura tarihi zorunludur")]
         public DateTime InvoiceDate { get; set; }
+
+        [Required(ErrorMessage = "Müşteri zorunludur")]
+        public int CustomerId { get; set; }
+
+        [Required(ErrorMessage = "Vade tarihi zorunludur")]
+        public DateTime DueDate { get; set; }
 
         public int? PassCompanyId { get; set; }
 
@@ -22,13 +28,13 @@ namespace SDTur.Application.DTOs.Financial.Invoice
 
         [Required(ErrorMessage = "Para birimi zorunludur")]
         [StringLength(3, ErrorMessage = "Para birimi en fazla 3 karakter olabilir")]
-        public string Currency { get; set; }
+        public string? Currency { get; set; }
 
         [Required(ErrorMessage = "Durum zorunludur")]
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         [StringLength(500, ErrorMessage = "Notlar en fazla 500 karakter olabilir")]
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
         public bool IsActive { get; set; }
     }
