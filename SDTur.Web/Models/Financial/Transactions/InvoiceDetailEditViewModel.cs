@@ -4,6 +4,7 @@ namespace SDTur.Web.Models.Financial.Transactions
 {
     public class InvoiceDetailEditViewModel
     {
+        [Required]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Fatura ID zorunludur")]

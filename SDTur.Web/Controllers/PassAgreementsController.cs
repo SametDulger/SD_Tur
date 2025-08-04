@@ -28,8 +28,10 @@ namespace SDTur.Web.Controllers
             return View(passAgreement);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var passCompanies = await _apiService.GetAsync<List<PassCompanyViewModel>>("api/passcompanies");
+            ViewBag.PassCompanies = passCompanies;
             return View();
         }
 
@@ -42,6 +44,9 @@ namespace SDTur.Web.Controllers
                 await _apiService.PostAsync<PassAgreementCreateViewModel, PassAgreementViewModel>("api/passagreements", createDto);
                 return RedirectToAction(nameof(Index));
             }
+            
+            var passCompanies = await _apiService.GetAsync<List<PassCompanyViewModel>>("api/passcompanies");
+            ViewBag.PassCompanies = passCompanies;
             return View(createDto);
         }
 
@@ -50,6 +55,9 @@ namespace SDTur.Web.Controllers
             var passAgreement = await _apiService.GetAsync<PassAgreementViewModel>($"api/passagreements/{id}");
             if (passAgreement == null)
                 return NotFound();
+
+            var passCompanies = await _apiService.GetAsync<List<PassCompanyViewModel>>("api/passcompanies");
+            ViewBag.PassCompanies = passCompanies;
 
             var updateDto = new PassAgreementEditViewModel
             {
@@ -79,6 +87,9 @@ namespace SDTur.Web.Controllers
                 await _apiService.PutAsync<PassAgreementEditViewModel, PassAgreementViewModel>($"api/passagreements/{id}", updateDto);
                 return RedirectToAction(nameof(Index));
             }
+            
+            var passCompanies = await _apiService.GetAsync<List<PassCompanyViewModel>>("api/passcompanies");
+            ViewBag.PassCompanies = passCompanies;
             return View(updateDto);
         }
 

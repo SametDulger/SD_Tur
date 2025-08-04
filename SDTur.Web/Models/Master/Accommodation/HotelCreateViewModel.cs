@@ -35,6 +35,7 @@ namespace SDTur.Web.Models.Master.Accommodation
         
         public bool IsActive { get; set; } = true;
         
+        [Required]
         // Additional property for compatibility
         public int RegionId { get; set; }
     }

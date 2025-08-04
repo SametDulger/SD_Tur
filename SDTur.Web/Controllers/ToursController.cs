@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SDTur.Web.Models.Tour.Core;
+using SDTur.Web.Models.Master.References;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -49,8 +50,18 @@ namespace SDTur.Web.Controllers
             return View(vm);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var currencies = await _apiService.GetAsync<List<CurrencyViewModel>>("api/currencies");
+            ViewBag.Currencies = currencies;
+            ViewBag.TourTypes = new List<TourTypeViewModel> 
+            { 
+                new TourTypeViewModel { Id = "Domestic", Name = "Yurt İçi" },
+                new TourTypeViewModel { Id = "International", Name = "Yurt Dışı" },
+                new TourTypeViewModel { Id = "Cultural", Name = "Kültür Turu" },
+                new TourTypeViewModel { Id = "Adventure", Name = "Macera Turu" },
+                new TourTypeViewModel { Id = "Relaxation", Name = "Dinlence Turu" }
+            };
             return View();
         }
 
@@ -60,38 +71,89 @@ namespace SDTur.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var dto = new TourCreateViewModel
+                try
                 {
-                    Name = vm.Name,
-                    Description = vm.Description,
-                    Price = vm.Price,
-                    TourDate = vm.TourDate,
-                    Capacity = vm.Capacity,
-                    IsActive = vm.IsActive
-                };
-                var result = await _apiService.PostAsync<TourCreateViewModel, TourViewModel>("api/tours", dto);
-                if (result != null)
-                    return RedirectToAction(nameof(Index));
+                    // Set required properties for API
+                    vm.Duration = (int)(vm.EndDate - vm.StartDate).TotalDays;
+                    vm.Destination = vm.DestinationLocation ?? vm.Destination;
+                    vm.BasePrice = vm.Price;
+                    
+                    // Debug için log ekleyelim
+                    Console.WriteLine($"Sending tour data: Name={vm.Name}, Price={vm.Price}, Duration={vm.Duration}, Destination={vm.Destination}");
+                    
+                    var result = await _apiService.PostAsync<TourCreateViewModel, TourViewModel>("api/tours", vm);
+                    if (result != null)
+                    {
+                        TempData["Success"] = "Tur başarıyla oluşturuldu!";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "API'den yanıt alınamadı");
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    ModelState.AddModelError("", $"API Hatası: {ex.Message}");
+                    Console.WriteLine($"HTTP Error: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Beklenmeyen hata: {ex.Message}");
+                    Console.WriteLine($"General Error: {ex.Message}");
+                }
             }
+            else
+            {
+                // Model validation hatalarını göster
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine($"Validation Error: {error.ErrorMessage}");
+                }
+            }
+            
+            var currencies = await _apiService.GetAsync<List<CurrencyViewModel>>("api/currencies");
+            ViewBag.Currencies = currencies;
+            ViewBag.TourTypes = new List<TourTypeViewModel> 
+            { 
+                new TourTypeViewModel { Id = "Domestic", Name = "Yurt İçi" },
+                new TourTypeViewModel { Id = "International", Name = "Yurt Dışı" },
+                new TourTypeViewModel { Id = "Cultural", Name = "Kültür Turu" },
+                new TourTypeViewModel { Id = "Adventure", Name = "Macera Turu" },
+                new TourTypeViewModel { Id = "Relaxation", Name = "Dinlence Turu" }
+            };
             return View(vm);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var t = await _apiService.GetAsync<TourViewModel>($"api/tours/{id}");
-            if (t == null)
+            var tour = await _apiService.GetAsync<TourViewModel>($"api/tours/{id}");
+            if (tour == null)
                 return NotFound();
-            var vm = new TourEditViewModel
-            {
-                Id = t.Id,
-                Name = t.Name,
-                Description = t.Description,
-                Price = t.Price,
-                TourDate = t.TourDate,
-                Capacity = t.Capacity,
-                IsActive = t.IsActive
+            
+            var currencies = await _apiService.GetAsync<List<CurrencyViewModel>>("api/currencies");
+            ViewBag.Currencies = currencies;
+            ViewBag.TourTypes = new List<TourTypeViewModel> 
+            { 
+                new TourTypeViewModel { Id = "Domestic", Name = "Yurt İçi" },
+                new TourTypeViewModel { Id = "International", Name = "Yurt Dışı" },
+                new TourTypeViewModel { Id = "Cultural", Name = "Kültür Turu" },
+                new TourTypeViewModel { Id = "Adventure", Name = "Macera Turu" },
+                new TourTypeViewModel { Id = "Relaxation", Name = "Dinlence Turu" }
             };
-            return View(vm);
+            
+            var editViewModel = new TourEditViewModel
+            {
+                Id = tour.Id,
+                Name = tour.Name,
+                Description = tour.Description,
+                Price = tour.Price,
+                TourDate = tour.TourDate,
+                Capacity = tour.Capacity,
+                IsActive = tour.IsActive
+            };
+            
+            return View(editViewModel);
         }
 
         [HttpPost]
@@ -100,40 +162,35 @@ namespace SDTur.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var dto = new TourEditViewModel
-                {
-                    Id = vm.Id,
-                    Name = vm.Name,
-                    Description = vm.Description,
-                    Price = vm.Price,
-                    TourDate = vm.TourDate,
-                    Capacity = vm.Capacity,
-                    IsActive = vm.IsActive
-                };
-                var result = await _apiService.PutAsync<TourEditViewModel, TourViewModel>($"api/tours/{vm.Id}", dto);
+                                 // Set required properties for API
+                 vm.Duration = (int)(vm.EndDate - vm.StartDate).TotalDays;
+                 vm.Destination = vm.DestinationLocation ?? vm.Destination;
+                 vm.BasePrice = vm.Price;
+                
+                var result = await _apiService.PutAsync<TourEditViewModel, TourViewModel>($"api/tours/{vm.Id}", vm);
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
+            
+            var currencies = await _apiService.GetAsync<List<CurrencyViewModel>>("api/currencies");
+            ViewBag.Currencies = currencies;
+            ViewBag.TourTypes = new List<TourTypeViewModel> 
+            { 
+                new TourTypeViewModel { Id = "Domestic", Name = "Yurt İçi" },
+                new TourTypeViewModel { Id = "International", Name = "Yurt Dışı" },
+                new TourTypeViewModel { Id = "Cultural", Name = "Kültür Turu" },
+                new TourTypeViewModel { Id = "Adventure", Name = "Macera Turu" },
+                new TourTypeViewModel { Id = "Relaxation", Name = "Dinlence Turu" }
+            };
             return View(vm);
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var t = await _apiService.GetAsync<TourViewModel>($"api/tours/{id}");
-            if (t == null)
+            var tour = await _apiService.GetAsync<TourViewModel>($"api/tours/{id}");
+            if (tour == null)
                 return NotFound();
-            var vm = new TourViewModel
-            {
-                Id = t.Id,
-                Name = t.Name,
-                Description = t.Description,
-                Price = t.Price,
-                TourDate = t.TourDate,
-                Capacity = t.Capacity,
-                AvailableSeats = t.AvailableSeats,
-                IsActive = t.IsActive
-            };
-            return View(vm);
+            return View(tour);
         }
 
         [HttpPost, ActionName("Delete")]

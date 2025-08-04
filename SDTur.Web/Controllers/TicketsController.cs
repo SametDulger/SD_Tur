@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SDTur.Web.Models.Tour.Operations;
+using SDTur.Web.Models.Tour.Core;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -28,8 +29,10 @@ namespace SDTur.Web.Controllers
             return View(ticket);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var tours = await _apiService.GetAsync<List<TourViewModel>>("api/tours");
+            ViewBag.Tours = tours;
             return View();
         }
 
@@ -42,6 +45,9 @@ namespace SDTur.Web.Controllers
                 await _apiService.CreateTicketAsync(TicketCreateViewModel);
                 return RedirectToAction(nameof(Index));
             }
+            
+            var tours = await _apiService.GetAsync<List<TourViewModel>>("api/tours");
+            ViewBag.Tours = tours;
             return View(TicketCreateViewModel);
         }
 
@@ -125,8 +131,8 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> PassTickets()
         {
-            var tickets = await _apiService.GetPassTicketsAsync();
-            return View(tickets);
+            var passTickets = await _apiService.GetPassTicketsAsync();
+            return View(passTickets);
         }
     }
 } 

@@ -35,6 +35,13 @@
                             </label>
                             <select asp-for="TourScheduleId" class="form-select" required>
                                 <option value="">Tur programı seçiniz...</option>
+                                @if (ViewBag.TourSchedules != null)
+                                {
+                                    @foreach (var schedule in ViewBag.TourSchedules)
+                                    {
+                                        <option value="@schedule.Id">@schedule.TourName - @schedule.StartDate.ToString("dd.MM.yyyy")</option>
+                                    }
+                                }
                             </select>
                             <span asp-validation-for="TourScheduleId" class="text-danger small"></span>
                         </div>
@@ -45,6 +52,13 @@
                             </label>
                             <select asp-for="BusId" class="form-select" required>
                                 <option value="">Otobüs seçiniz...</option>
+                                @if (ViewBag.Buses != null)
+                                {
+                                    @foreach (var bus in ViewBag.Buses)
+                                    {
+                                        <option value="@bus.Id">@bus.PlateNumber - @bus.Capacity Kişi</option>
+                                    }
+                                }
                             </select>
                             <span asp-validation-for="BusId" class="text-danger small"></span>
                         </div>
@@ -55,6 +69,13 @@
                             </label>
                             <select asp-for="EmployeeId" class="form-select" required>
                                 <option value="">Şoför seçiniz...</option>
+                                @if (ViewBag.Employees != null)
+                                {
+                                    @foreach (var employee in ViewBag.Employees)
+                                    {
+                                        <option value="@employee.Id">@employee.FirstName @employee.LastName</option>
+                                    }
+                                }
                             </select>
                             <span asp-validation-for="EmployeeId" class="text-danger small"></span>
                         </div>

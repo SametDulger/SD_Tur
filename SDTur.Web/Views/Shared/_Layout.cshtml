@@ -20,25 +20,68 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-speedometer2 me-1"></i>
+                            <span class="d-none d-md-inline">Dashboard</span>
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-currency-exchange me-1"></i>
-                            <span class="d-none d-md-inline">Finansal</span>
+                            <i class="bi bi-airplane me-1"></i>
+                            <span class="d-none d-md-inline">Turlar</span>
+                        </a>
+                        <ul class="dropdown-menu shadow border-0">
+                            <li><a class="dropdown-item" asp-controller="Tours" asp-action="Index"><i class="bi bi-airplane me-2"></i>Tur Listesi</a></li>
+                            <li><a class="dropdown-item" asp-controller="TourSchedules" asp-action="Index"><i class="bi bi-calendar-event me-2"></i>Tur Programları</a></li>
+                            <li><a class="dropdown-item" asp-controller="TourOperations" asp-action="Index"><i class="bi bi-gear me-2"></i>Tur Operasyonları</a></li>
+                            <li><a class="dropdown-item" asp-controller="ServiceSchedules" asp-action="Index"><i class="bi bi-clock me-2"></i>Servis Programları</a></li>
+                            <li><a class="dropdown-item" asp-controller="BusAssignments" asp-action="Index"><i class="bi bi-truck me-2"></i>Otobüs Atamaları</a></li>
+                            <li><a class="dropdown-item" asp-controller="TourExpenses" asp-action="Index"><i class="bi bi-cash-coin me-2"></i>Tur Giderleri</a></li>
+                            <li><a class="dropdown-item" asp-controller="TourIncomes" asp-action="Index"><i class="bi bi-cash me-2"></i>Tur Gelirleri</a></li>
+                            <li><a class="dropdown-item" asp-controller="TourReports" asp-action="Index"><i class="bi bi-graph-up me-2"></i>Tur Raporları</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-people me-1"></i>
+                            <span class="d-none d-md-inline">Müşteriler</span>
+                        </a>
+                        <ul class="dropdown-menu shadow border-0">
+                            <li><a class="dropdown-item" asp-controller="CustomerDistributions" asp-action="Index"><i class="bi bi-people me-2"></i>Müşteri Listesi</a></li>
+                            <li><a class="dropdown-item" asp-controller="CustomerDistributions" asp-action="Create"><i class="bi bi-person-plus me-2"></i>Müşteri Ekle</a></li>
+                            <li><a class="dropdown-item" asp-controller="CustomerDistributions" asp-action="Index"><i class="bi bi-search me-2"></i>Müşteri Ara</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-ticket-perforated me-1"></i>
+                            <span class="d-none d-md-inline">Satış</span>
+                        </a>
+                        <ul class="dropdown-menu shadow border-0">
+                            <li><a class="dropdown-item" asp-controller="Tickets" asp-action="Index"><i class="bi bi-ticket-perforated me-2"></i>Bilet Satışı</a></li>
+                            <li><a class="dropdown-item" asp-controller="Invoices" asp-action="Index"><i class="bi bi-receipt me-2"></i>Faturalar</a></li>
+                            <li><a class="dropdown-item" asp-controller="InvoiceDetails" asp-action="Index"><i class="bi bi-receipt-cutoff me-2"></i>Fatura Detayları</a></li>
+                            <li><a class="dropdown-item" asp-controller="CommissionCalculations" asp-action="Index"><i class="bi bi-percent me-2"></i>Komisyon Hesaplamaları</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bank me-1"></i>
+                            <span class="d-none d-md-inline">Finans</span>
                         </a>
                         <ul class="dropdown-menu shadow border-0">
                             <li><a class="dropdown-item" asp-controller="Accounts" asp-action="Index"><i class="bi bi-bank me-2"></i>Hesaplar</a></li>
-                            <li><a class="dropdown-item" asp-controller="AccountTransactions" asp-action="Index"><i class="bi bi-arrow-left-right me-2"></i>İşlemler</a></li>
+                            <li><a class="dropdown-item" asp-controller="AccountTransactions" asp-action="Index"><i class="bi bi-arrow-left-right me-2"></i>Hesap İşlemleri</a></li>
                             <li><a class="dropdown-item" asp-controller="Cash" asp-action="Index"><i class="bi bi-cash-stack me-2"></i>Kasa</a></li>
-                            <li><a class="dropdown-item" asp-controller="Invoices" asp-action="Index"><i class="bi bi-receipt me-2"></i>Faturalar</a></li>
                             <li><a class="dropdown-item" asp-controller="ExchangeRates" asp-action="Index"><i class="bi bi-currency-exchange me-2"></i>Döviz Kurları</a></li>
-                            <li><a class="dropdown-item" asp-controller="CommissionCalculations" asp-action="Index"><i class="bi bi-percent me-2"></i>Komisyon</a></li>
-                            <li><a class="dropdown-item" asp-controller="FinancialReports" asp-action="Index"><i class="bi bi-graph-up me-2"></i>Raporlar</a></li>
+                            <li><a class="dropdown-item" asp-controller="FinancialReports" asp-action="Index"><i class="bi bi-graph-up me-2"></i>Finansal Raporlar</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-building me-1"></i>
-                            <span class="d-none d-md-inline">Master</span>
+                            <span class="d-none d-md-inline">Yönetim</span>
                         </a>
                         <ul class="dropdown-menu shadow border-0">
                             <li><a class="dropdown-item" asp-controller="Branches" asp-action="Index"><i class="bi bi-geo-alt me-2"></i>Şubeler</a></li>
@@ -50,24 +93,6 @@
                             <li><a class="dropdown-item" asp-controller="Nationalities" asp-action="Index"><i class="bi bi-flag me-2"></i>Uyruklar</a></li>
                             <li><a class="dropdown-item" asp-controller="PassCompanies" asp-action="Index"><i class="bi bi-briefcase me-2"></i>Pas Şirketleri</a></li>
                             <li><a class="dropdown-item" asp-controller="PassAgreements" asp-action="Index"><i class="bi bi-file-text me-2"></i>Pas Anlaşmaları</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-airplane me-1"></i>
-                            <span class="d-none d-md-inline">Turlar</span>
-                        </a>
-                        <ul class="dropdown-menu shadow border-0">
-                            <li><a class="dropdown-item" asp-controller="Tours" asp-action="Index"><i class="bi bi-airplane me-2"></i>Turlar</a></li>
-                            <li><a class="dropdown-item" asp-controller="TourSchedules" asp-action="Index"><i class="bi bi-calendar-event me-2"></i>Tur Programları</a></li>
-                            <li><a class="dropdown-item" asp-controller="ServiceSchedules" asp-action="Index"><i class="bi bi-clock me-2"></i>Servis Programları</a></li>
-                            <li><a class="dropdown-item" asp-controller="Tickets" asp-action="Index"><i class="bi bi-ticket-perforated me-2"></i>Biletler</a></li>
-                            <li><a class="dropdown-item" asp-controller="TourOperations" asp-action="Index"><i class="bi bi-gear me-2"></i>Tur Operasyonları</a></li>
-                            <li><a class="dropdown-item" asp-controller="BusAssignments" asp-action="Index"><i class="bi bi-truck me-2"></i>Otobüs Atamaları</a></li>
-                            <li><a class="dropdown-item" asp-controller="CustomerDistributions" asp-action="Index"><i class="bi bi-people me-2"></i>Müşteri Dağılımları</a></li>
-                            <li><a class="dropdown-item" asp-controller="TourExpenses" asp-action="Index"><i class="bi bi-cash-coin me-2"></i>Tur Giderleri</a></li>
-                            <li><a class="dropdown-item" asp-controller="TourIncomes" asp-action="Index"><i class="bi bi-cash me-2"></i>Tur Gelirleri</a></li>
-                            <li><a class="dropdown-item" asp-controller="TourReports" asp-action="Index"><i class="bi bi-graph-up me-2"></i>Tur Raporları</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -89,10 +114,10 @@
                             <span class="d-none d-md-inline">Kullanıcı</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profil</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Ayarlar</a></li>
+                            <li><a class="dropdown-item" asp-controller="Users" asp-action="Index"><i class="bi bi-person me-2"></i>Profil</a></li>
+                            <li><a class="dropdown-item" asp-controller="Users" asp-action="Index"><i class="bi bi-gear me-2"></i>Ayarlar</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Çıkış</a></li>
+                            <li><a class="dropdown-item" asp-controller="Home" asp-action="Index"><i class="bi bi-box-arrow-right me-2"></i>Çıkış</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -132,7 +157,7 @@
         @RenderBody()
     </main>
 
-    <footer class="bg-white border-top mt-5">
+    <footer class="bg-white border-top">
         <div class="container py-4">
             <div class="row align-items-center">
                 <div class="col-md-6">

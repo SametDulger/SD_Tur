@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SDTur.Web.Models.Tour.Financial;
+using SDTur.Web.Models.Tour.Core;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -27,8 +28,10 @@ namespace SDTur.Web.Controllers
             return View(tourReport);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var tours = await _apiService.GetAsync<List<TourViewModel>>("api/tours");
+            ViewBag.Tours = tours;
             return View();
         }
 
@@ -41,6 +44,9 @@ namespace SDTur.Web.Controllers
                 await _apiService.PostAsync<TourReportCreateViewModel, TourReportViewModel>("api/tourreports", createTourReportViewModel);
                 return RedirectToAction(nameof(Index));
             }
+            
+            var tours = await _apiService.GetAsync<List<TourViewModel>>("api/tours");
+            ViewBag.Tours = tours;
             return View(createTourReportViewModel);
         }
 
@@ -49,6 +55,9 @@ namespace SDTur.Web.Controllers
             var tourReport = await _apiService.GetAsync<TourReportViewModel>($"api/tourreports/{id}");
             if (tourReport == null)
                 return NotFound();
+            
+            var tours = await _apiService.GetAsync<List<TourViewModel>>("api/tours");
+            ViewBag.Tours = tours;
             return View(tourReport);
         }
 
@@ -66,6 +75,9 @@ namespace SDTur.Web.Controllers
                 await _apiService.PutAsync<TourReportEditViewModel, TourReportViewModel>($"api/tourreports/{id}", updateTourReportViewModel);
                 return RedirectToAction(nameof(Index));
             }
+            
+            var tours = await _apiService.GetAsync<List<TourViewModel>>("api/tours");
+            ViewBag.Tours = tours;
             return View(updateTourReportViewModel);
         }
 
