@@ -18,5 +18,8 @@ namespace SDTur.Web.Models.Tour.Core
         public decimal TotalExpense { get; set; }
         public decimal NetProfit { get; set; }
         public string Notes { get; set; } = string.Empty;
+        
+        // Additional property for view compatibility
+        public DateTime StartDate => ScheduleDate;
     }
 } 

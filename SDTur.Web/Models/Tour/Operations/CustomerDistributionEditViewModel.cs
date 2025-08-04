@@ -20,5 +20,16 @@ namespace SDTur.Web.Models.Tour.Operations
         // Additional properties for compatibility
         public int TourScheduleId { get; set; }
         public string CustomerType { get; set; } = string.Empty;
+        
+        // Missing properties that are referenced in the view
+        [Required]
+        public int BusId { get; set; }
+        [Required]
+        public int TicketId { get; set; }
+        public int? EmployeeId { get; set; }
+        [Required]
+        public string Status { get; set; } = string.Empty;
+        public string Notes { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = true;
     }
 } 

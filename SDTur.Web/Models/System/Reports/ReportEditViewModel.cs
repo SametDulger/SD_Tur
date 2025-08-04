@@ -4,6 +4,7 @@ namespace SDTur.Web.Models.System.Reports
 {
     public class ReportEditViewModel
     {
+        [Required]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Rapor adı zorunludur")]

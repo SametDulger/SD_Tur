@@ -9,6 +9,8 @@ namespace SDTur.Web.Models.Tour.Core
         [Required]
         public int EmployeeId { get; set; }
         [Required]
+        public int BusId { get; set; }
+        [Required]
         public string OperationType { get; set; } = string.Empty;
         [Required]
         public DateTime OperationDate { get; set; }
@@ -16,7 +18,8 @@ namespace SDTur.Web.Models.Tour.Core
         [Required]
         public decimal Cost { get; set; }
         public bool IsCompleted { get; set; } = false;
-        public int? TourScheduleId { get; set; }
+        [Required]
+        public int TourScheduleId { get; set; }
         public string Status { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
     }

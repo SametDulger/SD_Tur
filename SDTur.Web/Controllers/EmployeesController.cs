@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SDTur.Web.Models.Master.People;
-using SDTur.Web.Models.Master.Branches;
+using SDTur.Web.Models.Master.References;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -16,7 +16,7 @@ namespace SDTur.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var employees = await _apiService.GetAsync<IEnumerable<EmployeeViewModel>>("api/employees");
+            var employees = await _apiService.GetAsync<List<EmployeeViewModel>>("api/employees");
             return View(employees);
         }
 
@@ -25,26 +25,28 @@ namespace SDTur.Web.Controllers
             var employee = await _apiService.GetAsync<EmployeeViewModel>($"api/employees/{id}");
             if (employee == null)
                 return NotFound();
-
             return View(employee);
         }
 
         public async Task<IActionResult> Create()
         {
-            var branches = await _apiService.GetAsync<IEnumerable<BranchViewModel>>("api/branches");
-            ViewBag.Branches = branches;
+            var currencies = await _apiService.GetAsync<List<CurrencyViewModel>>("api/currencies");
+            ViewBag.Currencies = currencies;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Email,Phone,Position,Salary,CurrencyId,HireDate,CommissionRate,BranchId,IsActive")] EmployeeCreateViewModel createEmployeeViewModel)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Email,Phone,Position,Salary,CurrencyId,HireDate,IsActive")] EmployeeCreateViewModel createEmployeeViewModel)
         {
             if (ModelState.IsValid)
             {
                 await _apiService.PostAsync<EmployeeCreateViewModel, EmployeeViewModel>("api/employees", createEmployeeViewModel);
                 return RedirectToAction(nameof(Index));
             }
+            
+            var currencies = await _apiService.GetAsync<List<CurrencyViewModel>>("api/currencies");
+            ViewBag.Currencies = currencies;
             return View(createEmployeeViewModel);
         }
 
@@ -53,46 +55,30 @@ namespace SDTur.Web.Controllers
             var employee = await _apiService.GetAsync<EmployeeViewModel>($"api/employees/{id}");
             if (employee == null)
                 return NotFound();
-
-            var branches = await _apiService.GetAsync<IEnumerable<BranchViewModel>>("api/branches");
-            ViewBag.Branches = branches;
-
-            var updateDto = new EmployeeEditViewModel
-            {
-                Id = employee.Id,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Email = employee.Email,
-                Phone = employee.Phone,
-                Position = employee.Position,
-                HireDate = employee.HireDate,
-                Salary = employee.Salary,
-                CurrencyId = employee.CurrencyId,
-                CommissionRate = employee.CommissionRate,
-                BranchId = employee.BranchId,
-                IsActive = employee.IsActive
-            };
-
-            return View(updateDto);
+            
+            var currencies = await _apiService.GetAsync<List<CurrencyViewModel>>("api/currencies");
+            ViewBag.Currencies = currencies;
+            return View(employee);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EmployeeEditViewModel EmployeeEditViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone,Position,Salary,CurrencyId,HireDate,IsActive")] EmployeeEditViewModel employeeEditViewModel)
         {
-            if (id != EmployeeEditViewModel.Id)
+            if (id != employeeEditViewModel.Id)
+            {
                 return NotFound();
+            }
 
             if (ModelState.IsValid)
             {
-                var result = await _apiService.PutAsync<EmployeeEditViewModel, EmployeeViewModel>($"api/employees/{id}", EmployeeEditViewModel);
-                if (result != null)
-                    return RedirectToAction(nameof(Index));
+                await _apiService.PutAsync<EmployeeEditViewModel, EmployeeViewModel>($"api/employees/{id}", employeeEditViewModel);
+                return RedirectToAction(nameof(Index));
             }
-
-            var branches = await _apiService.GetAsync<IEnumerable<BranchViewModel>>("api/branches");
-            ViewBag.Branches = branches;
-            return View(EmployeeEditViewModel);
+            
+            var currencies = await _apiService.GetAsync<List<CurrencyViewModel>>("api/currencies");
+            ViewBag.Currencies = currencies;
+            return View(employeeEditViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -100,7 +86,6 @@ namespace SDTur.Web.Controllers
             var employee = await _apiService.GetAsync<EmployeeViewModel>($"api/employees/{id}");
             if (employee == null)
                 return NotFound();
-
             return View(employee);
         }
 

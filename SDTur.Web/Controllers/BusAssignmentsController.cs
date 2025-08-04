@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using SDTur.Web.Models.Tour.Operations;
+using SDTur.Web.Models.Tour.Core;
+using SDTur.Web.Models.Master.Transport;
+using SDTur.Web.Models.Master.People;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -27,20 +30,35 @@ namespace SDTur.Web.Controllers
             return View(busAssignment);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var tourSchedules = await _apiService.GetAsync<List<TourScheduleViewModel>>("api/tourschedules");
+            var buses = await _apiService.GetAsync<List<BusViewModel>>("api/buses");
+            var employees = await _apiService.GetAsync<List<EmployeeViewModel>>("api/employees");
+            
+            ViewBag.TourSchedules = tourSchedules;
+            ViewBag.Buses = buses;
+            ViewBag.Employees = employees;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BusId,TourScheduleId,EmployeeId,AssignmentDate,Status,Notes")] BusAssignmentCreateViewModel createBusAssignmentViewModel)
+        public async Task<IActionResult> Create([Bind("TourScheduleId,BusId,EmployeeId,AssignmentDate,Notes,IsActive")] BusAssignmentCreateViewModel createBusAssignmentViewModel)
         {
             if (ModelState.IsValid)
             {
                 await _apiService.PostAsync<BusAssignmentCreateViewModel, BusAssignmentViewModel>("api/busassignments", createBusAssignmentViewModel);
                 return RedirectToAction(nameof(Index));
             }
+            
+            var tourSchedules = await _apiService.GetAsync<List<TourScheduleViewModel>>("api/tourschedules");
+            var buses = await _apiService.GetAsync<List<BusViewModel>>("api/buses");
+            var employees = await _apiService.GetAsync<List<EmployeeViewModel>>("api/employees");
+            
+            ViewBag.TourSchedules = tourSchedules;
+            ViewBag.Buses = buses;
+            ViewBag.Employees = employees;
             return View(createBusAssignmentViewModel);
         }
 
@@ -49,24 +67,40 @@ namespace SDTur.Web.Controllers
             var busAssignment = await _apiService.GetAsync<BusAssignmentViewModel>($"api/busassignments/{id}");
             if (busAssignment == null)
                 return NotFound();
+            
+            var tourSchedules = await _apiService.GetAsync<List<TourScheduleViewModel>>("api/tourschedules");
+            var buses = await _apiService.GetAsync<List<BusViewModel>>("api/buses");
+            var employees = await _apiService.GetAsync<List<EmployeeViewModel>>("api/employees");
+            
+            ViewBag.TourSchedules = tourSchedules;
+            ViewBag.Buses = buses;
+            ViewBag.Employees = employees;
             return View(busAssignment);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BusId,TourScheduleId,EmployeeId,AssignmentDate,Status,Notes,IsActive")] BusAssignmentEditViewModel updateBusAssignmentViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TourScheduleId,BusId,EmployeeId,AssignmentDate,Notes,IsActive")] BusAssignmentEditViewModel busAssignmentEditViewModel)
         {
-            if (id != updateBusAssignmentViewModel.Id)
+            if (id != busAssignmentEditViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                await _apiService.PutAsync<BusAssignmentEditViewModel, BusAssignmentViewModel>($"api/busassignments/{id}", updateBusAssignmentViewModel);
+                await _apiService.PutAsync<BusAssignmentEditViewModel, BusAssignmentViewModel>($"api/busassignments/{id}", busAssignmentEditViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(updateBusAssignmentViewModel);
+            
+            var tourSchedules = await _apiService.GetAsync<List<TourScheduleViewModel>>("api/tourschedules");
+            var buses = await _apiService.GetAsync<List<BusViewModel>>("api/buses");
+            var employees = await _apiService.GetAsync<List<EmployeeViewModel>>("api/employees");
+            
+            ViewBag.TourSchedules = tourSchedules;
+            ViewBag.Buses = buses;
+            ViewBag.Employees = employees;
+            return View(busAssignmentEditViewModel);
         }
 
         public async Task<IActionResult> Delete(int id)

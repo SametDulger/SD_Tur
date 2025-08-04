@@ -38,41 +38,72 @@
                                 </label>
                                 <select asp-for="TourScheduleId" class="form-select" required>
                                     <option value="">Tur programı seçiniz...</option>
+                                    @if (ViewBag.TourSchedules != null)
+                                    {
+                                        @foreach (var schedule in ViewBag.TourSchedules)
+                                        {
+                                            <option value="@schedule.Id" selected="@(Model.TourScheduleId == schedule.Id)">@schedule.TourName - @schedule.StartDate.ToString("dd.MM.yyyy")</option>
+                                        }
+                                    }
                                 </select>
                                 <span asp-validation-for="TourScheduleId" class="text-danger small"></span>
                             </div>
                             
                             <div class="col-md-6 mb-3">
-                                <label asp-for="CustomerType" class="form-label fw-semibold">
-                                    <i class="bi bi-person me-1"></i>Müşteri Tipi <span class="text-danger">*</span>
+                                <label asp-for="BusId" class="form-label fw-semibold">
+                                    <i class="bi bi-truck me-1"></i>Otobüs <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="CustomerType" class="form-select" required>
-                                    <option value="">Müşteri tipi seçiniz...</option>
-                                    <option value="Bireysel">Bireysel</option>
-                                    <option value="Grup">Grup</option>
-                                    <option value="Kurumsal">Kurumsal</option>
-                                    <option value="VIP">VIP</option>
+                                <select asp-for="BusId" class="form-select" required>
+                                    <option value="">Otobüs seçiniz...</option>
+                                    @if (ViewBag.Buses != null)
+                                    {
+                                        @foreach (var bus in ViewBag.Buses)
+                                        {
+                                            <option value="@bus.Id" selected="@(Model.BusId == bus.Id)">@bus.PlateNumber - @bus.Capacity Kişi</option>
+                                        }
+                                    }
                                 </select>
-                                <span asp-validation-for="CustomerType" class="text-danger small"></span>
+                                <span asp-validation-for="BusId" class="text-danger small"></span>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="DistributionType" class="form-label fw-semibold">
-                                    <i class="bi bi-tag me-1"></i>Dağılım Tipi <span class="text-danger">*</span>
+                                <label asp-for="TicketId" class="form-label fw-semibold">
+                                    <i class="bi bi-ticket-perforated me-1"></i>Bilet <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="DistributionType" class="form-select" required>
-                                    <option value="">Dağılım tipi seçiniz...</option>
-                                    <option value="Otel">Otel</option>
-                                    <option value="Oda">Oda</option>
-                                    <option value="Otobüs">Otobüs</option>
-                                    <option value="Masa">Masa</option>
-                                    <option value="Diğer">Diğer</option>
+                                <select asp-for="TicketId" class="form-select" required>
+                                    <option value="">Bilet seçiniz...</option>
+                                    @if (ViewBag.Tickets != null)
+                                    {
+                                        @foreach (var ticket in ViewBag.Tickets)
+                                        {
+                                            <option value="@ticket.Id" selected="@(Model.TicketId == ticket.Id)">@ticket.CustomerName - @ticket.TourName</option>
+                                        }
+                                    }
                                 </select>
-                                <span asp-validation-for="DistributionType" class="text-danger small"></span>
+                                <span asp-validation-for="TicketId" class="text-danger small"></span>
                             </div>
                             
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="EmployeeId" class="form-label fw-semibold">
+                                    <i class="bi bi-person-badge me-1"></i>Çalışan
+                                </label>
+                                <select asp-for="EmployeeId" class="form-select">
+                                    <option value="">Çalışan seçiniz...</option>
+                                    @if (ViewBag.Employees != null)
+                                    {
+                                        @foreach (var employee in ViewBag.Employees)
+                                        {
+                                            <option value="@employee.Id" selected="@(Model.EmployeeId == employee.Id)">@employee.FirstName @employee.LastName</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="EmployeeId" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="DistributionDate" class="form-label fw-semibold">
                                     <i class="bi bi-calendar me-1"></i>Dağılım Tarihi <span class="text-danger">*</span>
@@ -80,27 +111,41 @@
                                 <input asp-for="DistributionDate" type="datetime-local" class="form-control" required />
                                 <span asp-validation-for="DistributionDate" class="text-danger small"></span>
                             </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Status" class="form-label fw-semibold">
+                                    <i class="bi bi-flag me-1"></i>Durum <span class="text-danger">*</span>
+                                </label>
+                                <select asp-for="Status" class="form-select" required>
+                                    <option value="">Durum seçiniz...</option>
+                                    <option value="Planlandı" selected="@(Model.Status == "Planlandı")">Planlandı</option>
+                                    <option value="Devam Ediyor" selected="@(Model.Status == "Devam Ediyor")">Devam Ediyor</option>
+                                    <option value="Tamamlandı" selected="@(Model.Status == "Tamamlandı")">Tamamlandı</option>
+                                    <option value="İptal Edildi" selected="@(Model.Status == "İptal Edildi")">İptal Edildi</option>
+                                </select>
+                                <span asp-validation-for="Status" class="text-danger small"></span>
+                            </div>
                         </div>
 
                         <div class="row">
                             <div class="col-12 mb-3">
-                                <label asp-for="Description" class="form-label fw-semibold">
-                                    <i class="bi bi-text-paragraph me-1"></i>Açıklama
+                                <label asp-for="Notes" class="form-label fw-semibold">
+                                    <i class="bi bi-text-paragraph me-1"></i>Notlar
                                 </label>
-                                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Müşteri dağılımı hakkında açıklama..."></textarea>
-                                <span asp-validation-for="Description" class="text-danger small"></span>
+                                <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Müşteri dağılımı hakkında notlar..."></textarea>
+                                <span asp-validation-for="Notes" class="text-danger small"></span>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="form-check form-switch">
-                                    <input asp-for="IsCompleted" class="form-check-input" type="checkbox" id="isCompletedSwitch">
-                                    <label class="form-check-label fw-semibold" for="isCompletedSwitch">
-                                        <i class="bi bi-check-circle me-1"></i>Tamamlandı
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" id="isActiveSwitch">
+                                    <label class="form-check-label fw-semibold" for="isActiveSwitch">
+                                        <i class="bi bi-check-circle me-1"></i>Aktif
                                     </label>
                                 </div>
-                                <small class="text-muted">Bu dağılımın tamamlandığını işaretleyin</small>
+                                <small class="text-muted">Bu dağılımın aktif olduğunu işaretleyin</small>
                             </div>
                         </div>
 

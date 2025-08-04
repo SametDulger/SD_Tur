@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SDTur.Web.Models.System.Users;
+using SDTur.Web.Models.Master.Branches;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -28,8 +29,10 @@ namespace SDTur.Web.Controllers
             return View(user);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var branches = await _apiService.GetAsync<List<BranchViewModel>>("api/branches");
+            ViewBag.Branches = branches;
             return View();
         }
 
@@ -42,6 +45,9 @@ namespace SDTur.Web.Controllers
                 await _apiService.PostAsync<UserCreateViewModel, UserViewModel>("api/users", UserCreateViewModel);
                 return RedirectToAction(nameof(Index));
             }
+            
+            var branches = await _apiService.GetAsync<List<BranchViewModel>>("api/branches");
+            ViewBag.Branches = branches;
             return View(UserCreateViewModel);
         }
 
@@ -50,6 +56,9 @@ namespace SDTur.Web.Controllers
             var user = await _apiService.GetAsync<UserViewModel>($"api/users/{id}");
             if (user == null)
                 return NotFound();
+
+            var branches = await _apiService.GetAsync<List<BranchViewModel>>("api/branches");
+            ViewBag.Branches = branches;
 
             var updateDto = new UserEditViewModel
             {
@@ -81,6 +90,9 @@ namespace SDTur.Web.Controllers
                 if (result != null)
                     return RedirectToAction(nameof(Index));
             }
+            
+            var branches = await _apiService.GetAsync<List<BranchViewModel>>("api/branches");
+            ViewBag.Branches = branches;
             return View(updateDto);
         }
 
@@ -89,7 +101,6 @@ namespace SDTur.Web.Controllers
             var user = await _apiService.GetAsync<UserViewModel>($"api/users/{id}");
             if (user == null)
                 return NotFound();
-
             return View(user);
         }
 

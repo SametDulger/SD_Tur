@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SDTur.Web.Models;
+using SDTur.Web.Models.Home;
 
 namespace SDTur.Web.Controllers
 {
@@ -18,8 +19,8 @@ namespace SDTur.Web.Controllers
             ViewBag.IncomeGrowth = 0;
             ViewBag.ActiveCustomersCount = 0;
             ViewBag.CustomersGrowth = 0;
-            ViewBag.RecentActivities = new List<dynamic>();
-            ViewBag.UpcomingTours = new List<dynamic>();
+            ViewBag.RecentActivities = new List<RecentActivityViewModel>();
+            ViewBag.UpcomingTours = new List<UpcomingTourViewModel>();
             
             return View();
         }
