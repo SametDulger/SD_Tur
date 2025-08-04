@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using SDTur.Web.Models;
 using SDTur.Web.Models.Financial.Accounts;
 using SDTur.Web.Models.Financial.Cash;
@@ -25,20 +26,32 @@ namespace SDTur.Web.Services
     public class ApiService : IApiService
     {
         private readonly HttpClient _httpClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly JsonSerializerOptions _jsonOptions;
 
-        public ApiService(HttpClient httpClient)
+        public ApiService(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
+            _httpContextAccessor = httpContextAccessor;
             _jsonOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
         }
 
+        private void AddAuthorizationHeader()
+        {
+            var token = _httpContextAccessor.HttpContext?.Session.GetString("JWTToken");
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            }
+        }
+
         // Generic CRUD operations
         public async Task<T?> GetAsync<T>(string url)
         {
+            AddAuthorizationHeader();
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -47,6 +60,7 @@ namespace SDTur.Web.Services
 
         public async Task<TResponse?> PostAsync<TRequest, TResponse>(string url, TRequest data)
         {
+            AddAuthorizationHeader();
             var json = JsonSerializer.Serialize(data, _jsonOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(url, content);
@@ -57,6 +71,7 @@ namespace SDTur.Web.Services
 
         public async Task<TResponse?> PutAsync<TRequest, TResponse>(string url, TRequest data)
         {
+            AddAuthorizationHeader();
             var json = JsonSerializer.Serialize(data, _jsonOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync(url, content);
@@ -67,6 +82,7 @@ namespace SDTur.Web.Services
 
         public async Task DeleteAsync(string url)
         {
+            AddAuthorizationHeader();
             var response = await _httpClient.DeleteAsync(url);
             response.EnsureSuccessStatusCode();
         }
