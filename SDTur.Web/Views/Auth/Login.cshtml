@@ -58,6 +58,17 @@
             border-radius: 10px;
             border: none;
         }
+        .validation-summary-errors {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        .field-validation-error {
+            color: #dc3545;
+            font-size: 0.75rem;
+            display: block;
+            margin-top: 0.25rem;
+        }
     </style>
 </head>
 <body>
@@ -69,27 +80,45 @@
         </div>
         
         <div class="login-body">
+            <!-- Demo Kullanıcı Bilgileri -->
+            <div class="alert alert-info" style="font-size: 0.8rem; padding: 0.75rem;">
+                <div class="mb-2"><strong>Demo Kullanıcı Bilgileri:</strong></div>
+                <div class="row">
+                    <div class="col-4"><strong>Admin:</strong></div>
+                    <div class="col-8">admin / admin123</div>
+                </div>
+                <div class="row">
+                    <div class="col-4"><strong>Manager:</strong></div>
+                    <div class="col-8">manager / manager123</div>
+                </div>
+                <div class="row">
+                    <div class="col-4"><strong>Sales:</strong></div>
+                    <div class="col-8">sales / sales123</div>
+                </div>
+            </div>
+
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="alert alert-danger">
                     <i class="bi bi-exclamation-triangle me-2"></i>
-                    Lütfen form hatalarını düzeltiniz.
+                    <strong>Giriş Hatası:</strong>
+                    <div asp-validation-summary="All" class="validation-summary-errors mt-2"></div>
                 </div>
             }
 
-            <form asp-action="Login" asp-controller="Auth" method="post">
-                <input type="hidden" asp-for="ReturnUrl" />
+            <form asp-action="Login" asp-controller="Auth" method="post" id="loginForm">
+                <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
                 
                 <div class="form-floating">
                     <input asp-for="Username" class="form-control" placeholder="Kullanıcı Adı" />
                     <label asp-for="Username">Kullanıcı Adı</label>
-                    <span asp-validation-for="Username" class="text-danger small"></span>
+                    <span asp-validation-for="Username" class="field-validation-error"></span>
                 </div>
 
                 <div class="form-floating">
-                    <input asp-for="Password" class="form-control" placeholder="Şifre" />
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Şifre" />
                     <label asp-for="Password">Şifre</label>
-                    <span asp-validation-for="Password" class="text-danger small"></span>
+                    <span asp-validation-for="Password" class="field-validation-error"></span>
                 </div>
 
                 <div class="form-check mb-3">
@@ -99,9 +128,10 @@
                     </label>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-login">
+                <button type="submit" class="btn btn-primary btn-login" id="loginButton">
                     <i class="bi bi-box-arrow-in-right me-2"></i>
-                    Giriş Yap
+                    <span id="loginButtonText">Giriş Yap</span>
+                    <span id="loginButtonSpinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
                 </button>
             </form>
 
@@ -116,17 +146,52 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Form validation
-        document.querySelector('form').addEventListener('submit', function(e) {
+        // Form validation and submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             const username = document.getElementById('Username').value.trim();
             const password = document.getElementById('Password').value.trim();
+            const loginButton = document.getElementById('loginButton');
+            const loginButtonText = document.getElementById('loginButtonText');
+            const loginButtonSpinner = document.getElementById('loginButtonSpinner');
             
-            if (!username || !password) {
+            // Clear previous validation errors
+            clearValidationErrors();
+            
+            let hasErrors = false;
+            
+            if (!username) {
+                showFieldError('Username', 'Kullanıcı adı gereklidir');
+                hasErrors = true;
+            }
+            
+            if (!password) {
+                showFieldError('Password', 'Şifre gereklidir');
+                hasErrors = true;
+            }
+            
+            if (hasErrors) {
                 e.preventDefault();
-                alert('Lütfen tüm alanları doldurunuz.');
                 return false;
             }
+            
+            // Show loading state
+            loginButton.disabled = true;
+            loginButtonText.textContent = 'Giriş yapılıyor...';
+            loginButtonSpinner.style.display = 'inline-block';
         });
+        
+        function clearValidationErrors() {
+            const errorSpans = document.querySelectorAll('.field-validation-error');
+            errorSpans.forEach(span => span.textContent = '');
+        }
+        
+        function showFieldError(fieldName, message) {
+            const field = document.getElementById(fieldName);
+            const errorSpan = field.parentNode.querySelector('.field-validation-error');
+            if (errorSpan) {
+                errorSpan.textContent = message;
+            }
+        }
     </script>
 </body>
 </html> 

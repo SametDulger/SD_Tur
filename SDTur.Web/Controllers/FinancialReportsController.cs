@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using SDTur.Web.Models.Financial.Reports;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
 {
+    [Authorize]
     public class FinancialReportsController : Controller
     {
         private readonly IApiService _apiService;

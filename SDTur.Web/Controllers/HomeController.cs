@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using SDTur.Web.Models;
 using SDTur.Web.Models.Home;
 
@@ -9,6 +10,13 @@ namespace SDTur.Web.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = "Ana Sayfa";
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Dashboard()
+        {
+            ViewData["Title"] = "Dashboard";
             
             // Set ViewBag properties to prevent runtime binding exceptions
             ViewBag.ActiveToursCount = 0;
@@ -22,7 +30,7 @@ namespace SDTur.Web.Controllers
             ViewBag.RecentActivities = new List<RecentActivityViewModel>();
             ViewBag.UpcomingTours = new List<UpcomingTourViewModel>();
             
-            return View();
+            return View("Dashboard");
         }
 
         public IActionResult Privacy()

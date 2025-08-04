@@ -18,10 +18,28 @@ namespace SDTur.Infrastructure.Repositories.System
 
         public async Task<User> GetUserByUsernameAsync(string username)
         {
-            return await _dbSet
-                .Include(u => u.Employee)
-                .Include(u => u.Branch)
-                .FirstOrDefaultAsync(u => u.Username == username && u.IsActive);
+            Console.WriteLine($"UserRepository.GetUserByUsernameAsync called with username: {username}");
+            try
+            {
+                var user = await _dbSet
+                    .Include(u => u.Employee)
+                    .Include(u => u.Branch)
+                    .FirstOrDefaultAsync(u => u.Username == username && u.IsActive);
+                
+                Console.WriteLine($"Database query completed. User found: {user != null}");
+                if (user != null)
+                {
+                    Console.WriteLine($"User details: Id={user.Id}, Username={user.Username}, Password={user.Password}, IsActive={user.IsActive}");
+                }
+                
+                return user;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in UserRepository.GetUserByUsernameAsync: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<User> GetUserWithDetailsAsync(int id)

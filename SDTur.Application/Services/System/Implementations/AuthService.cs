@@ -26,16 +26,26 @@ namespace SDTur.Application.Services.System.Implementations
 
         public async Task<LoginResponseDto> LoginAsync(LoginDto loginDto)
         {
-            var user = await _userService.GetByUsernameAsync(loginDto.Username);
+            // Debug için log ekleyelim
+            Console.WriteLine($"Login attempt for username: {loginDto.Username}");
+            Console.WriteLine($"Input password: {loginDto.Password}");
             
-            if (user == null)
+            try
             {
-                return new LoginResponseDto
+                var user = await _userService.GetByUsernameAsync(loginDto.Username);
+                Console.WriteLine($"UserService.GetByUsernameAsync completed");
+                
+                if (user == null)
                 {
-                    Success = false,
-                    Message = "Kullanıcı adı veya şifre hatalı"
-                };
-            }
+                    Console.WriteLine($"User not found: {loginDto.Username}");
+                    return new LoginResponseDto
+                    {
+                        Success = false,
+                        Message = "Kullanıcı adı veya şifre hatalı"
+                    };
+                }
+            
+            Console.WriteLine($"User found: {user.Username}, Password: {user.Password}, Input Password: {loginDto.Password}");
 
             if (!user.IsActive)
             {
@@ -46,18 +56,24 @@ namespace SDTur.Application.Services.System.Implementations
                 };
             }
 
-            // Şifre doğrulama (gerçek uygulamada hash karşılaştırması yapılır)
-            if (user.Password != loginDto.Password) // TODO: Hash karşılaştırması yapılacak
+            // Şifre doğrulama - SeedData'da plain text şifreler var
+            Console.WriteLine($"Password comparison: DB='{user.Password}' vs Input='{loginDto.Password}'");
+            if (user.Password != loginDto.Password)
             {
+                Console.WriteLine("Password mismatch!");
                 return new LoginResponseDto
                 {
                     Success = false,
                     Message = "Kullanıcı adı veya şifre hatalı"
                 };
             }
+            
+            Console.WriteLine("Password match successful!");
 
             var token = await GenerateTokenAsync(user);
             var refreshToken = await GenerateRefreshTokenAsync();
+
+            Console.WriteLine("Login successful! Generating response...");
 
             return new LoginResponseDto
             {
@@ -80,22 +96,33 @@ namespace SDTur.Application.Services.System.Implementations
                 },
                 Message = "Giriş başarılı"
             };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in LoginAsync: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                return new LoginResponseDto
+                {
+                    Success = false,
+                    Message = "Giriş sırasında bir hata oluştu"
+                };
+            }
         }
 
         public async Task<string> GenerateTokenAsync(UserDto user)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
-            var secretKey = jwtSettings["SecretKey"];
+            var secretKey = jwtSettings["SecretKey"] ?? "";
             var key = Encoding.ASCII.GetBytes(secretKey);
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.GivenName, user.FirstName),
-                new Claim(ClaimTypes.Surname, user.LastName),
+                new Claim(ClaimTypes.Name, user.Username ?? ""),
+                new Claim(ClaimTypes.GivenName, user.FirstName ?? ""),
+                new Claim(ClaimTypes.Surname, user.LastName ?? ""),
                 new Claim(ClaimTypes.Email, user.Email ?? ""),
-                new Claim(ClaimTypes.Role, user.Role),
+                new Claim(ClaimTypes.Role, user.Role ?? ""),
                 new Claim("BranchId", user.BranchId?.ToString() ?? ""),
                 new Claim("EmployeeId", user.EmployeeId?.ToString() ?? "")
             };
@@ -103,9 +130,9 @@ namespace SDTur.Application.Services.System.Implementations
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(jwtSettings["ExpirationInMinutes"])),
-                Issuer = jwtSettings["Issuer"],
-                Audience = jwtSettings["Audience"],
+                Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(jwtSettings["ExpirationInMinutes"] ?? "60")),
+                Issuer = jwtSettings["Issuer"] ?? "",
+                Audience = jwtSettings["Audience"] ?? "",
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
@@ -128,7 +155,7 @@ namespace SDTur.Application.Services.System.Implementations
             try
             {
                 var jwtSettings = _configuration.GetSection("JwtSettings");
-                var secretKey = jwtSettings["SecretKey"];
+                var secretKey = jwtSettings["SecretKey"] ?? "";
                 var key = Encoding.ASCII.GetBytes(secretKey);
 
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -137,9 +164,9 @@ namespace SDTur.Application.Services.System.Implementations
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
-                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidIssuer = jwtSettings["Issuer"] ?? "",
                     ValidateAudience = true,
-                    ValidAudience = jwtSettings["Audience"],
+                    ValidAudience = jwtSettings["Audience"] ?? "",
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
@@ -155,30 +182,47 @@ namespace SDTur.Application.Services.System.Implementations
 
         public async Task<bool> ChangePasswordAsync(int userId, ChangePasswordDto changePasswordDto)
         {
+            Console.WriteLine($"AuthService.ChangePasswordAsync called with userId: {userId}");
+            
             var user = await _userService.GetByIdAsync(userId);
             if (user == null)
-                return false;
-
-            // Mevcut şifre kontrolü
-            if (user.Password != changePasswordDto.CurrentPassword) // TODO: Hash karşılaştırması
-                return false;
-
-            // Yeni şifre güncelleme
-            user.Password = changePasswordDto.NewPassword; // TODO: Hash'leme
-            await _userService.UpdateAsync(user.Id, new UpdateUserDto
             {
-                Username = user.Username,
-                Password = user.Password,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Phone = user.Phone,
+                Console.WriteLine($"User not found for userId: {userId}");
+                return false;
+            }
+
+            Console.WriteLine($"User found: {user.Username}, Current DB Password: {user.Password}");
+            Console.WriteLine($"Input Current Password: {changePasswordDto.CurrentPassword}");
+
+            // Mevcut şifre kontrolü - SeedData'da plain text şifreler var
+            if (user.Password != changePasswordDto.CurrentPassword)
+            {
+                Console.WriteLine("Current password mismatch!");
+                return false;
+            }
+
+            Console.WriteLine("Current password match successful!");
+
+            // Yeni şifre güncelleme - Şimdilik plain text olarak kaydediyoruz
+            user.Password = changePasswordDto.NewPassword;
+            Console.WriteLine($"New password set: {user.Password}");
+            
+            await _userService.UpdateAsync(new UpdateUserDto
+            {
+                Id = user.Id,
+                Username = user.Username ?? "",
+                Password = user.Password ?? "",
+                FirstName = user.FirstName ?? "",
+                LastName = user.LastName ?? "",
+                Email = user.Email ?? "",
+                Phone = user.Phone ?? "",
                 EmployeeId = user.EmployeeId,
                 BranchId = user.BranchId,
-                Role = user.Role,
+                Role = user.Role ?? "",
                 IsActive = user.IsActive
             });
 
+            Console.WriteLine("Password update successful!");
             return true;
         }
 
@@ -198,14 +242,14 @@ namespace SDTur.Application.Services.System.Implementations
             return new UserInfoDto
             {
                 Id = user.Id,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Phone = user.Phone,
-                Role = user.Role,
-                BranchName = user.BranchName,
-                EmployeeName = user.EmployeeName,
+                Username = user.Username ?? "",
+                FirstName = user.FirstName ?? "",
+                LastName = user.LastName ?? "",
+                Email = user.Email ?? "",
+                Phone = user.Phone ?? "",
+                Role = user.Role ?? "",
+                BranchName = user.BranchName ?? "",
+                EmployeeName = user.EmployeeName ?? "",
                 IsActive = user.IsActive
             };
         }

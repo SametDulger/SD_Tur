@@ -12,8 +12,17 @@ using SDTur.Application.Services.Master.Implementations;
 using SDTur.Application.Services.System.Implementations;
 using SDTur.Application.Services.Tour.Implementations;
 using SDTur.Core.Interfaces.Core;
+using SDTur.Core.Interfaces.System;
+using SDTur.Core.Interfaces.Master;
+using SDTur.Core.Interfaces.Financial;
+using SDTur.Core.Interfaces.Tour;
 using SDTur.Infrastructure.Data;
 using SDTur.Infrastructure.UnitOfWork;
+using SDTur.Infrastructure.Repositories.System;
+using SDTur.Infrastructure.Repositories.Master;
+using SDTur.Infrastructure.Repositories.Financial;
+using SDTur.Infrastructure.Repositories.Tour;
+using SDTur.Infrastructure.SeedData;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +35,7 @@ builder.Services.AddSwaggerGen();
 
 // JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var secretKey = jwtSettings["SecretKey"];
+var secretKey = jwtSettings["SecretKey"] ?? "your-super-secret-key-with-at-least-32-characters";
 var key = Encoding.ASCII.GetBytes(secretKey);
 
 builder.Services.AddAuthentication(options =>
@@ -94,6 +103,44 @@ builder.Services.AddScoped<IFinancialReportService, FinancialReportService>();
 builder.Services.AddScoped<ISystemLogService, SystemLogService>();
 builder.Services.AddScoped<IInvoiceDetailService, InvoiceDetailService>();
 
+// Repository registrations
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ISystemLogRepository, SystemLogRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+
+// Master repositories
+builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IRegionRepository, RegionRepository>();
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+builder.Services.AddScoped<IBusRepository, BusRepository>();
+builder.Services.AddScoped<IPassCompanyRepository, PassCompanyRepository>();
+builder.Services.AddScoped<IPassAgreementRepository, PassAgreementRepository>();
+builder.Services.AddScoped<INationalityRepository, NationalityRepository>();
+builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+
+// Tour repositories
+builder.Services.AddScoped<ITourRepository, TourRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<ITourScheduleRepository, TourScheduleRepository>();
+builder.Services.AddScoped<IServiceScheduleRepository, ServiceScheduleRepository>();
+builder.Services.AddScoped<ITourExpenseRepository, TourExpenseRepository>();
+builder.Services.AddScoped<ITourIncomeRepository, TourIncomeRepository>();
+builder.Services.AddScoped<ITourOperationRepository, TourOperationRepository>();
+builder.Services.AddScoped<ITourReportRepository, TourReportRepository>();
+builder.Services.AddScoped<IBusAssignmentRepository, BusAssignmentRepository>();
+builder.Services.AddScoped<ICustomerDistributionRepository, CustomerDistributionRepository>();
+
+// Financial repositories
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IAccountTransactionRepository, AccountTransactionRepository>();
+builder.Services.AddScoped<ICashRepository, CashRepository>();
+builder.Services.AddScoped<ICommissionCalculationRepository, CommissionCalculationRepository>();
+builder.Services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
+builder.Services.AddScoped<IFinancialReportRepository, FinancialReportRepository>();
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+builder.Services.AddScoped<IInvoiceDetailRepository, InvoiceDetailRepository>();
+
 // CORS
 builder.Services.AddCors(options =>
 {
@@ -122,5 +169,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Seed data
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<SDTurDbContext>();
+    await SeedData.SeedUsers(context);
+}
 
 app.Run();

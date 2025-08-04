@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using SDTur.Web.Models.Master.Locations;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
 {
+    [Authorize]
     public class RegionsController : Controller
     {
         private readonly IApiService _apiService;

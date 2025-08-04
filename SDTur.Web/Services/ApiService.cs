@@ -60,13 +60,37 @@ namespace SDTur.Web.Services
 
         public async Task<TResponse?> PostAsync<TRequest, TResponse>(string url, TRequest data)
         {
-            AddAuthorizationHeader();
-            var json = JsonSerializer.Serialize(data, _jsonOptions);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync(url, content);
-            response.EnsureSuccessStatusCode();
-            var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TResponse>(responseContent, _jsonOptions);
+            try
+            {
+                AddAuthorizationHeader();
+                var json = JsonSerializer.Serialize(data, _jsonOptions);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                
+                Console.WriteLine($"API Request to {url}: {json}");
+                
+                var response = await _httpClient.PostAsync(url, content);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                
+                Console.WriteLine($"API Response from {url}: Status={response.StatusCode}, Content={responseContent}");
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine($"API Error: {response.StatusCode} - {responseContent}");
+                    throw new HttpRequestException($"API request failed with status {response.StatusCode}: {responseContent}");
+                }
+                
+                return JsonSerializer.Deserialize<TResponse>(responseContent, _jsonOptions);
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"HTTP Request Error: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected Error in PostAsync: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<TResponse?> PutAsync<TRequest, TResponse>(string url, TRequest data)
