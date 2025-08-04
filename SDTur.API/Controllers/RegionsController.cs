@@ -40,22 +40,22 @@ namespace SDTur.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<RegionDto>> CreateRegion(CreateRegionDto createRegionDto)
+        public async Task<ActionResult<RegionDto>> Create(CreateRegionDto createDto)
         {
-            var region = await _regionService.CreateRegionAsync(createRegionDto);
+            var region = await _regionService.CreateAsync(createDto);
+            if (region == null)
+                return BadRequest("Failed to create region");
             return CreatedAtAction(nameof(GetRegion), new { id = region.Id }, region);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRegion(int id, UpdateRegionDto updateRegionDto)
+        public async Task<IActionResult> Update(int id, UpdateRegionDto updateDto)
         {
-            if (id != updateRegionDto.Id)
+            if (id != updateDto.Id)
                 return BadRequest();
-
-            var region = await _regionService.UpdateRegionAsync(updateRegionDto);
+            var region = await _regionService.UpdateAsync(updateDto);
             if (region == null)
                 return NotFound();
-
             return NoContent();
         }
 

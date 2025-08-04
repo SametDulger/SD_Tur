@@ -35,7 +35,7 @@
                 <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex p-3 mb-2">
                     <i class="bi bi-check-circle text-success fs-4"></i>
                 </div>
-                <h4 class="mb-1 fw-bold">@Model.Count(t => t.Status == "Sold")</h4>
+                <h4 class="mb-1 fw-bold">@Model.Count(t => !t.IsCancelled)</h4>
                 <small class="text-muted">Satılan Bilet</small>
             </div>
         </div>
@@ -46,7 +46,7 @@
                 <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex p-3 mb-2">
                     <i class="bi bi-clock text-warning fs-4"></i>
                 </div>
-                <h4 class="mb-1 fw-bold">@Model.Count(t => t.Status == "Reserved")</h4>
+                <h4 class="mb-1 fw-bold">@Model.Count(t => t.IsCancelled)</h4>
                 <small class="text-muted">Rezerve Bilet</small>
             </div>
         </div>
@@ -57,7 +57,7 @@
                 <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex p-3 mb-2">
                     <i class="bi bi-currency-dollar text-info fs-4"></i>
                 </div>
-                <h4 class="mb-1 fw-bold">₺@Model.Sum(t => t.Price).ToString("N0")</h4>
+                <h4 class="mb-1 fw-bold">₺@Model.Sum(t => t.TotalAmount).ToString("N0")</h4>
                 <small class="text-muted">Toplam Gelir</small>
             </div>
         </div>
@@ -126,7 +126,7 @@
                                     </div>
                                     <div>
                                         <div class="fw-semibold">@ticket.CustomerName</div>
-                                        <small class="text-muted">@ticket.CustomerEmail</small>
+                                        <small class="text-muted">@ticket.Nationality</small>
                                     </div>
                                 </div>
                             </td>
@@ -138,26 +138,12 @@
                                 <small class="text-muted">@ticket.TourDate.ToString("HH:mm")</small>
                             </td>
                             <td>
-                                <span class="fw-semibold text-primary">₺@ticket.Price.ToString("N0")</span>
+                                <span class="fw-semibold text-primary">₺@ticket.TotalAmount.ToString("N0")</span>
                             </td>
                             <td>
                                 @{
-                                    var statusClass = ticket.Status switch
-                                    {
-                                        "Sold" => "badge bg-success",
-                                        "Reserved" => "badge bg-warning",
-                                        "Cancelled" => "badge bg-danger",
-                                        "Refunded" => "badge bg-secondary",
-                                        _ => "badge bg-light text-dark"
-                                    };
-                                    var statusText = ticket.Status switch
-                                    {
-                                        "Sold" => "Satıldı",
-                                        "Reserved" => "Rezerve",
-                                        "Cancelled" => "İptal",
-                                        "Refunded" => "İade",
-                                        _ => ticket.Status
-                                    };
+                                    var statusClass = ticket.IsCancelled ? "badge bg-danger" : "badge bg-success";
+                                    var statusText = ticket.IsCancelled ? "İptal" : "Aktif";
                                 }
                                 <span class="@statusClass">
                                     <i class="bi bi-check-circle me-1"></i>@statusText

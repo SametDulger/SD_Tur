@@ -66,46 +66,28 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<InvoiceDto>> Create(CreateInvoiceDto createDto)
         {
-            try
-            {
-                var invoice = await _invoiceService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = invoice.Id }, invoice);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var invoice = await _invoiceService.CreateAsync(createDto);
+            if (invoice == null)
+                return BadRequest("Failed to create invoice");
+            return CreatedAtAction(nameof(GetById), new { id = invoice.Id }, invoice);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<InvoiceDto>> Update(int id, UpdateInvoiceDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdateInvoiceDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var invoice = await _invoiceService.UpdateAsync(updateDto);
-                return Ok(invoice);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var invoice = await _invoiceService.UpdateAsync(updateDto);
+            if (invoice == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _invoiceService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _invoiceService.DeleteAsync(id);
+            return NoContent();
         }
     }
 } 

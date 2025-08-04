@@ -28,34 +28,68 @@ namespace SDTur.Web.Services
         private readonly HttpClient _httpClient;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly JsonSerializerOptions _jsonOptions;
+        private readonly ILogger<ApiService> _logger;
 
-        public ApiService(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
+        public ApiService(HttpClient httpClient, IHttpContextAccessor httpContextAccessor, ILogger<ApiService> logger)
         {
             _httpClient = httpClient;
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
             _jsonOptions = new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
+                WriteIndented = false
             };
         }
 
         private void AddAuthorizationHeader()
         {
-            var token = _httpContextAccessor.HttpContext?.Session.GetString("JWTToken");
-            if (!string.IsNullOrEmpty(token))
+            try
             {
-                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                var token = _httpContextAccessor.HttpContext?.Session.GetString("JWTToken");
+                if (!string.IsNullOrEmpty(token))
+                {
+                    _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to add authorization header");
             }
         }
 
-        // Generic CRUD operations
+        // Generic CRUD operations with improved error handling
         public async Task<T?> GetAsync<T>(string url)
         {
-            AddAuthorizationHeader();
-            var response = await _httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<T>(content, _jsonOptions);
+            try
+            {
+                AddAuthorizationHeader();
+                _logger.LogDebug("Making GET request to: {Url}", url);
+                
+                var response = await _httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<T>(content, _jsonOptions);
+                
+                _logger.LogDebug("GET request successful for: {Url}", url);
+                return result;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "HTTP request failed for GET: {Url}", url);
+                throw;
+            }
+            catch (JsonException ex)
+            {
+                _logger.LogError(ex, "JSON deserialization failed for GET: {Url}", url);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error in GET: {Url}", url);
+                throw;
+            }
         }
 
         public async Task<TResponse?> PostAsync<TRequest, TResponse>(string url, TRequest data)
@@ -66,49 +100,98 @@ namespace SDTur.Web.Services
                 var json = JsonSerializer.Serialize(data, _jsonOptions);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 
-                Console.WriteLine($"API Request to {url}: {json}");
+                _logger.LogDebug("Making POST request to: {Url} with data: {Data}", url, json);
                 
                 var response = await _httpClient.PostAsync(url, content);
                 var responseContent = await response.Content.ReadAsStringAsync();
                 
-                Console.WriteLine($"API Response from {url}: Status={response.StatusCode}, Content={responseContent}");
+                _logger.LogDebug("POST response from {Url}: Status={StatusCode}", url, response.StatusCode);
                 
                 if (!response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"API Error: {response.StatusCode} - {responseContent}");
+                    _logger.LogError("POST request failed: {StatusCode} - {Content}", response.StatusCode, responseContent);
                     throw new HttpRequestException($"API request failed with status {response.StatusCode}: {responseContent}");
                 }
                 
-                return JsonSerializer.Deserialize<TResponse>(responseContent, _jsonOptions);
+                var result = JsonSerializer.Deserialize<TResponse>(responseContent, _jsonOptions);
+                _logger.LogDebug("POST request successful for: {Url}", url);
+                return result;
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine($"HTTP Request Error: {ex.Message}");
+                _logger.LogError(ex, "HTTP request failed for POST: {Url}", url);
+                throw;
+            }
+            catch (JsonException ex)
+            {
+                _logger.LogError(ex, "JSON serialization/deserialization failed for POST: {Url}", url);
                 throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected Error in PostAsync: {ex.Message}");
+                _logger.LogError(ex, "Unexpected error in POST: {Url}", url);
                 throw;
             }
         }
 
         public async Task<TResponse?> PutAsync<TRequest, TResponse>(string url, TRequest data)
         {
-            AddAuthorizationHeader();
-            var json = JsonSerializer.Serialize(data, _jsonOptions);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync(url, content);
-            response.EnsureSuccessStatusCode();
-            var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TResponse>(responseContent, _jsonOptions);
+            try
+            {
+                AddAuthorizationHeader();
+                var json = JsonSerializer.Serialize(data, _jsonOptions);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                
+                _logger.LogDebug("Making PUT request to: {Url}", url);
+                
+                var response = await _httpClient.PutAsync(url, content);
+                response.EnsureSuccessStatusCode();
+                
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<TResponse>(responseContent, _jsonOptions);
+                
+                _logger.LogDebug("PUT request successful for: {Url}", url);
+                return result;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "HTTP request failed for PUT: {Url}", url);
+                throw;
+            }
+            catch (JsonException ex)
+            {
+                _logger.LogError(ex, "JSON serialization/deserialization failed for PUT: {Url}", url);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error in PUT: {Url}", url);
+                throw;
+            }
         }
 
         public async Task DeleteAsync(string url)
         {
-            AddAuthorizationHeader();
-            var response = await _httpClient.DeleteAsync(url);
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                AddAuthorizationHeader();
+                _logger.LogDebug("Making DELETE request to: {Url}", url);
+                
+                var response = await _httpClient.DeleteAsync(url);
+                response.EnsureSuccessStatusCode();
+                
+                _logger.LogDebug("DELETE request successful for: {Url}", url);
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "HTTP request failed for DELETE: {Url}", url);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error in DELETE: {Url}", url);
+                throw;
+            }
         }
 
         // Financial - Accounts
@@ -624,55 +707,32 @@ namespace SDTur.Web.Services
         // Tour - Tours
         public async Task<IEnumerable<TourViewModel>> GetToursAsync()
         {
-            var response = await _httpClient.GetAsync("api/tours");
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<IEnumerable<TourViewModel>>(content, _jsonOptions) ?? new List<TourViewModel>();
+            return await GetAsync<IEnumerable<TourViewModel>>("api/tours") ?? new List<TourViewModel>();
         }
 
         public async Task<IEnumerable<TourViewModel>> GetActiveToursAsync()
         {
-            var response = await _httpClient.GetAsync("api/tours/active");
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<IEnumerable<TourViewModel>>(content, _jsonOptions) ?? new List<TourViewModel>();
+            return await GetAsync<IEnumerable<TourViewModel>>("api/tours/active") ?? new List<TourViewModel>();
         }
 
         public async Task<TourViewModel?> GetTourByIdAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"api/tours/{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<TourViewModel>(content, _jsonOptions);
-            }
-            return null;
+            return await GetAsync<TourViewModel>($"api/tours/{id}");
         }
 
         public async Task<TourViewModel> CreateTourAsync(TourCreateViewModel createTourViewModel)
         {
-            var json = JsonSerializer.Serialize(createTourViewModel, _jsonOptions);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("api/tours", content);
-            response.EnsureSuccessStatusCode();
-            var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TourViewModel>(responseContent, _jsonOptions)!;
+            return await PostAsync<TourCreateViewModel, TourViewModel>("api/tours", createTourViewModel) ?? new TourViewModel();
         }
 
         public async Task<TourViewModel> UpdateTourAsync(TourEditViewModel updateTourViewModel)
         {
-            var json = JsonSerializer.Serialize(updateTourViewModel, _jsonOptions);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync($"api/tours/{updateTourViewModel.Id}", content);
-            response.EnsureSuccessStatusCode();
-            var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TourViewModel>(responseContent, _jsonOptions)!;
+            return await PutAsync<TourEditViewModel, TourViewModel>($"api/tours/{updateTourViewModel.Id}", updateTourViewModel) ?? new TourViewModel();
         }
 
         public async Task DeleteTourAsync(int id)
         {
-            var response = await _httpClient.DeleteAsync($"api/tours/{id}");
-            response.EnsureSuccessStatusCode();
+            await DeleteAsync($"api/tours/{id}");
         }
 
         // Tour - Tour Schedules
@@ -730,88 +790,52 @@ namespace SDTur.Web.Services
         // Tour - Tickets
         public async Task<IEnumerable<TicketViewModel>> GetTicketsAsync()
         {
-            var response = await _httpClient.GetAsync("api/tickets");
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<IEnumerable<TicketViewModel>>(content, _jsonOptions) ?? new List<TicketViewModel>();
+            return await GetAsync<IEnumerable<TicketViewModel>>("api/tickets") ?? new List<TicketViewModel>();
         }
 
         public async Task<TicketViewModel?> GetTicketByIdAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"api/tickets/{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<TicketViewModel>(content, _jsonOptions);
-            }
-            return null;
+            return await GetAsync<TicketViewModel>($"api/tickets/{id}");
         }
 
         public async Task<TicketViewModel?> GetTicketByNumberAsync(string ticketNumber)
         {
-            var response = await _httpClient.GetAsync($"api/tickets/number/{ticketNumber}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<TicketViewModel>(content, _jsonOptions);
-            }
-            return null;
+            return await GetAsync<TicketViewModel>($"api/tickets/number/{ticketNumber}");
         }
 
         public async Task<IEnumerable<TicketViewModel>> GetTicketsByTourDateAsync(DateTime tourDate)
         {
-            var response = await _httpClient.GetAsync($"api/tickets/tour-date/{tourDate:yyyy-MM-dd}");
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<IEnumerable<TicketViewModel>>(content, _jsonOptions) ?? new List<TicketViewModel>();
+            return await GetAsync<IEnumerable<TicketViewModel>>($"api/tickets/tour-date/{tourDate:yyyy-MM-dd}") ?? new List<TicketViewModel>();
         }
 
         public async Task<IEnumerable<TicketViewModel>> GetTicketsByBranchAsync(int branchId)
         {
-            var response = await _httpClient.GetAsync($"api/tickets/branch/{branchId}");
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<IEnumerable<TicketViewModel>>(content, _jsonOptions) ?? new List<TicketViewModel>();
+            return await GetAsync<IEnumerable<TicketViewModel>>($"api/tickets/branch/{branchId}") ?? new List<TicketViewModel>();
         }
 
         public async Task<IEnumerable<TicketViewModel>> GetPassTicketsAsync()
         {
-            var response = await _httpClient.GetAsync("api/tickets/pass");
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<IEnumerable<TicketViewModel>>(content, _jsonOptions) ?? new List<TicketViewModel>();
+            return await GetAsync<IEnumerable<TicketViewModel>>("api/tickets/pass") ?? new List<TicketViewModel>();
         }
 
         public async Task<TicketViewModel> CreateTicketAsync(TicketCreateViewModel createTicketViewModel)
         {
-            var json = JsonSerializer.Serialize(createTicketViewModel, _jsonOptions);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("api/tickets", content);
-            response.EnsureSuccessStatusCode();
-            var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TicketViewModel>(responseContent, _jsonOptions)!;
+            return await PostAsync<TicketCreateViewModel, TicketViewModel>("api/tickets", createTicketViewModel) ?? new TicketViewModel();
         }
 
         public async Task<TicketViewModel> UpdateTicketAsync(TicketEditViewModel updateTicketViewModel)
         {
-            var json = JsonSerializer.Serialize(updateTicketViewModel, _jsonOptions);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync($"api/tickets/{updateTicketViewModel.Id}", content);
-            response.EnsureSuccessStatusCode();
-            var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TicketViewModel>(responseContent, _jsonOptions)!;
+            return await PutAsync<TicketEditViewModel, TicketViewModel>($"api/tickets/{updateTicketViewModel.Id}", updateTicketViewModel) ?? new TicketViewModel();
         }
 
         public async Task DeleteTicketAsync(int id)
         {
-            var response = await _httpClient.DeleteAsync($"api/tickets/{id}");
-            response.EnsureSuccessStatusCode();
+            await DeleteAsync($"api/tickets/{id}");
         }
 
         public async Task CancelTicketAsync(int id)
         {
-            var response = await _httpClient.PostAsync($"api/tickets/{id}/cancel", null);
-            response.EnsureSuccessStatusCode();
+            await PostAsync<object, object>($"api/tickets/{id}/cancel", new { });
         }
 
         public async Task<string> GenerateTicketNumberAsync()

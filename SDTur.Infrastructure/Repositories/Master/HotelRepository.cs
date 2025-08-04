@@ -18,21 +18,21 @@ namespace SDTur.Infrastructure.Repositories.Master
 
         public async Task<IEnumerable<Hotel>> GetActiveHotelsAsync()
         {
-            return await _dbSet.Where(h => h.IsActive).OrderBy(h => h.Order).ToListAsync();
+            return await _dbSet.Where(h => h.IsActive && !h.IsDeleted).OrderBy(h => h.Order).ToListAsync();
         }
 
-        public async Task<Hotel> GetHotelWithRegionAsync(int id)
+        public async Task<Hotel?> GetHotelWithRegionAsync(int id)
         {
             return await _dbSet
                 .Include(h => h.Region)
-                .FirstOrDefaultAsync(h => h.Id == id);
+                .FirstOrDefaultAsync(h => h.Id == id && h.IsActive && !h.IsDeleted);
         }
 
         public async Task<IEnumerable<Hotel>> GetHotelsByRegionAsync(int regionId)
         {
             return await _dbSet
                 .Include(h => h.Region)
-                .Where(h => h.RegionId == regionId && h.IsActive)
+                .Where(h => h.RegionId == regionId && h.IsActive && !h.IsDeleted)
                 .OrderBy(h => h.Order)
                 .ToListAsync();
         }
@@ -41,7 +41,7 @@ namespace SDTur.Infrastructure.Repositories.Master
         {
             return await _dbSet
                 .Include(h => h.Region)
-                .Where(h => h.IsActive)
+                .Where(h => h.IsActive && !h.IsDeleted)
                 .OrderByDescending(h => h.Region.DistanceFromKemer)
                 .ThenBy(h => h.Order)
                 .ToListAsync();

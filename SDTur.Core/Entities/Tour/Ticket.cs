@@ -10,20 +10,20 @@ namespace SDTur.Core.Entities.Tour
     {
         [Required]
         [StringLength(20)]
-        public string TicketNumber { get; set; }
+        public string TicketNumber { get; set; } = string.Empty;
 
         public DateTime TourDate { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string CustomerName { get; set; }
+        public string CustomerName { get; set; } = string.Empty;
 
         [Required]
         [StringLength(50)]
-        public string Nationality { get; set; }
+        public string Nationality { get; set; } = string.Empty;
 
         [StringLength(20)]
-        public string RoomNumber { get; set; }
+        public string RoomNumber { get; set; } = string.Empty;
 
         public bool RequiresService { get; set; }
 
@@ -36,10 +36,10 @@ namespace SDTur.Core.Entities.Tour
         public decimal RestAmount { get; set; }
 
         [StringLength(3)]
-        public string Currency { get; set; } // USD, EUR, TRY
+        public string Currency { get; set; } = string.Empty; // USD, EUR, TRY
 
         [StringLength(500)]
-        public string Notes { get; set; }
+        public string Notes { get; set; } = string.Empty;
 
         public bool IsCancelled { get; set; }
         public bool IsPassTicket { get; set; } // Pas bileti mi?
@@ -59,14 +59,14 @@ namespace SDTur.Core.Entities.Tour
         public int? PassCompanyId { get; set; }
 
         // Navigation properties
-        public virtual Tour Tour { get; set; }
-        public virtual Branch Branch { get; set; }
-        public virtual Employee Employee { get; set; }
-        public virtual Hotel Hotel { get; set; }
-        public virtual ServiceSchedule ServiceSchedule { get; set; }
-        public virtual TourSchedule TourSchedule { get; set; }
-        public virtual Bus Bus { get; set; }
-        public virtual PassCompany PassCompany { get; set; }
-        public virtual ICollection<CommissionCalculation> CommissionCalculations { get; set; }
+        public virtual Tour Tour { get; set; } = null!;
+        public virtual Branch Branch { get; set; } = null!;
+        public virtual Employee Employee { get; set; } = null!;
+        public virtual Hotel Hotel { get; set; } = null!;
+        public virtual ServiceSchedule? ServiceSchedule { get; set; }
+        public virtual TourSchedule? TourSchedule { get; set; }
+        public virtual Bus? Bus { get; set; }
+        public virtual PassCompany? PassCompany { get; set; }
+        public virtual ICollection<CommissionCalculation> CommissionCalculations { get; set; } = new List<CommissionCalculation>();
     }
 } 

@@ -23,34 +23,28 @@ namespace SDTur.Application.Services.Tour.Implementations
             return _mapper.Map<IEnumerable<ServiceScheduleDto>>(serviceSchedules);
         }
 
-        public async Task<ServiceScheduleDto> GetByIdAsync(int id)
+        public async Task<ServiceScheduleDto?> GetByIdAsync(int id)
         {
             var serviceSchedule = await _unitOfWork.ServiceSchedules.GetByIdAsync(id);
-            return _mapper.Map<ServiceScheduleDto>(serviceSchedule);
+            return serviceSchedule != null ? _mapper.Map<ServiceScheduleDto>(serviceSchedule) : null;
         }
 
-        public async Task<ServiceScheduleDto> CreateAsync(CreateServiceScheduleDto createDto)
+        public async Task<ServiceScheduleDto?> CreateAsync(CreateServiceScheduleDto createDto)
         {
-            var serviceSchedule = _mapper.Map<ServiceSchedule>(createDto);
-            serviceSchedule.IsActive = true;
-            
-            await _unitOfWork.ServiceSchedules.AddAsync(serviceSchedule);
+            var entity = _mapper.Map<ServiceSchedule>(createDto);
+            var created = await _unitOfWork.ServiceSchedules.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<ServiceScheduleDto>(serviceSchedule);
+            return _mapper.Map<ServiceScheduleDto>(created);
         }
 
-        public async Task<ServiceScheduleDto> UpdateAsync(UpdateServiceScheduleDto updateDto)
+        public async Task<ServiceScheduleDto?> UpdateAsync(UpdateServiceScheduleDto updateDto)
         {
-            var serviceSchedule = await _unitOfWork.ServiceSchedules.GetByIdAsync(updateDto.Id);
-            if (serviceSchedule == null)
-                return null;
-
-            _mapper.Map(updateDto, serviceSchedule);
-            await _unitOfWork.ServiceSchedules.UpdateAsync(serviceSchedule);
+            var entity = await _unitOfWork.ServiceSchedules.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.ServiceSchedules.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<ServiceScheduleDto>(serviceSchedule);
+            return _mapper.Map<ServiceScheduleDto>(updated);
         }
 
         public async Task DeleteAsync(int id)
@@ -65,20 +59,42 @@ namespace SDTur.Application.Services.Tour.Implementations
 
         public async Task<IEnumerable<ServiceScheduleDto>> GetByTourAsync(int tourId)
         {
-            var serviceSchedules = await _unitOfWork.ServiceSchedules.GetServiceSchedulesByTourAsync(tourId);
-            return _mapper.Map<IEnumerable<ServiceScheduleDto>>(serviceSchedules);
+            try
+            {
+                var serviceSchedules = await _unitOfWork.ServiceSchedules.GetAllAsync();
+                var filteredSchedules = serviceSchedules.Where(ss => ss.TourId == tourId);
+                return _mapper.Map<IEnumerable<ServiceScheduleDto>>(filteredSchedules);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<ServiceScheduleDto>> GetByRegionAsync(int regionId)
         {
-            var serviceSchedules = await _unitOfWork.ServiceSchedules.GetServiceSchedulesByRegionAsync(regionId);
-            return _mapper.Map<IEnumerable<ServiceScheduleDto>>(serviceSchedules);
+            try
+            {
+                var serviceSchedules = await _unitOfWork.ServiceSchedules.GetSchedulesByRegionAsync(regionId);
+                return _mapper.Map<IEnumerable<ServiceScheduleDto>>(serviceSchedules);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<ServiceScheduleDto>> GetByDateAsync(DateTime date)
         {
-            var serviceSchedules = await _unitOfWork.ServiceSchedules.GetServiceSchedulesByDateAsync(date);
-            return _mapper.Map<IEnumerable<ServiceScheduleDto>>(serviceSchedules);
+            try
+            {
+                var serviceSchedules = await _unitOfWork.ServiceSchedules.GetSchedulesByDateAsync(date);
+                return _mapper.Map<IEnumerable<ServiceScheduleDto>>(serviceSchedules);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 } 

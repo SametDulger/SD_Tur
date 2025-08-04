@@ -6,7 +6,7 @@ namespace SDTur.Web.Models.Auth
         public string Token { get; set; } = string.Empty;
         public string RefreshToken { get; set; } = string.Empty;
         public DateTime ExpiresAt { get; set; }
-        public UserInfoViewModel User { get; set; } = new UserInfoViewModel();
+        public UserInfoViewModel UserInfo { get; set; } = new UserInfoViewModel();
         public string Message { get; set; } = string.Empty;
     }
 

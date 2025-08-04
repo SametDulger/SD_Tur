@@ -173,7 +173,7 @@ namespace SDTur.API.Controllers
             }
         }
 
-        private string GetIncomeTypeColor(string incomeType)
+        private string GetIncomeTypeColor(string? incomeType)
         {
             return incomeType?.ToLower() switch
             {
@@ -185,7 +185,7 @@ namespace SDTur.API.Controllers
             };
         }
 
-        private string GetIncomeTypeIcon(string incomeType)
+        private string GetIncomeTypeIcon(string? incomeType)
         {
             return incomeType?.ToLower() switch
             {

@@ -23,10 +23,10 @@ namespace SDTur.Application.Services.Tour.Implementations
             return _mapper.Map<IEnumerable<TourReportDto>>(tourReports);
         }
 
-        public async Task<TourReportDto> GetByIdAsync(int id)
+        public async Task<TourReportDto?> GetByIdAsync(int id)
         {
             var tourReport = await _unitOfWork.TourReports.GetByIdAsync(id);
-            return _mapper.Map<TourReportDto>(tourReport);
+            return tourReport != null ? _mapper.Map<TourReportDto>(tourReport) : null;
         }
 
         public async Task<IEnumerable<TourReportDto>> GetByTourAsync(int tourId)
@@ -59,35 +59,28 @@ namespace SDTur.Application.Services.Tour.Implementations
             return _mapper.Map<IEnumerable<TourReportDto>>(tourReports);
         }
 
-        public async Task<TourReportDto> GetLatestByTourAsync(int tourId)
+        public async Task<TourReportDto?> GetLatestByTourAsync(int tourId)
         {
             var tourReport = await _unitOfWork.TourReports.GetLatestByTourAsync(tourId);
-            return _mapper.Map<TourReportDto>(tourReport);
+            return tourReport != null ? _mapper.Map<TourReportDto>(tourReport) : null;
         }
 
-        public async Task<TourReportDto> CreateAsync(CreateTourReportDto createDto)
+        public async Task<TourReportDto?> CreateAsync(CreateTourReportDto createDto)
         {
-            var tourReport = _mapper.Map<TourReport>(createDto);
-            tourReport.IsActive = true;
-            
-            await _unitOfWork.TourReports.AddAsync(tourReport);
+            var entity = _mapper.Map<TourReport>(createDto);
+            var created = await _unitOfWork.TourReports.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<TourReportDto>(tourReport);
+            return _mapper.Map<TourReportDto>(created);
         }
 
-        public async Task<TourReportDto> UpdateAsync(UpdateTourReportDto updateDto)
+        public async Task<TourReportDto?> UpdateAsync(UpdateTourReportDto updateDto)
         {
-            var existingTourReport = await _unitOfWork.TourReports.GetByIdAsync(updateDto.Id);
-            if (existingTourReport == null)
-                throw new ArgumentException("Tour report not found");
-            
-            _mapper.Map(updateDto, existingTourReport);
-            
-            await _unitOfWork.TourReports.UpdateAsync(existingTourReport);
+            var entity = await _unitOfWork.TourReports.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.TourReports.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<TourReportDto>(existingTourReport);
+            return _mapper.Map<TourReportDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

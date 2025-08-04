@@ -1,5 +1,4 @@
 using System;
-using SDTur.Core.Interfaces.Core;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SDTur.Core.Entities.Tour;
@@ -10,6 +9,7 @@ namespace SDTur.Core.Interfaces.Tour
     public interface ITourIncomeRepository : IRepository<TourIncome>
     {
         Task<IEnumerable<TourIncome>> GetIncomesByTourScheduleAsync(int tourScheduleId);
-        Task<IEnumerable<TourIncome>> GetIncomesByDateRangeAsync(DateTime startDate, DateTime endDate);
+        Task<IEnumerable<TourIncome>> GetIncomesByCategoryAsync(string category);
+        Task<decimal> GetTotalIncomesByTourScheduleAsync(int tourScheduleId);
     }
 } 

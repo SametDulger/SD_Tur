@@ -29,34 +29,28 @@ namespace SDTur.Application.Services.Master.Implementations
             return _mapper.Map<IEnumerable<BranchDto>>(branches.Where(b => b.IsActive));
         }
 
-        public async Task<BranchDto> GetBranchByIdAsync(int id)
+        public async Task<BranchDto?> GetBranchByIdAsync(int id)
         {
             var branch = await _unitOfWork.Branches.GetByIdAsync(id);
-            return _mapper.Map<BranchDto>(branch);
+            return branch != null ? _mapper.Map<BranchDto>(branch) : null;
         }
 
-        public async Task<BranchDto> CreateBranchAsync(CreateBranchDto createBranchDto)
+        public async Task<BranchDto?> CreateAsync(CreateBranchDto createBranchDto)
         {
-            var branch = _mapper.Map<Branch>(createBranchDto);
-            branch.IsActive = true;
-            
-            await _unitOfWork.Branches.AddAsync(branch);
+            var entity = _mapper.Map<Branch>(createBranchDto);
+            var created = await _unitOfWork.Branches.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<BranchDto>(branch);
+            return _mapper.Map<BranchDto>(created);
         }
 
-        public async Task<BranchDto> UpdateBranchAsync(UpdateBranchDto updateBranchDto)
+        public async Task<BranchDto?> UpdateAsync(UpdateBranchDto updateBranchDto)
         {
-            var branch = await _unitOfWork.Branches.GetByIdAsync(updateBranchDto.Id);
-            if (branch == null)
-                return null;
-
-            _mapper.Map(updateBranchDto, branch);
-            await _unitOfWork.Branches.UpdateAsync(branch);
+            var entity = await _unitOfWork.Branches.GetByIdAsync(updateBranchDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateBranchDto, entity);
+            var updated = await _unitOfWork.Branches.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<BranchDto>(branch);
+            return _mapper.Map<BranchDto>(updated);
         }
 
         public async Task DeleteBranchAsync(int id)

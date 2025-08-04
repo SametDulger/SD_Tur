@@ -62,32 +62,21 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<BusAssignmentDto>> Create(CreateBusAssignmentDto createDto)
         {
-            try
-            {
-                var busAssignment = await _busAssignmentService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = busAssignment.Id }, busAssignment);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var busAssignment = await _busAssignmentService.CreateAsync(createDto);
+            if (busAssignment == null)
+                return BadRequest("Failed to create bus assignment");
+            return CreatedAtAction(nameof(GetById), new { id = busAssignment.Id }, busAssignment);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<BusAssignmentDto>> Update(int id, UpdateBusAssignmentDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdateBusAssignmentDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var busAssignment = await _busAssignmentService.UpdateAsync(updateDto);
-                return Ok(busAssignment);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var busAssignment = await _busAssignmentService.UpdateAsync(updateDto);
+            if (busAssignment == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

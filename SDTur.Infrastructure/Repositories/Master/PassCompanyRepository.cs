@@ -19,16 +19,16 @@ namespace SDTur.Infrastructure.Repositories.Master
         public async Task<IEnumerable<PassCompany>> GetActivePassCompaniesAsync()
         {
             return await _dbSet
-                .Where(pc => pc.IsActive)
+                .Where(pc => pc.IsActive && !pc.IsDeleted)
                 .OrderBy(pc => pc.Name)
                 .ToListAsync();
         }
 
-        public async Task<PassCompany> GetPassCompanyWithAgreementsAsync(int id)
+        public async Task<PassCompany?> GetPassCompanyWithAgreementsAsync(int id)
         {
             return await _dbSet
                 .Include(pc => pc.PassAgreements)
-                .FirstOrDefaultAsync(pc => pc.Id == id);
+                .FirstOrDefaultAsync(pc => pc.Id == id && pc.IsActive && !pc.IsDeleted);
         }
     }
 } 

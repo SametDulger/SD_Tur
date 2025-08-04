@@ -58,8 +58,7 @@ namespace SDTur.Web.Controllers
                 Id = currency.Id,
                 Name = currency.Name,
                 Code = currency.Code,
-                Symbol = currency.Symbol,
-                IsActive = currency.IsActive
+                Symbol = currency.Symbol
             };
 
             return View(updateDto);

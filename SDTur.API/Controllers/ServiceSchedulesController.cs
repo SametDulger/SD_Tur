@@ -56,46 +56,28 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ServiceScheduleDto>> Create(CreateServiceScheduleDto createDto)
         {
-            try
-            {
-                var serviceSchedule = await _serviceScheduleService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = serviceSchedule.Id }, serviceSchedule);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var serviceSchedule = await _serviceScheduleService.CreateAsync(createDto);
+            if (serviceSchedule == null)
+                return BadRequest("Failed to create service schedule");
+            return CreatedAtAction(nameof(GetById), new { id = serviceSchedule.Id }, serviceSchedule);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ServiceScheduleDto>> Update(int id, UpdateServiceScheduleDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdateServiceScheduleDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var serviceSchedule = await _serviceScheduleService.UpdateAsync(updateDto);
-                return Ok(serviceSchedule);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var serviceSchedule = await _serviceScheduleService.UpdateAsync(updateDto);
+            if (serviceSchedule == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _serviceScheduleService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _serviceScheduleService.DeleteAsync(id);
+            return NoContent();
         }
     }
 } 

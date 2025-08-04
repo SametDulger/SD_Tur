@@ -18,12 +18,12 @@ namespace SDTur.Infrastructure.Repositories.Master
 
         public async Task<IEnumerable<Bus>> GetActiveBusesAsync()
         {
-            return await _dbSet.Where(b => b.IsActive).ToListAsync();
+            return await _dbSet.Where(b => b.IsActive && !b.IsDeleted).ToListAsync();
         }
 
         public async Task<IEnumerable<Bus>> GetAvailableBusesAsync()
         {
-            return await _dbSet.Where(b => b.IsActive).ToListAsync();
+            return await _dbSet.Where(b => b.IsActive && !b.IsDeleted).ToListAsync();
         }
     }
 } 

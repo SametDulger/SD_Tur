@@ -23,34 +23,28 @@ namespace SDTur.Application.Services.Master.Implementations
             return _mapper.Map<IEnumerable<PassCompanyDto>>(passCompanies);
         }
 
-        public async Task<PassCompanyDto> GetByIdAsync(int id)
+        public async Task<PassCompanyDto?> GetByIdAsync(int id)
         {
             var passCompany = await _unitOfWork.PassCompanies.GetByIdAsync(id);
-            return _mapper.Map<PassCompanyDto>(passCompany);
+            return passCompany != null ? _mapper.Map<PassCompanyDto>(passCompany) : null;
         }
 
-        public async Task<PassCompanyDto> CreateAsync(CreatePassCompanyDto createDto)
+        public async Task<PassCompanyDto?> CreateAsync(CreatePassCompanyDto createDto)
         {
-            var passCompany = _mapper.Map<PassCompany>(createDto);
-            passCompany.IsActive = true;
-            
-            await _unitOfWork.PassCompanies.AddAsync(passCompany);
+            var entity = _mapper.Map<PassCompany>(createDto);
+            var created = await _unitOfWork.PassCompanies.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<PassCompanyDto>(passCompany);
+            return _mapper.Map<PassCompanyDto>(created);
         }
 
-        public async Task<PassCompanyDto> UpdateAsync(UpdatePassCompanyDto updateDto)
+        public async Task<PassCompanyDto?> UpdateAsync(UpdatePassCompanyDto updateDto)
         {
-            var passCompany = await _unitOfWork.PassCompanies.GetByIdAsync(updateDto.Id);
-            if (passCompany == null)
-                return null;
-
-            _mapper.Map(updateDto, passCompany);
-            await _unitOfWork.PassCompanies.UpdateAsync(passCompany);
+            var entity = await _unitOfWork.PassCompanies.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.PassCompanies.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<PassCompanyDto>(passCompany);
+            return _mapper.Map<PassCompanyDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

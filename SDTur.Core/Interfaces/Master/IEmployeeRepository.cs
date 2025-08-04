@@ -8,7 +8,7 @@ namespace SDTur.Core.Interfaces.Master
     public interface IEmployeeRepository : IRepository<Employee>
     {
         Task<IEnumerable<Employee>> GetActiveEmployeesAsync();
-        Task<Employee> GetEmployeeWithBranchAsync(int id);
+        Task<Employee?> GetEmployeeWithBranchAsync(int id);
         Task<IEnumerable<Employee>> GetEmployeesByBranchAsync(int branchId);
     }
 } 

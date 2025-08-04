@@ -63,8 +63,30 @@ namespace SDTur.Web.Controllers
             {
                 Id = ticket.Id,
                 CustomerName = ticket.CustomerName,
-                CustomerEmail = ticket.CustomerEmail,
-                CustomerPhone = ticket.CustomerPhone
+                Nationality = ticket.Nationality,
+                RoomNumber = ticket.RoomNumber,
+                RequiresService = ticket.RequiresService,
+                FullCount = ticket.FullCount,
+                HalfCount = ticket.HalfCount,
+                GuestCount = ticket.GuestCount,
+                TotalAmount = ticket.TotalAmount,
+                PaidAmount = ticket.PaidAmount,
+                RestAmount = ticket.RestAmount,
+                Currency = ticket.Currency,
+                Notes = ticket.Notes,
+                IsCancelled = ticket.IsCancelled,
+                IsPassTicket = ticket.IsPassTicket,
+                IsIncomingPass = ticket.IsIncomingPass,
+                SaleDate = ticket.SaleDate,
+                CancellationDate = ticket.CancellationDate,
+                TourId = ticket.TourId,
+                BranchId = ticket.BranchId,
+                EmployeeId = ticket.EmployeeId,
+                HotelId = ticket.HotelId,
+                ServiceScheduleId = ticket.ServiceScheduleId,
+                TourScheduleId = ticket.TourScheduleId,
+                BusId = ticket.BusId,
+                PassCompanyId = ticket.PassCompanyId
             };
 
             return View(updateDto);

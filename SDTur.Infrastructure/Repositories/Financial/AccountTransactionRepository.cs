@@ -16,11 +16,11 @@ namespace SDTur.Infrastructure.Repositories.Financial
         {
         }
 
-        public async Task<IEnumerable<AccountTransaction>> GetTransactionsByPassCompanyAsync(int passCompanyId)
+        public Task<IEnumerable<AccountTransaction>> GetTransactionsByPassCompanyAsync(int passCompanyId)
         {
             // Since AccountTransaction doesn't have PassCompanyId, we'll return empty for now
             // This method should be removed or the entity should be updated
-            return new List<AccountTransaction>();
+            return Task.FromResult<IEnumerable<AccountTransaction>>(new List<AccountTransaction>());
         }
 
         public async Task<IEnumerable<AccountTransaction>> GetTransactionsByTourScheduleAsync(int tourScheduleId)
@@ -29,7 +29,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
                 .Include(at => at.Account)
                 .Include(at => at.TourSchedule)
                 .Include(at => at.Ticket)
-                .Where(at => at.TourScheduleId == tourScheduleId)
+                .Where(at => at.TourScheduleId == tourScheduleId && at.IsActive && !at.IsDeleted)
                 .OrderByDescending(at => at.TransactionDate)
                 .ToListAsync();
         }
@@ -40,16 +40,23 @@ namespace SDTur.Infrastructure.Repositories.Financial
                 .Include(at => at.Account)
                 .Include(at => at.TourSchedule)
                 .Include(at => at.Ticket)
-                .Where(at => at.TransactionDate >= startDate && at.TransactionDate <= endDate)
+                .Where(at => at.TransactionDate >= startDate && at.TransactionDate <= endDate && at.IsActive && !at.IsDeleted)
                 .OrderByDescending(at => at.TransactionDate)
                 .ToListAsync();
         }
 
-        public async Task<decimal> GetBalanceByPassCompanyAsync(int passCompanyId)
+        public Task<decimal> GetBalanceByPassCompanyAsync(int passCompanyId)
         {
             // Since AccountTransaction doesn't have PassCompanyId, we'll return 0 for now
             // This method should be removed or the entity should be updated
-            return 0;
+            return Task.FromResult(0m);
+        }
+
+        public async Task<decimal> GetAccountBalanceAsync(int accountId)
+        {
+            return await _dbSet
+                .Where(at => at.AccountId == accountId && at.IsActive && !at.IsDeleted)
+                .SumAsync(at => at.TransactionType == "Credit" ? at.Amount : -at.Amount);
         }
     }
 } 

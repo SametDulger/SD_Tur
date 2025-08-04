@@ -60,71 +60,11 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-envelope me-1"></i>E-posta
-                        </label>
-                        <div class="h6 mb-0">@Model.CustomerEmail</div>
-                    </div>
-                    
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-telephone me-1"></i>Telefon
-                        </label>
-                        <div class="h6 mb-0">@Model.CustomerPhone</div>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-currency-dollar me-1"></i>Fiyat
-                        </label>
-                        <div class="h4 fw-bold text-success mb-0">
-                            @Model.Price.ToString("C")
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-calendar me-1"></i>Satın Alma Tarihi
-                        </label>
-                        <div class="h6 mb-0">@Model.PurchaseDate.ToString("dd MMMM yyyy")</div>
-                        <small class="text-muted">@Model.PurchaseDate.ToString("dddd")</small>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-check-circle me-1"></i>Ödeme Durumu
-                        </label>
-                        <div>
-                            @if (Model.IsPaid)
-                            {
-                                <span class="badge bg-success fs-6">
-                                    <i class="bi bi-check-circle me-1"></i>Ödendi
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-warning fs-6">
-                                    <i class="bi bi-clock me-1"></i>Beklemede
-                                </span>
-                            }
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold text-muted">
-                            <i class="bi bi-flag me-1"></i>Durum
-                        </label>
-                        <div>
-                            <span class="badge bg-info bg-opacity-75 fs-6">@Model.Status</span>
-                        </div>
-                    </div>
-                </div>
+
+
+
 
                 <form asp-action="Delete" method="post">
                     <input type="hidden" asp-for="Id" />

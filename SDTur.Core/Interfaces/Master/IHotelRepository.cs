@@ -8,7 +8,7 @@ namespace SDTur.Core.Interfaces.Master
     public interface IHotelRepository : IRepository<Hotel>
     {
         Task<IEnumerable<Hotel>> GetActiveHotelsAsync();
-        Task<Hotel> GetHotelWithRegionAsync(int id);
+        Task<Hotel?> GetHotelWithRegionAsync(int id);
         Task<IEnumerable<Hotel>> GetHotelsByRegionAsync(int regionId);
     }
 } 

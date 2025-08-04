@@ -59,46 +59,28 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ExchangeRateDto>> Create(CreateExchangeRateDto createDto)
         {
-            try
-            {
-                var exchangeRate = await _exchangeRateService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = exchangeRate.Id }, exchangeRate);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var exchangeRate = await _exchangeRateService.CreateAsync(createDto);
+            if (exchangeRate == null)
+                return BadRequest("Failed to create exchange rate");
+            return CreatedAtAction(nameof(GetById), new { id = exchangeRate.Id }, exchangeRate);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ExchangeRateDto>> Update(int id, UpdateExchangeRateDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdateExchangeRateDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var exchangeRate = await _exchangeRateService.UpdateAsync(updateDto);
-                return Ok(exchangeRate);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var exchangeRate = await _exchangeRateService.UpdateAsync(updateDto);
+            if (exchangeRate == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _exchangeRateService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _exchangeRateService.DeleteAsync(id);
+            return NoContent();
         }
     }
 } 

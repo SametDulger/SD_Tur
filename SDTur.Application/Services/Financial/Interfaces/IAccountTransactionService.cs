@@ -8,9 +8,9 @@ namespace SDTur.Application.Services.Financial.Interfaces
     public interface IAccountTransactionService
     {
         Task<IEnumerable<AccountTransactionDto>> GetAllAsync();
-        Task<AccountTransactionDto> GetByIdAsync(int id);
-        Task<AccountTransactionDto> CreateAsync(CreateAccountTransactionDto createDto);
-        Task<AccountTransactionDto> UpdateAsync(UpdateAccountTransactionDto updateDto);
+        Task<AccountTransactionDto?> GetByIdAsync(int id);
+        Task<AccountTransactionDto?> CreateAsync(CreateAccountTransactionDto createDto);
+        Task<AccountTransactionDto?> UpdateAsync(UpdateAccountTransactionDto updateDto);
         Task DeleteAsync(int id);
         Task<IEnumerable<AccountTransactionDto>> GetByPassCompanyAsync(int passCompanyId);
         Task<IEnumerable<AccountTransactionDto>> GetByTourScheduleAsync(int tourScheduleId);

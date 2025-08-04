@@ -1,5 +1,4 @@
 using System;
-using SDTur.Core.Interfaces.Core;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SDTur.Core.Entities.Tour;
@@ -9,7 +8,7 @@ namespace SDTur.Core.Interfaces.Tour
 {
     public interface ITicketRepository : IRepository<Ticket>
     {
-        Task<Ticket> GetTicketWithDetailsAsync(int id);
+        Task<Ticket?> GetTicketWithDetailsAsync(int id);
         Task<IEnumerable<Ticket>> GetTicketsByTourDateAsync(DateTime tourDate);
         Task<IEnumerable<Ticket>> GetTicketsByTourScheduleAsync(int tourScheduleId);
         Task<IEnumerable<Ticket>> GetTicketsByBranchAsync(int branchId);

@@ -38,20 +38,36 @@
                         </div>
                         
                         <div class="col-md-6">
-                            <label asp-for="TourType" class="form-label">
+                            <label asp-for="TourTypeId" class="form-label">
                                 <i class="bi bi-tag me-1"></i>Tur Tipi <span class="text-danger">*</span>
                             </label>
-                            <select asp-for="TourType" class="form-select" required>
+                            <select asp-for="TourTypeId" class="form-select" required>
                                 <option value="">Tur tipi seçiniz...</option>
                                 @if (ViewBag.TourTypes != null)
                                 {
                                     @foreach (var tourType in ViewBag.TourTypes)
                                     {
-                                        <option value="@tourType.Id" selected="@(Model.TourType == tourType.Id)">@tourType.Name</option>
+                                        <option value="@tourType.Id" selected="@(Model.TourTypeId == tourType.Id)">@tourType.Name</option>
                                     }
                                 }
                             </select>
-                            <span asp-validation-for="TourType" class="text-danger small"></span>
+                            <span asp-validation-for="TourTypeId" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="Duration" class="form-label">
+                                <i class="bi bi-clock me-1"></i>Süre (Saat) <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Duration" type="number" class="form-control" placeholder="0" min="1" required>
+                            <span asp-validation-for="Duration" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="Destination" class="form-label">
+                                <i class="bi bi-geo-alt me-1"></i>Destinasyon <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Destination" class="form-control" placeholder="Destinasyon giriniz" required>
+                            <span asp-validation-for="Destination" class="text-danger small"></span>
                         </div>
                         
                         <div class="col-md-6">
@@ -60,6 +76,14 @@
                             </label>
                             <input asp-for="TourDate" type="date" class="form-control" required>
                             <span asp-validation-for="TourDate" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label asp-for="Capacity" class="form-label">
+                                <i class="bi bi-people me-1"></i>Kapasite
+                            </label>
+                            <input asp-for="Capacity" type="number" class="form-control" placeholder="0" min="1" required>
+                            <span asp-validation-for="Capacity" class="text-danger small"></span>
                         </div>
                         
                         <div class="col-md-6">
@@ -76,23 +100,11 @@
                             </label>
                             <select asp-for="Currency" class="form-select" required>
                                 <option value="">Para birimi seçiniz...</option>
-                                @if (ViewBag.Currencies != null)
-                                {
-                                    @foreach (var currency in ViewBag.Currencies)
-                                    {
-                                        <option value="@currency.Code" selected="@(Model.Currency == currency.Code)">@currency.Name (@currency.Code)</option>
-                                    }
-                                }
+                                <option value="TRY" selected="@(Model.Currency == "TRY")">Türk Lirası (₺)</option>
+                                <option value="USD" selected="@(Model.Currency == "USD")">Amerikan Doları ($)</option>
+                                <option value="EUR" selected="@(Model.Currency == "EUR")">Euro (€)</option>
                             </select>
                             <span asp-validation-for="Currency" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="Capacity" class="form-label">
-                                <i class="bi bi-people me-1"></i>Kapasite
-                            </label>
-                            <input asp-for="Capacity" type="number" class="form-control" placeholder="0" min="1" required>
-                            <span asp-validation-for="Capacity" class="text-danger small"></span>
                         </div>
                         
                         <div class="col-12">
@@ -101,17 +113,6 @@
                             </label>
                             <textarea asp-for="Description" class="form-control" rows="4" placeholder="Tur açıklamasını giriniz"></textarea>
                             <span asp-validation-for="Description" class="text-danger small"></span>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label asp-for="IsActive" class="form-label">
-                                <i class="bi bi-toggle-on me-1"></i>Durum
-                            </label>
-                            <div class="form-check form-switch">
-                                <input asp-for="IsActive" class="form-check-input" type="checkbox">
-                                <label asp-for="IsActive" class="form-check-label">Aktif</label>
-                            </div>
-                            <span asp-validation-for="IsActive" class="text-danger small"></span>
                         </div>
                     </div>
                     
@@ -146,7 +147,7 @@
                         <li>Tur tarihi bugünden sonra olmalıdır</li>
                         <li>Fiyat pozitif olmalıdır</li>
                         <li>Kapasite en az 1 olmalıdır</li>
-                        <li>Pasif turlar rezervasyon alamaz</li>
+                        <li>Süre saat cinsinden girilmelidir</li>
                     </ul>
                 </div>
             </div>

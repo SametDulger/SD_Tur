@@ -19,7 +19,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
         public async Task<IEnumerable<Cash>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
         {
             return await _dbSet
-                .Where(c => c.TransactionDate >= startDate && c.TransactionDate <= endDate)
+                .Where(c => c.TransactionDate >= startDate && c.TransactionDate <= endDate && c.IsActive && !c.IsDeleted)
                 .OrderByDescending(c => c.TransactionDate)
                 .ToListAsync();
         }
@@ -27,7 +27,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
         public async Task<IEnumerable<Cash>> GetByTransactionTypeAsync(string transactionType)
         {
             return await _dbSet
-                .Where(c => c.TransactionType == transactionType)
+                .Where(c => c.TransactionType == transactionType && c.IsActive && !c.IsDeleted)
                 .OrderByDescending(c => c.TransactionDate)
                 .ToListAsync();
         }
@@ -35,11 +35,11 @@ namespace SDTur.Infrastructure.Repositories.Financial
         public async Task<decimal> GetTotalBalanceAsync(DateTime date, string currency)
         {
             var income = await _dbSet
-                .Where(c => c.TransactionDate <= date && c.Currency == currency && c.TransactionType == "Income")
+                .Where(c => c.TransactionDate <= date && c.Currency == currency && c.TransactionType == "Income" && c.IsActive && !c.IsDeleted)
                 .SumAsync(c => c.Amount);
                 
             var expense = await _dbSet
-                .Where(c => c.TransactionDate <= date && c.Currency == currency && c.TransactionType == "Expense")
+                .Where(c => c.TransactionDate <= date && c.Currency == currency && c.TransactionType == "Expense" && c.IsActive && !c.IsDeleted)
                 .SumAsync(c => c.Amount);
                 
             return income - expense;
@@ -48,7 +48,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
         public async Task<IEnumerable<Cash>> GetByCategoryAsync(string category)
         {
             return await _dbSet
-                .Where(c => c.Category == category)
+                .Where(c => c.Category == category && c.IsActive && !c.IsDeleted)
                 .OrderByDescending(c => c.TransactionDate)
                 .ToListAsync();
         }

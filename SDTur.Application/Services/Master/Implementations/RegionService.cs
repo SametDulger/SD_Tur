@@ -29,35 +29,28 @@ namespace SDTur.Application.Services.Master.Implementations
             return _mapper.Map<IEnumerable<RegionDto>>(regions);
         }
 
-        public async Task<RegionDto> GetRegionByIdAsync(int id)
+        public async Task<RegionDto?> GetRegionByIdAsync(int id)
         {
             var region = await _unitOfWork.Regions.GetByIdAsync(id);
-            return _mapper.Map<RegionDto>(region);
+            return region != null ? _mapper.Map<RegionDto>(region) : null;
         }
 
-        public async Task<RegionDto> CreateRegionAsync(CreateRegionDto createRegionDto)
+        public async Task<RegionDto?> CreateAsync(CreateRegionDto createDto)
         {
-            var region = _mapper.Map<Region>(createRegionDto);
-            region.IsActive = true;
-            
-            var createdRegion = await _unitOfWork.Regions.AddAsync(region);
+            var entity = _mapper.Map<Region>(createDto);
+            var created = await _unitOfWork.Regions.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<RegionDto>(createdRegion);
+            return _mapper.Map<RegionDto>(created);
         }
 
-        public async Task<RegionDto> UpdateRegionAsync(UpdateRegionDto updateRegionDto)
+        public async Task<RegionDto?> UpdateAsync(UpdateRegionDto updateDto)
         {
-            var existingRegion = await _unitOfWork.Regions.GetByIdAsync(updateRegionDto.Id);
-            if (existingRegion == null)
-                return null;
-
-            _mapper.Map(updateRegionDto, existingRegion);
-            
-            var updatedRegion = await _unitOfWork.Regions.UpdateAsync(existingRegion);
+            var entity = await _unitOfWork.Regions.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.Regions.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<RegionDto>(updatedRegion);
+            return _mapper.Map<RegionDto>(updated);
         }
 
         public async Task DeleteRegionAsync(int id)

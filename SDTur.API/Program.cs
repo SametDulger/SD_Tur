@@ -23,6 +23,7 @@ using SDTur.Infrastructure.Repositories.Master;
 using SDTur.Infrastructure.Repositories.Financial;
 using SDTur.Infrastructure.Repositories.Tour;
 using SDTur.Infrastructure.SeedData;
+using SDTur.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,11 +32,32 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "SDTur API", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new()
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new()
+    {
+        {
+            new()
+            {
+                Reference = new() { Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 // JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var secretKey = jwtSettings["SecretKey"] ?? "your-super-secret-key-with-at-least-32-characters";
+var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey is not configured");
 var key = Encoding.ASCII.GetBytes(secretKey);
 
 builder.Services.AddAuthentication(options =>
@@ -62,16 +84,33 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// Database configuration
+// Database configuration with connection pooling
 builder.Services.AddDbContext<SDTurDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlServerOptionsAction: sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+        });
+});
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-// Dependency Injection
+// HTTP Client with retry policy
+builder.Services.AddHttpClient("SDTurAPI", client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
+
+// Dependency Injection - Services
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ITourService, TourService>();
+builder.Services.AddScoped<ITourTypeService, TourTypeService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
@@ -121,6 +160,7 @@ builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 
 // Tour repositories
 builder.Services.AddScoped<ITourRepository, TourRepository>();
+builder.Services.AddScoped<ITourTypeRepository, TourTypeRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITourScheduleRepository, TourScheduleRepository>();
 builder.Services.AddScoped<IServiceScheduleRepository, ServiceScheduleRepository>();
@@ -141,14 +181,18 @@ builder.Services.AddScoped<IFinancialReportRepository, FinancialReportRepository
 builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 builder.Services.AddScoped<IInvoiceDetailRepository, InvoiceDetailRepository>();
 
-// CORS
+// CORS with specific origins
+var corsSettings = builder.Configuration.GetSection("CorsSettings");
+var allowedOrigins = corsSettings.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "https://localhost:7276", "http://localhost:5018" };
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("SDTurCorsPolicy", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
@@ -158,12 +202,23 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SDTur API v1");
+        c.RoutePrefix = "swagger";
+    });
 }
+else
+{
+    app.UseHsts();
+}
+
+// Add security headers middleware
+app.UseSecurityHeaders();
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseCors("SDTurCorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -173,8 +228,19 @@ app.MapControllers();
 // Seed data
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<SDTurDbContext>();
-    await SeedData.SeedUsers(context);
+    try
+    {
+        var context = scope.ServiceProvider.GetRequiredService<SDTurDbContext>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        await context.Database.MigrateAsync();
+        await SeedData.SeedUsers(context);
+        logger.LogInformation("Database migration and seeding completed successfully.");
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Error during database migration or seeding: {Message}", ex.Message);
+    }
 }
 
 app.Run();

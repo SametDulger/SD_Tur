@@ -10,24 +10,22 @@ namespace SDTur.Core.Entities.Financial
     {
         [Required]
         [StringLength(20)]
-        public string InvoiceNumber { get; set; }
+        public string InvoiceNumber { get; set; } = string.Empty;
 
         public DateTime InvoiceDate { get; set; }
 
         public int? PassCompanyId { get; set; }
-        public virtual PassCompany PassCompany { get; set; }
+        public virtual PassCompany? PassCompany { get; set; }
 
         public decimal TotalAmount { get; set; }
 
-        public string Currency { get; set; } // USD, EUR, TRY
+        public string Currency { get; set; } = string.Empty; // USD, EUR, TRY
 
-        public string Status { get; set; } // Draft, Sent, Paid, Cancelled
+        public string Status { get; set; } = string.Empty; // Draft, Sent, Paid, Cancelled
 
         [StringLength(500)]
-        public string Notes { get; set; }
+        public string Notes { get; set; } = string.Empty;
 
-        public bool IsActive { get; set; } = true;
-
-        public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; }
+        public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
     }
 } 

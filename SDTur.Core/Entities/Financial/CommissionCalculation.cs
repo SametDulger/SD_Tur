@@ -13,16 +13,15 @@ namespace SDTur.Core.Entities.Financial
         public int TicketId { get; set; }
         public DateTime CalculationDate { get; set; }
         public decimal CommissionAmount { get; set; }
-        public string Currency { get; set; }
-        public string CommissionType { get; set; } // Percentage, Fixed
+        public string Currency { get; set; } = string.Empty;
+        public string CommissionType { get; set; } = string.Empty; // Percentage, Fixed
         public decimal CommissionRate { get; set; }
-        public string Status { get; set; } // Pending, Approved, Rejected
-        public string Notes { get; set; }
-        public bool IsActive { get; set; } = true;
+        public string Status { get; set; } = string.Empty; // Pending, Approved, Rejected
+        public string Notes { get; set; } = string.Empty;
         
         // Navigation properties
-        public virtual Employee Employee { get; set; }
-        public virtual TourSchedule TourSchedule { get; set; }
-        public virtual Ticket Ticket { get; set; }
+        public virtual Employee Employee { get; set; } = null!;
+        public virtual TourSchedule TourSchedule { get; set; } = null!;
+        public virtual Ticket Ticket { get; set; } = null!;
     }
 } 

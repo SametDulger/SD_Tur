@@ -17,6 +17,11 @@ namespace SDTur.Application.DTOs.Master.Employee
         public string? CurrencyCode { get; set; }
         public DateTime HireDate { get; set; }
         public decimal CommissionRate { get; set; }
+        public string? Gender { get; set; }
+        public string? EmployeeNumber { get; set; }
+        public string? IdentityNumber { get; set; }
+        public DateTime StartDate { get; set; }
+        public string? FullName { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }

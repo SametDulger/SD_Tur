@@ -29,34 +29,28 @@ namespace SDTur.Application.Services.Master.Implementations
             return _mapper.Map<IEnumerable<NationalityDto>>(nationalities);
         }
 
-        public async Task<NationalityDto> GetByIdAsync(int id)
+        public async Task<NationalityDto?> GetByIdAsync(int id)
         {
             var nationality = await _unitOfWork.Nationalities.GetByIdAsync(id);
-            return _mapper.Map<NationalityDto>(nationality);
+            return nationality != null ? _mapper.Map<NationalityDto>(nationality) : null;
         }
 
-        public async Task<NationalityDto> CreateAsync(CreateNationalityDto createDto)
+        public async Task<NationalityDto?> CreateAsync(CreateNationalityDto createDto)
         {
-            var nationality = _mapper.Map<Nationality>(createDto);
-            nationality.IsActive = true;
-            
-            await _unitOfWork.Nationalities.AddAsync(nationality);
+            var entity = _mapper.Map<Nationality>(createDto);
+            var created = await _unitOfWork.Nationalities.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<NationalityDto>(nationality);
+            return _mapper.Map<NationalityDto>(created);
         }
 
-        public async Task<NationalityDto> UpdateAsync(UpdateNationalityDto updateDto)
+        public async Task<NationalityDto?> UpdateAsync(UpdateNationalityDto updateDto)
         {
-            var nationality = await _unitOfWork.Nationalities.GetByIdAsync(updateDto.Id);
-            if (nationality == null)
-                return null;
-
-            _mapper.Map(updateDto, nationality);
-            await _unitOfWork.Nationalities.UpdateAsync(nationality);
+            var entity = await _unitOfWork.Nationalities.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.Nationalities.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<NationalityDto>(nationality);
+            return _mapper.Map<NationalityDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

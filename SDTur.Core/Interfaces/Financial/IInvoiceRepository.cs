@@ -5,7 +5,7 @@ namespace SDTur.Core.Interfaces.Financial
 {
     public interface IInvoiceRepository : IRepository<Invoice>
     {
-        Task<Invoice> GetInvoiceWithDetailsAsync(int id);
+        Task<Invoice?> GetInvoiceWithDetailsAsync(int id);
         Task<IEnumerable<Invoice>> GetInvoicesByPassCompanyAsync(int passCompanyId);
         Task<IEnumerable<Invoice>> GetInvoicesByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<Invoice>> GetInvoicesByStatusAsync(string status);

@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using SDTur.Core.Entities.Core;
 using SDTur.Core.Entities.Master;
@@ -6,36 +7,17 @@ namespace SDTur.Core.Entities.System
 {
     public class User : BaseEntity
     {
-        [Required]
-        [StringLength(50)]
-        public string Username { get; set; }
-
-        [Required]
-        [StringLength(100)]
-        public string Password { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        public string FirstName { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        public string LastName { get; set; }
-
-        [StringLength(100)]
-        public string Email { get; set; }
-
-        [StringLength(20)]
-        public string Phone { get; set; }
-
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public DateTime? LastLoginDate { get; set; }
         public int? EmployeeId { get; set; }
-        public virtual Employee Employee { get; set; }
-
+        public virtual Employee? Employee { get; set; }
         public int? BranchId { get; set; }
-        public virtual Branch Branch { get; set; }
-
-        public string Role { get; set; } // Admin, Manager, Sales, DataEntry, Accounting, Operations
-
-        public bool IsActive { get; set; } = true;
+        public virtual Branch? Branch { get; set; }
+        public string Role { get; set; } = string.Empty; // Admin, Manager, Sales, DataEntry, Accounting, Operations
     }
 } 
