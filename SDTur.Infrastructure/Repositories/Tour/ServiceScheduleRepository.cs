@@ -20,7 +20,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
         {
             return await _dbSet
                 .Include(ss => ss.Region)
-                .Where(ss => ss.TourId == tourId && ss.IsActive)
+                .Where(ss => ss.TourId == tourId && ss.IsActive && !ss.IsDeleted)
                 .OrderBy(ss => ss.ServiceTime)
                 .ToListAsync();
         }
@@ -29,7 +29,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
         {
             return await _dbSet
                 .Include(ss => ss.Tour)
-                .Where(ss => ss.RegionId == regionId && ss.IsActive)
+                .Where(ss => ss.RegionId == regionId && ss.IsActive && !ss.IsDeleted)
                 .OrderBy(ss => ss.ServiceTime)
                 .ToListAsync();
         }
@@ -39,8 +39,35 @@ namespace SDTur.Infrastructure.Repositories.Tour
             return await _dbSet
                 .Include(ss => ss.Tour)
                 .Include(ss => ss.Region)
-                .Where(ss => ss.ServiceDate.Date == date.Date && ss.IsActive)
+                .Where(ss => ss.ServiceDate.Date == date.Date && ss.IsActive && !ss.IsDeleted)
                 .OrderBy(ss => ss.ServiceTime)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ServiceSchedule>> GetSchedulesByRegionAsync(int regionId)
+        {
+            return await _dbSet
+                .Include(ss => ss.Tour)
+                .Include(ss => ss.Region)
+                .Where(ss => ss.RegionId == regionId && ss.IsActive && !ss.IsDeleted)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ServiceSchedule>> GetSchedulesByDateAsync(DateTime date)
+        {
+            return await _dbSet
+                .Include(ss => ss.Tour)
+                .Include(ss => ss.Region)
+                .Where(ss => ss.ServiceDate.Date == date.Date && ss.IsActive && !ss.IsDeleted)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<ServiceSchedule>> GetActiveSchedulesAsync()
+        {
+            return await _dbSet
+                .Include(ss => ss.Tour)
+                .Include(ss => ss.Region)
+                .Where(ss => ss.IsActive && !ss.IsDeleted)
                 .ToListAsync();
         }
     }

@@ -56,15 +56,10 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ReportDto>> Create(CreateReportDto createDto)
         {
-            try
-            {
-                var report = await _reportService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = report.Id }, report);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var report = await _reportService.CreateAsync(createDto);
+            if (report == null)
+                return BadRequest("Failed to create report");
+            return CreatedAtAction(nameof(GetById), new { id = report.Id }, report);
         }
 
         [HttpPut("{id}")]
@@ -72,16 +67,10 @@ namespace SDTur.API.Controllers
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var report = await _reportService.UpdateAsync(updateDto);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var report = await _reportService.UpdateAsync(updateDto);
+            if (report == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

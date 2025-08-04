@@ -23,10 +23,10 @@ namespace SDTur.Application.Services.Financial.Implementations
             return _mapper.Map<IEnumerable<FinancialReportDto>>(financialReports);
         }
 
-        public async Task<FinancialReportDto> GetByIdAsync(int id)
+        public async Task<FinancialReportDto?> GetByIdAsync(int id)
         {
             var financialReport = await _unitOfWork.FinancialReports.GetByIdAsync(id);
-            return _mapper.Map<FinancialReportDto>(financialReport);
+            return financialReport != null ? _mapper.Map<FinancialReportDto>(financialReport) : null;
         }
 
         public async Task<IEnumerable<FinancialReportDto>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
@@ -47,10 +47,10 @@ namespace SDTur.Application.Services.Financial.Implementations
             return _mapper.Map<IEnumerable<FinancialReportDto>>(financialReports);
         }
 
-        public async Task<FinancialReportDto> GetLatestByTypeAsync(string reportType)
+        public async Task<FinancialReportDto?> GetLatestByTypeAsync(string reportType)
         {
             var financialReport = await _unitOfWork.FinancialReports.GetLatestByTypeAsync(reportType);
-            return _mapper.Map<FinancialReportDto>(financialReport);
+            return financialReport != null ? _mapper.Map<FinancialReportDto>(financialReport) : null;
         }
 
         public async Task<IEnumerable<FinancialReportDto>> GetByEmployeeAsync(int employeeId)
@@ -59,29 +59,22 @@ namespace SDTur.Application.Services.Financial.Implementations
             return _mapper.Map<IEnumerable<FinancialReportDto>>(financialReports);
         }
 
-        public async Task<FinancialReportDto> CreateAsync(CreateFinancialReportDto createDto)
+        public async Task<FinancialReportDto?> CreateAsync(CreateFinancialReportDto createDto)
         {
-            var financialReport = _mapper.Map<FinancialReport>(createDto);
-            financialReport.IsActive = true;
-            
-            await _unitOfWork.FinancialReports.AddAsync(financialReport);
+            var entity = _mapper.Map<FinancialReport>(createDto);
+            var created = await _unitOfWork.FinancialReports.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<FinancialReportDto>(financialReport);
+            return _mapper.Map<FinancialReportDto>(created);
         }
 
-        public async Task<FinancialReportDto> UpdateAsync(UpdateFinancialReportDto updateDto)
+        public async Task<FinancialReportDto?> UpdateAsync(UpdateFinancialReportDto updateDto)
         {
-            var existingFinancialReport = await _unitOfWork.FinancialReports.GetByIdAsync(updateDto.Id);
-            if (existingFinancialReport == null)
-                throw new ArgumentException("Financial report not found");
-            
-            _mapper.Map(updateDto, existingFinancialReport);
-            
-            await _unitOfWork.FinancialReports.UpdateAsync(existingFinancialReport);
+            var entity = await _unitOfWork.FinancialReports.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.FinancialReports.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<FinancialReportDto>(existingFinancialReport);
+            return _mapper.Map<FinancialReportDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

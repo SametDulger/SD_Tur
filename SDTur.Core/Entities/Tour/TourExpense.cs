@@ -7,13 +7,12 @@ namespace SDTur.Core.Entities.Tour
     {
         public int TourScheduleId { get; set; }
         public DateTime ExpenseDate { get; set; }
-        public string Category { get; set; } // Fuel, Food, Entrance, Other
-        public string Description { get; set; }
+        public string Category { get; set; } = string.Empty; // Fuel, Food, Entrance, Other
+        public string Description { get; set; } = string.Empty;
         public decimal Amount { get; set; }
-        public string Currency { get; set; }
-        public bool IsActive { get; set; } = true;
+        public string Currency { get; set; } = string.Empty;
         
         // Navigation properties
-        public virtual TourSchedule TourSchedule { get; set; }
+        public virtual TourSchedule TourSchedule { get; set; } = null!;
     }
 } 

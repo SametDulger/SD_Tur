@@ -18,27 +18,27 @@ namespace SDTur.Infrastructure.Repositories.Master
 
         public async Task<IEnumerable<Employee>> GetActiveEmployeesAsync()
         {
-            return await _dbSet.Where(e => e.IsActive).ToListAsync();
+            return await _dbSet.Where(e => e.IsActive && !e.IsDeleted).ToListAsync();
         }
 
-        public async Task<Employee> GetEmployeeWithBranchAsync(int id)
+        public async Task<Employee?> GetEmployeeWithBranchAsync(int id)
         {
             return await _dbSet
                 .Include(e => e.Branch)
-                .FirstOrDefaultAsync(e => e.Id == id);
+                .FirstOrDefaultAsync(e => e.Id == id && e.IsActive && !e.IsDeleted);
         }
 
         public async Task<IEnumerable<Employee>> GetEmployeesByBranchAsync(int branchId)
         {
             return await _dbSet
                 .Include(e => e.Branch)
-                .Where(e => e.BranchId == branchId && e.IsActive)
+                .Where(e => e.BranchId == branchId && e.IsActive && !e.IsDeleted)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Employee>> GetEmployeesByPositionAsync(string position)
         {
-            return await _dbSet.Where(e => e.Position == position && e.IsActive).ToListAsync();
+            return await _dbSet.Where(e => e.Position == position && e.IsActive && !e.IsDeleted).ToListAsync();
         }
     }
 } 

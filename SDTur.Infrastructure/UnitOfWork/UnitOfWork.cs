@@ -11,12 +11,14 @@ using SDTur.Infrastructure.Repositories.Financial;
 using SDTur.Infrastructure.Repositories.Master;
 using SDTur.Infrastructure.Repositories.System;
 using SDTur.Infrastructure.Repositories.Tour;
+using Microsoft.Extensions.Logging;
 
 namespace SDTur.Infrastructure.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly SDTurDbContext _context;
+        private readonly ILoggerFactory _loggerFactory;
         private ITourRepository? _tours;
         private IBranchRepository? _branches;
         private IEmployeeRepository? _employees;
@@ -48,9 +50,10 @@ namespace SDTur.Infrastructure.UnitOfWork
         private ISystemLogRepository? _systemLogs;
         private IInvoiceDetailRepository? _invoiceDetails;
 
-        public UnitOfWork(SDTurDbContext context)
+        public UnitOfWork(SDTurDbContext context, ILoggerFactory loggerFactory)
         {
             _context = context;
+            _loggerFactory = loggerFactory;
         }
 
         public ITourRepository Tours => _tours ??= new TourRepository(_context);
@@ -70,7 +73,7 @@ namespace SDTur.Infrastructure.UnitOfWork
         public IExchangeRateRepository ExchangeRates => _exchangeRates ??= new ExchangeRateRepository(_context);
         public INationalityRepository Nationalities => _nationalities ??= new NationalityRepository(_context);
         public ICurrencyRepository Currencies => _currencies ??= new CurrencyRepository(_context);
-        public IUserRepository Users => _users ??= new UserRepository(_context);
+        public IUserRepository Users => _users ??= new UserRepository(_context, _loggerFactory.CreateLogger<UserRepository>());
         public IInvoiceRepository Invoices => _invoices ??= new InvoiceRepository(_context);
         public ICashRepository Cash => _cash ??= new CashRepository(_context);
         public IAccountRepository Accounts => _accounts ??= new AccountRepository(_context);

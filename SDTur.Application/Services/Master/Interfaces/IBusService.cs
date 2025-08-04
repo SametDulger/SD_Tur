@@ -6,12 +6,12 @@ namespace SDTur.Application.Services.Master.Interfaces
 {
     public interface IBusService
     {
+        Task<BusDto?> CreateAsync(CreateBusDto createDto);
+        Task<BusDto?> UpdateAsync(UpdateBusDto updateDto);
         Task<IEnumerable<BusDto>> GetAllBusesAsync();
         Task<IEnumerable<BusDto>> GetActiveBusesAsync();
-        Task<BusDto> GetBusByIdAsync(int id);
+        Task<BusDto?> GetBusByIdAsync(int id);
         Task<IEnumerable<BusDto>> GetAvailableBusesAsync();
-        Task<BusDto> CreateBusAsync(CreateBusDto createBusDto);
-        Task<BusDto> UpdateBusAsync(UpdateBusDto updateBusDto);
         Task DeleteBusAsync(int id);
     }
 } 

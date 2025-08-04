@@ -4,15 +4,16 @@ namespace SDTur.Application.DTOs.Tour.CustomerDistribution
 {
     public class UpdateCustomerDistributionDto
     {
+        [Required]
         public int Id { get; set; }
 
         [Required]
         public DateTime DistributionDate { get; set; }
 
         [Required]
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
         [Required]
         public int TourScheduleId { get; set; }

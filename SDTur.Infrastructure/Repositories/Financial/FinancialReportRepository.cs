@@ -40,6 +40,13 @@ namespace SDTur.Infrastructure.Repositories.Financial
                 .ToListAsync();
         }
 
+        public async Task<FinancialReport?> GetFinancialReportWithDetailsAsync(int id)
+        {
+            return await _dbSet
+                .Include(fr => fr.Employee)
+                .FirstOrDefaultAsync(fr => fr.Id == id);
+        }
+
         public async Task<FinancialReport> GetLatestByTypeAsync(string reportType)
         {
             return await _dbSet

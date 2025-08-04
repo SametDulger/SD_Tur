@@ -4,13 +4,14 @@ namespace SDTur.Application.DTOs.Tour.TourReport
 {
     public class UpdateTourReportDto
     {
+        [Required]
         public int Id { get; set; }
 
         [Required]
         public DateTime ReportDate { get; set; }
 
         [Required]
-        public string ReportType { get; set; }
+        public string? ReportType { get; set; }
 
         [Required]
         public DateTime StartDate { get; set; }
@@ -43,11 +44,11 @@ namespace SDTur.Application.DTOs.Tour.TourReport
         public decimal NetProfit { get; set; }
 
         [Required]
-        public string Currency { get; set; }
+        public string? Currency { get; set; }
 
-        public string ReportData { get; set; }
+        public string? ReportData { get; set; }
 
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         public int? TourId { get; set; }
 

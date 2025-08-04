@@ -56,6 +56,14 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .ToListAsync();
         }
 
+        public async Task<TourReport?> GetTourReportWithDetailsAsync(int id)
+        {
+            return await _dbSet
+                .Include(tr => tr.TourSchedule)
+                .Include(tr => tr.Employee)
+                .FirstOrDefaultAsync(tr => tr.Id == id);
+        }
+
         public async Task<TourReport> GetLatestByTourAsync(int tourId)
         {
             return await _dbSet

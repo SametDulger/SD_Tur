@@ -22,7 +22,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .Include(ba => ba.TourSchedule)
                 .Include(ba => ba.Bus)
                 .Include(ba => ba.Employee)
-                .Where(ba => ba.TourScheduleId == tourScheduleId && !ba.IsDeleted)
+                .Where(ba => ba.TourScheduleId == tourScheduleId && ba.IsActive && !ba.IsDeleted)
                 .ToListAsync();
         }
 
@@ -32,7 +32,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .Include(ba => ba.TourSchedule)
                 .Include(ba => ba.Bus)
                 .Include(ba => ba.Employee)
-                .Where(ba => ba.BusId == busId && !ba.IsDeleted)
+                .Where(ba => ba.BusId == busId && ba.IsActive && !ba.IsDeleted)
                 .ToListAsync();
         }
 
@@ -42,7 +42,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .Include(ba => ba.TourSchedule)
                 .Include(ba => ba.Bus)
                 .Include(ba => ba.Employee)
-                .Where(ba => ba.AssignmentDate >= startDate && ba.AssignmentDate <= endDate && !ba.IsDeleted)
+                .Where(ba => ba.AssignmentDate >= startDate && ba.AssignmentDate <= endDate && ba.IsActive && !ba.IsDeleted)
                 .ToListAsync();
         }
 
@@ -52,7 +52,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .Include(ba => ba.TourSchedule)
                 .Include(ba => ba.Bus)
                 .Include(ba => ba.Employee)
-                .Where(ba => ba.Status == status && !ba.IsDeleted)
+                .Where(ba => ba.Status == status && ba.IsActive && !ba.IsDeleted)
                 .ToListAsync();
         }
     }

@@ -47,22 +47,23 @@ namespace SDTur.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TourScheduleDto>> CreateTourSchedule(CreateTourScheduleDto createTourScheduleDto)
+        public async Task<ActionResult<TourScheduleDto>> Create(CreateTourScheduleDto createTourScheduleDto)
         {
-            var tourSchedule = await _tourScheduleService.CreateTourScheduleAsync(createTourScheduleDto);
+            var tourSchedule = await _tourScheduleService.CreateAsync(createTourScheduleDto);
+            if (tourSchedule == null)
+                return BadRequest("Failed to create tour schedule");
+
             return CreatedAtAction(nameof(GetTourSchedule), new { id = tourSchedule.Id }, tourSchedule);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTourSchedule(int id, UpdateTourScheduleDto updateTourScheduleDto)
+        public async Task<IActionResult> Update(int id, UpdateTourScheduleDto updateTourScheduleDto)
         {
             if (id != updateTourScheduleDto.Id)
                 return BadRequest();
-
-            var tourSchedule = await _tourScheduleService.UpdateTourScheduleAsync(updateTourScheduleDto);
+            var tourSchedule = await _tourScheduleService.UpdateAsync(updateTourScheduleDto);
             if (tourSchedule == null)
                 return NotFound();
-
             return NoContent();
         }
 

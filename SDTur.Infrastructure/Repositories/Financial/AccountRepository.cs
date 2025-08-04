@@ -19,22 +19,22 @@ namespace SDTur.Infrastructure.Repositories.Financial
         public async Task<IEnumerable<Account>> GetActiveAccountsAsync()
         {
             return await _dbSet
-                .Where(a => a.IsActive)
+                .Where(a => a.IsActive && !a.IsDeleted)
                 .OrderBy(a => a.AccountName)
                 .ToListAsync();
         }
 
-        public async Task<Account> GetAccountWithTransactionsAsync(int id)
+        public async Task<Account?> GetAccountWithTransactionsAsync(int id)
         {
             return await _dbSet
                 .Include(a => a.AccountTransactions)
-                .FirstOrDefaultAsync(a => a.Id == id);
+                .FirstOrDefaultAsync(a => a.Id == id && a.IsActive && !a.IsDeleted);
         }
 
         public async Task<IEnumerable<Account>> GetByAccountTypeAsync(string accountType)
         {
             return await _dbSet
-                .Where(a => a.AccountType == accountType && a.IsActive)
+                .Where(a => a.AccountType == accountType && a.IsActive && !a.IsDeleted)
                 .OrderBy(a => a.AccountName)
                 .ToListAsync();
         }
@@ -43,7 +43,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
         {
             var account = await _dbSet
                 .Include(a => a.AccountTransactions)
-                .FirstOrDefaultAsync(a => a.Id == accountId);
+                .FirstOrDefaultAsync(a => a.Id == accountId && a.IsActive && !a.IsDeleted);
                 
             if (account == null)
                 return 0;

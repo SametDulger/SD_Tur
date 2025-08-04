@@ -40,22 +40,22 @@ namespace SDTur.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BranchDto>> CreateBranch(CreateBranchDto createBranchDto)
+        public async Task<ActionResult<BranchDto>> Create(CreateBranchDto createBranchDto)
         {
-            var branch = await _branchService.CreateBranchAsync(createBranchDto);
+            var branch = await _branchService.CreateAsync(createBranchDto);
+            if (branch == null)
+                return BadRequest("Failed to create branch");
             return CreatedAtAction(nameof(GetBranch), new { id = branch.Id }, branch);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBranch(int id, UpdateBranchDto updateBranchDto)
+        public async Task<IActionResult> Update(int id, UpdateBranchDto updateBranchDto)
         {
             if (id != updateBranchDto.Id)
                 return BadRequest();
-
-            var branch = await _branchService.UpdateBranchAsync(updateBranchDto);
+            var branch = await _branchService.UpdateAsync(updateBranchDto);
             if (branch == null)
                 return NotFound();
-
             return NoContent();
         }
 

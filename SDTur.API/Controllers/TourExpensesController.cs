@@ -42,46 +42,28 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<TourExpenseDto>> Create(CreateTourExpenseDto createDto)
         {
-            try
-            {
-                var tourExpense = await _tourExpenseService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = tourExpense.Id }, tourExpense);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var tourExpense = await _tourExpenseService.CreateAsync(createDto);
+            if (tourExpense == null)
+                return BadRequest("Failed to create tour expense");
+            return CreatedAtAction(nameof(GetById), new { id = tourExpense.Id }, tourExpense);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<TourExpenseDto>> Update(int id, UpdateTourExpenseDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdateTourExpenseDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var tourExpense = await _tourExpenseService.UpdateAsync(updateDto);
-                return Ok(tourExpense);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var tourExpense = await _tourExpenseService.UpdateAsync(updateDto);
+            if (tourExpense == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _tourExpenseService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _tourExpenseService.DeleteAsync(id);
+            return NoContent();
         }
     }
 } 

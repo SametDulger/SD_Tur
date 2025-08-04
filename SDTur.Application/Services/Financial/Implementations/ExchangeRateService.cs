@@ -23,35 +23,28 @@ namespace SDTur.Application.Services.Financial.Implementations
             return _mapper.Map<IEnumerable<ExchangeRateDto>>(exchangeRates);
         }
 
-        public async Task<ExchangeRateDto> GetByIdAsync(int id)
+        public async Task<ExchangeRateDto?> GetByIdAsync(int id)
         {
             var exchangeRate = await _unitOfWork.ExchangeRates.GetByIdAsync(id);
-            return _mapper.Map<ExchangeRateDto>(exchangeRate);
+            return exchangeRate != null ? _mapper.Map<ExchangeRateDto>(exchangeRate) : null;
         }
 
-        public async Task<ExchangeRateDto> CreateAsync(CreateExchangeRateDto createDto)
+        public async Task<ExchangeRateDto?> CreateAsync(CreateExchangeRateDto createDto)
         {
-            var exchangeRate = _mapper.Map<ExchangeRate>(createDto);
-            exchangeRate.IsActive = true;
-            
-            await _unitOfWork.ExchangeRates.AddAsync(exchangeRate);
+            var entity = _mapper.Map<ExchangeRate>(createDto);
+            var created = await _unitOfWork.ExchangeRates.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<ExchangeRateDto>(exchangeRate);
+            return _mapper.Map<ExchangeRateDto>(created);
         }
 
-        public async Task<ExchangeRateDto> UpdateAsync(UpdateExchangeRateDto updateDto)
+        public async Task<ExchangeRateDto?> UpdateAsync(UpdateExchangeRateDto updateDto)
         {
-            var exchangeRate = await _unitOfWork.ExchangeRates.GetByIdAsync(updateDto.Id);
-            if (exchangeRate == null)
-                throw new ArgumentException("Döviz kuru bulunamadı");
-
-            _mapper.Map(updateDto, exchangeRate);
-            
-            await _unitOfWork.ExchangeRates.UpdateAsync(exchangeRate);
+            var entity = await _unitOfWork.ExchangeRates.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.ExchangeRates.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<ExchangeRateDto>(exchangeRate);
+            return _mapper.Map<ExchangeRateDto>(updated);
         }
 
         public async Task DeleteAsync(int id)
@@ -60,10 +53,10 @@ namespace SDTur.Application.Services.Financial.Implementations
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<ExchangeRateDto> GetLatestRateAsync(string fromCurrency, string toCurrency)
+        public async Task<ExchangeRateDto?> GetLatestRateAsync(string fromCurrency, string toCurrency)
         {
             var exchangeRate = await _unitOfWork.ExchangeRates.GetLatestRateAsync(fromCurrency, toCurrency);
-            return _mapper.Map<ExchangeRateDto>(exchangeRate);
+            return exchangeRate != null ? _mapper.Map<ExchangeRateDto>(exchangeRate) : null;
         }
 
         public async Task<IEnumerable<ExchangeRateDto>> GetRatesByDateAsync(DateTime date)

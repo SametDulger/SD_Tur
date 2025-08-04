@@ -16,21 +16,21 @@ namespace SDTur.Infrastructure.Repositories.Tour
         {
         }
 
-        public async Task<TourSchedule> GetTourScheduleWithDetailsAsync(int id)
+        public async Task<TourSchedule?> GetTourScheduleWithDetailsAsync(int id)
         {
             return await _dbSet
                 .Include(ts => ts.Tour)
                 .Include(ts => ts.Tickets)
                 .Include(ts => ts.TourExpenses)
                 .Include(ts => ts.TourIncomes)
-                .FirstOrDefaultAsync(ts => ts.Id == id);
+                .FirstOrDefaultAsync(ts => ts.Id == id && ts.IsActive && !ts.IsDeleted);
         }
 
         public async Task<IEnumerable<TourSchedule>> GetTourSchedulesByTourAsync(int tourId)
         {
             return await _dbSet
                 .Include(ts => ts.Tour)
-                .Where(ts => ts.TourId == tourId)
+                .Where(ts => ts.TourId == tourId && ts.IsActive && !ts.IsDeleted)
                 .OrderBy(ts => ts.TourDate)
                 .ToListAsync();
         }
@@ -39,7 +39,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
         {
             return await _dbSet
                 .Include(ts => ts.Tour)
-                .Where(ts => ts.TourDate.Date == date.Date)
+                .Where(ts => ts.TourDate.Date == date.Date && ts.IsActive && !ts.IsDeleted)
                 .OrderBy(ts => ts.TourDate)
                 .ToListAsync();
         }
@@ -48,7 +48,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
         {
             return await _dbSet
                 .Include(ts => ts.Tour)
-                .Where(ts => ts.TourId == tourId)
+                .Where(ts => ts.TourId == tourId && ts.IsActive && !ts.IsDeleted)
                 .OrderBy(ts => ts.TourDate)
                 .ToListAsync();
         }
@@ -57,12 +57,12 @@ namespace SDTur.Infrastructure.Repositories.Tour
         {
             return await _dbSet
                 .Include(ts => ts.Tour)
-                .Where(ts => ts.TourDate >= startDate && ts.TourDate <= endDate)
+                .Where(ts => ts.TourDate >= startDate && ts.TourDate <= endDate && ts.IsActive && !ts.IsDeleted)
                 .OrderBy(ts => ts.TourDate)
                 .ToListAsync();
         }
 
-        public async Task<TourSchedule> GetScheduleWithDetailsAsync(int id)
+        public async Task<TourSchedule?> GetScheduleWithDetailsAsync(int id)
         {
             return await _dbSet
                 .Include(ts => ts.Tour)
@@ -70,7 +70,22 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .Include(ts => ts.TourExpenses)
                 .Include(ts => ts.TourIncomes)
                 .Include(ts => ts.CommissionCalculations)
-                .FirstOrDefaultAsync(ts => ts.Id == id);
+                .FirstOrDefaultAsync(ts => ts.Id == id && ts.IsActive && !ts.IsDeleted);
+        }
+
+        public async Task<TourSchedule?> GetTourScheduleByDateAsync(DateTime tourDate)
+        {
+            return await _dbSet
+                .Include(ts => ts.Tour)
+                .FirstOrDefaultAsync(ts => ts.TourDate.Date == tourDate.Date && ts.IsActive && !ts.IsDeleted);
+        }
+
+        public async Task<IEnumerable<TourSchedule>> GetActiveSchedulesAsync()
+        {
+            return await _dbSet
+                .Include(ts => ts.Tour)
+                .Where(ts => !ts.IsCompleted && !ts.IsCancelled && ts.IsActive && !ts.IsDeleted)
+                .ToListAsync();
         }
     }
 } 

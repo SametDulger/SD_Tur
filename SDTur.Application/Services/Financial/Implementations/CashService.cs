@@ -23,10 +23,10 @@ namespace SDTur.Application.Services.Financial.Implementations
             return _mapper.Map<IEnumerable<CashDto>>(cashTransactions);
         }
 
-        public async Task<CashDto> GetByIdAsync(int id)
+        public async Task<CashDto?> GetByIdAsync(int id)
         {
             var cashTransaction = await _unitOfWork.Cash.GetByIdAsync(id);
-            return _mapper.Map<CashDto>(cashTransaction);
+            return cashTransaction != null ? _mapper.Map<CashDto>(cashTransaction) : null;
         }
 
         public async Task<IEnumerable<CashDto>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
@@ -46,29 +46,22 @@ namespace SDTur.Application.Services.Financial.Implementations
             return await _unitOfWork.Cash.GetTotalBalanceAsync(date, currency);
         }
 
-        public async Task<CashDto> CreateAsync(CreateCashDto createDto)
+        public async Task<CashDto?> CreateAsync(CreateCashDto createDto)
         {
-            var cashTransaction = _mapper.Map<Cash>(createDto);
-            cashTransaction.IsActive = true;
-            
-            await _unitOfWork.Cash.AddAsync(cashTransaction);
+            var entity = _mapper.Map<Cash>(createDto);
+            var created = await _unitOfWork.Cash.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<CashDto>(cashTransaction);
+            return _mapper.Map<CashDto>(created);
         }
 
-        public async Task<CashDto> UpdateAsync(UpdateCashDto updateDto)
+        public async Task<CashDto?> UpdateAsync(UpdateCashDto updateDto)
         {
-            var cashTransaction = await _unitOfWork.Cash.GetByIdAsync(updateDto.Id);
-            if (cashTransaction == null)
-                throw new ArgumentException("Kasa işlemi bulunamadı");
-            
-            _mapper.Map(updateDto, cashTransaction);
-            
-            await _unitOfWork.Cash.UpdateAsync(cashTransaction);
+            var entity = await _unitOfWork.Cash.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.Cash.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<CashDto>(cashTransaction);
+            return _mapper.Map<CashDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

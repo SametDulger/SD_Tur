@@ -42,32 +42,21 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<PassCompanyDto>> Create(CreatePassCompanyDto createDto)
         {
-            try
-            {
-                var passCompany = await _passCompanyService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = passCompany.Id }, passCompany);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var passCompany = await _passCompanyService.CreateAsync(createDto);
+            if (passCompany == null)
+                return BadRequest("Failed to create pass company");
+            return CreatedAtAction(nameof(GetById), new { id = passCompany.Id }, passCompany);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<PassCompanyDto>> Update(int id, UpdatePassCompanyDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdatePassCompanyDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var passCompany = await _passCompanyService.UpdateAsync(updateDto);
-                return Ok(passCompany);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var passCompany = await _passCompanyService.UpdateAsync(updateDto);
+            if (passCompany == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

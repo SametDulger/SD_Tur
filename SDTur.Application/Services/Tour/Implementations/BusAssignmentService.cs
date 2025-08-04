@@ -23,10 +23,10 @@ namespace SDTur.Application.Services.Tour.Implementations
             return _mapper.Map<IEnumerable<BusAssignmentDto>>(busAssignments);
         }
 
-        public async Task<BusAssignmentDto> GetByIdAsync(int id)
+        public async Task<BusAssignmentDto?> GetByIdAsync(int id)
         {
             var busAssignment = await _unitOfWork.BusAssignments.GetByIdAsync(id);
-            return _mapper.Map<BusAssignmentDto>(busAssignment);
+            return busAssignment != null ? _mapper.Map<BusAssignmentDto>(busAssignment) : null;
         }
 
         public async Task<IEnumerable<BusAssignmentDto>> GetByTourScheduleAsync(int tourScheduleId)
@@ -53,28 +53,22 @@ namespace SDTur.Application.Services.Tour.Implementations
             return _mapper.Map<IEnumerable<BusAssignmentDto>>(busAssignments);
         }
 
-        public async Task<BusAssignmentDto> CreateAsync(CreateBusAssignmentDto createDto)
+        public async Task<BusAssignmentDto?> CreateAsync(CreateBusAssignmentDto createDto)
         {
-            var busAssignment = _mapper.Map<BusAssignment>(createDto);
-            busAssignment.IsActive = true;
-            
-            await _unitOfWork.BusAssignments.AddAsync(busAssignment);
+            var entity = _mapper.Map<BusAssignment>(createDto);
+            var created = await _unitOfWork.BusAssignments.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<BusAssignmentDto>(busAssignment);
+            return _mapper.Map<BusAssignmentDto>(created);
         }
 
-        public async Task<BusAssignmentDto> UpdateAsync(UpdateBusAssignmentDto updateDto)
+        public async Task<BusAssignmentDto?> UpdateAsync(UpdateBusAssignmentDto updateDto)
         {
-            var busAssignment = await _unitOfWork.BusAssignments.GetByIdAsync(updateDto.Id);
-            if (busAssignment == null)
-                return null;
-
-            _mapper.Map(updateDto, busAssignment);
-            await _unitOfWork.BusAssignments.UpdateAsync(busAssignment);
+            var entity = await _unitOfWork.BusAssignments.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.BusAssignments.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<BusAssignmentDto>(busAssignment);
+            return _mapper.Map<BusAssignmentDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

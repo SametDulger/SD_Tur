@@ -4,6 +4,9 @@ using SDTur.Core.Entities.System;
 using SDTur.Core.Entities.Financial;
 using SDTur.Core.Entities.Tour;
 using SDTur.Application.Enums;
+using SDTur.Infrastructure.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace SDTur.Infrastructure.SeedData
 {
@@ -11,6 +14,9 @@ namespace SDTur.Infrastructure.SeedData
     {
         public static void Seed(ModelBuilder modelBuilder)
         {
+            // Seed Tour Types
+            SeedTourTypes(modelBuilder);
+            
             // Seed Currencies
             SeedCurrencies(modelBuilder);
             
@@ -100,6 +106,102 @@ namespace SDTur.Infrastructure.SeedData
             
             // Seed Tickets (en son eklenmeli çünkü diğer entity'lere bağımlı)
             SeedTickets(modelBuilder);
+        }
+
+        private static void SeedTourTypes(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TourType>().HasData(
+                new TourType
+                {
+                    Id = 1,
+                    Name = "Günlük Tur",
+                    Description = "Tek günlük turlar",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    UpdatedDate = null
+                },
+                new TourType
+                {
+                    Id = 2,
+                    Name = "Hafta Sonu Turu",
+                    Description = "Hafta sonu turları",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    UpdatedDate = null
+                },
+                new TourType
+                {
+                    Id = 3,
+                    Name = "Uzun Tur",
+                    Description = "Uzun süreli turlar",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    UpdatedDate = null
+                },
+                new TourType
+                {
+                    Id = 4,
+                    Name = "Kültür Turu",
+                    Description = "Kültürel turlar",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    UpdatedDate = null
+                },
+                new TourType
+                {
+                    Id = 5,
+                    Name = "Doğa Turu",
+                    Description = "Doğa turları",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    UpdatedDate = null
+                },
+                new TourType
+                {
+                    Id = 6,
+                    Name = "Şehir Turu",
+                    Description = "Şehir turları",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    UpdatedDate = null
+                },
+                new TourType
+                {
+                    Id = 7,
+                    Name = "Tarih Turu",
+                    Description = "Tarihi turlar",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    UpdatedDate = null
+                },
+                new TourType
+                {
+                    Id = 8,
+                    Name = "Deniz Turu",
+                    Description = "Deniz turları",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    UpdatedDate = null
+                },
+                new TourType
+                {
+                    Id = 9,
+                    Name = "Dağ Turu",
+                    Description = "Dağ turları",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    UpdatedDate = null
+                },
+                new TourType
+                {
+                    Id = 10,
+                    Name = "Özel Tur",
+                    Description = "Özel turlar",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    UpdatedDate = null
+                }
+            );
         }
 
         private static void SeedCurrencies(ModelBuilder modelBuilder)
@@ -234,7 +336,7 @@ namespace SDTur.Infrastructure.SeedData
                 new User { 
                     Id = 1, 
                     Username = "admin",
-                    Password = "admin123",
+                    Password = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
                     FirstName = "Admin",
                     LastName = "User",
                     Email = "admin@sdtur.com", 
@@ -249,7 +351,7 @@ namespace SDTur.Infrastructure.SeedData
                 new User { 
                     Id = 2, 
                     Username = "manager",
-                    Password = "manager123",
+                    Password = BCrypt.Net.BCrypt.HashPassword("Manager123!"),
                     FirstName = "Manager",
                     LastName = "User",
                     Email = "manager@sdtur.com", 
@@ -264,7 +366,7 @@ namespace SDTur.Infrastructure.SeedData
                 new User { 
                     Id = 3, 
                     Username = "sales",
-                    Password = "sales123",
+                    Password = BCrypt.Net.BCrypt.HashPassword("Sales123!"),
                     FirstName = "Sales",
                     LastName = "User",
                     Email = "sales@sdtur.com", 
@@ -340,6 +442,7 @@ namespace SDTur.Infrastructure.SeedData
                     Duration = 48, 
                     Price = 1500, 
                     Currency = "TRY", 
+                    TourTypeId = 3, // Uzun Tur
                     IsActive = true, 
                     CreatedDate = new DateTime(2024, 1, 1),
                     IsDeleted = false
@@ -351,6 +454,7 @@ namespace SDTur.Infrastructure.SeedData
                     Duration = 24, 
                     Price = 800, 
                     Currency = "TRY", 
+                    TourTypeId = 1, // Günlük Tur
                     IsActive = true, 
                     CreatedDate = new DateTime(2024, 1, 1),
                     IsDeleted = false
@@ -362,6 +466,7 @@ namespace SDTur.Infrastructure.SeedData
                     Duration = 72, 
                     Price = 2000, 
                     Currency = "TRY", 
+                    TourTypeId = 3, // Uzun Tur
                     IsActive = true, 
                     CreatedDate = new DateTime(2024, 1, 1),
                     IsDeleted = false
@@ -948,7 +1053,7 @@ namespace SDTur.Infrastructure.SeedData
                     Action = "Startup",
                     Message = "Sistem başlatıldı", 
                     Details = "{}",
-                    IpAddress = "127.0.0.1",
+                    IpAddress = "::1",
                     UserAgent = "System",
                     LogDate = new DateTime(2024, 1, 1), 
                     UserId = 1, 
@@ -963,7 +1068,7 @@ namespace SDTur.Infrastructure.SeedData
                     Action = "Create",
                     Message = "Yeni kullanıcı eklendi", 
                     Details = "{}",
-                    IpAddress = "127.0.0.1",
+                    IpAddress = "::1",
                     UserAgent = "System",
                     LogDate = new DateTime(2024, 1, 1), 
                     UserId = 1, 
@@ -978,7 +1083,7 @@ namespace SDTur.Infrastructure.SeedData
                     Action = "Balance",
                     Message = "Düşük bakiye uyarısı", 
                     Details = "{}",
-                    IpAddress = "127.0.0.1",
+                    IpAddress = "::1",
                     UserAgent = "System",
                     LogDate = new DateTime(2024, 1, 1), 
                     UserId = 2, 
@@ -1117,6 +1222,70 @@ namespace SDTur.Infrastructure.SeedData
                     IsDeleted = false
                 }
             );
+        }
+
+        public static async Task SeedUsers(SDTurDbContext context)
+        {
+            try
+            {
+                // Check if users already exist
+                if (await context.Users.AnyAsync())
+                {
+                    return; // Users already seeded
+                }
+
+                // Create default users with secure passwords
+                var users = new List<User>
+                {
+                    new User
+                    {
+                        Username = "admin",
+                        Password = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
+                        FirstName = "Admin",
+                        LastName = "User",
+                        Email = "admin@sdtur.com",
+                        Phone = "+90 555 123 4567",
+                        Role = "Admin",
+                        IsActive = true,
+                        CreatedDate = new DateTime(2024, 1, 1),
+                        IsDeleted = false
+                    },
+                    new User
+                    {
+                        Username = "manager",
+                        Password = BCrypt.Net.BCrypt.HashPassword("Manager123!"),
+                        FirstName = "Manager",
+                        LastName = "User",
+                        Email = "manager@sdtur.com",
+                        Phone = "+90 555 234 5678",
+                        Role = "Manager",
+                        IsActive = true,
+                        CreatedDate = new DateTime(2024, 1, 1),
+                        IsDeleted = false
+                    },
+                    new User
+                    {
+                        Username = "sales",
+                        Password = BCrypt.Net.BCrypt.HashPassword("Sales123!"),
+                        FirstName = "Sales",
+                        LastName = "User",
+                        Email = "sales@sdtur.com",
+                        Phone = "+90 555 345 6789",
+                        Role = "Sales",
+                        IsActive = true,
+                        CreatedDate = new DateTime(2024, 1, 1),
+                        IsDeleted = false
+                    }
+                };
+
+                await context.Users.AddRangeAsync(users);
+                await context.SaveChangesAsync();
+            }
+            catch
+            {
+                // Log error but don't throw to prevent application startup failure
+                // In a real application, you might want to use a logger here
+            }
         }
     }
 } 

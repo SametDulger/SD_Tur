@@ -9,15 +9,14 @@ namespace SDTur.Core.Entities.Tour
     {
         public DateTime ServiceDate { get; set; }
         public TimeSpan ServiceTime { get; set; }
-        public bool IsActive { get; set; }
         
         // Foreign keys
         public int TourId { get; set; }
         public int RegionId { get; set; }
         
         // Navigation properties
-        public virtual Tour Tour { get; set; }
-        public virtual Region Region { get; set; }
-        public virtual ICollection<Ticket> Tickets { get; set; }
+        public virtual Tour Tour { get; set; } = null!;
+        public virtual Region Region { get; set; } = null!;
+        public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
     }
 } 

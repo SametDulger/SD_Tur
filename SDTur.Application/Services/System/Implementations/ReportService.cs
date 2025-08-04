@@ -23,10 +23,10 @@ namespace SDTur.Application.Services.System.Implementations
             return _mapper.Map<IEnumerable<ReportDto>>(reports);
         }
 
-        public async Task<ReportDto> GetByIdAsync(int id)
+        public async Task<ReportDto?> GetByIdAsync(int id)
         {
             var report = await _unitOfWork.Reports.GetByIdAsync(id);
-            return _mapper.Map<ReportDto>(report);
+            return report != null ? _mapper.Map<ReportDto>(report) : null;
         }
 
         public async Task<IEnumerable<ReportDto>> GetByReportTypeAsync(string reportType)
@@ -47,28 +47,22 @@ namespace SDTur.Application.Services.System.Implementations
             return _mapper.Map<IEnumerable<ReportDto>>(reports);
         }
 
-        public async Task<ReportDto> CreateAsync(CreateReportDto createDto)
+        public async Task<ReportDto?> CreateAsync(CreateReportDto createDto)
         {
-            var report = _mapper.Map<Report>(createDto);
-            report.IsActive = true;
-            
-            await _unitOfWork.Reports.AddAsync(report);
+            var entity = _mapper.Map<Report>(createDto);
+            var created = await _unitOfWork.Reports.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<ReportDto>(report);
+            return _mapper.Map<ReportDto>(created);
         }
 
-        public async Task<ReportDto> UpdateAsync(UpdateReportDto updateDto)
+        public async Task<ReportDto?> UpdateAsync(UpdateReportDto updateDto)
         {
-            var report = await _unitOfWork.Reports.GetByIdAsync(updateDto.Id);
-            if (report == null)
-                throw new ArgumentException("Rapor bulunamadı");
-            _mapper.Map(updateDto, report);
-            
-            await _unitOfWork.Reports.UpdateAsync(report);
+            var entity = await _unitOfWork.Reports.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.Reports.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<ReportDto>(report);
+            return _mapper.Map<ReportDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

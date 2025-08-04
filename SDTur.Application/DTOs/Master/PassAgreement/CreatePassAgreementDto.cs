@@ -10,7 +10,7 @@ namespace SDTur.Application.DTOs.Master.PassAgreement
         [Required]
         public int TourId { get; set; }
         [Required]
-        public string AgreementNumber { get; set; }
+        public string? AgreementNumber { get; set; }
         [Required]
         public DateTime StartDate { get; set; }
         [Required]
@@ -32,8 +32,8 @@ namespace SDTur.Application.DTOs.Master.PassAgreement
         [Required]
         public int CurrencyId { get; set; }
         [Required]
-        public string Status { get; set; }
-        public string Notes { get; set; }
+        public string? Status { get; set; }
+        public string? Notes { get; set; }
         public bool IsActive { get; set; }
     }
 } 

@@ -6,20 +6,20 @@ namespace SDTur.Application.DTOs.Master.Employee
     public class CreateEmployeeDto
     {
         [Required]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
         
         [Required]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
         
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string? Email { get; set; }
         
         [Required]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
         
         [Required]
-        public string Position { get; set; }
+        public string? Position { get; set; }
         
         [Required]
         public decimal Salary { get; set; }

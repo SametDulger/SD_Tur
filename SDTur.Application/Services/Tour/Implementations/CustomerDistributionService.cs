@@ -23,10 +23,10 @@ namespace SDTur.Application.Services.Tour.Implementations
             return _mapper.Map<IEnumerable<CustomerDistributionDto>>(customerDistributions);
         }
 
-        public async Task<CustomerDistributionDto> GetByIdAsync(int id)
+        public async Task<CustomerDistributionDto?> GetByIdAsync(int id)
         {
             var customerDistribution = await _unitOfWork.CustomerDistributions.GetByIdAsync(id);
-            return _mapper.Map<CustomerDistributionDto>(customerDistribution);
+            return customerDistribution != null ? _mapper.Map<CustomerDistributionDto>(customerDistribution) : null;
         }
 
         public async Task<IEnumerable<CustomerDistributionDto>> GetByTourScheduleAsync(int tourScheduleId)
@@ -59,28 +59,22 @@ namespace SDTur.Application.Services.Tour.Implementations
             return _mapper.Map<IEnumerable<CustomerDistributionDto>>(customerDistributions);
         }
 
-        public async Task<CustomerDistributionDto> CreateAsync(CreateCustomerDistributionDto createDto)
+        public async Task<CustomerDistributionDto?> CreateAsync(CreateCustomerDistributionDto createDto)
         {
-            var customerDistribution = _mapper.Map<CustomerDistribution>(createDto);
-            customerDistribution.IsActive = true;
-            
-            await _unitOfWork.CustomerDistributions.AddAsync(customerDistribution);
+            var entity = _mapper.Map<CustomerDistribution>(createDto);
+            var created = await _unitOfWork.CustomerDistributions.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<CustomerDistributionDto>(customerDistribution);
+            return _mapper.Map<CustomerDistributionDto>(created);
         }
 
-        public async Task<CustomerDistributionDto> UpdateAsync(UpdateCustomerDistributionDto updateDto)
+        public async Task<CustomerDistributionDto?> UpdateAsync(UpdateCustomerDistributionDto updateDto)
         {
-            var customerDistribution = await _unitOfWork.CustomerDistributions.GetByIdAsync(updateDto.Id);
-            if (customerDistribution == null)
-                return null;
-
-            _mapper.Map(updateDto, customerDistribution);
-            await _unitOfWork.CustomerDistributions.UpdateAsync(customerDistribution);
+            var entity = await _unitOfWork.CustomerDistributions.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.CustomerDistributions.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<CustomerDistributionDto>(customerDistribution);
+            return _mapper.Map<CustomerDistributionDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

@@ -9,19 +9,15 @@ namespace SDTur.Core.Entities.Financial
     public class InvoiceDetail : BaseEntity
     {
         public int InvoiceId { get; set; }
-        public virtual Invoice Invoice { get; set; }
+        public virtual Invoice Invoice { get; set; } = null!;
 
-        [Required]
-        [StringLength(200)]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         public decimal Amount { get; set; }
 
-        public string Currency { get; set; } // USD, EUR, TRY
+        public string Currency { get; set; } = string.Empty; // USD, EUR, TRY
 
         public int? TourScheduleId { get; set; }
-        public virtual TourSchedule TourSchedule { get; set; }
-
-        public bool IsActive { get; set; } = true;
+        public virtual TourSchedule? TourSchedule { get; set; }
     }
 } 

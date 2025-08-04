@@ -23,7 +23,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .Include(cd => cd.Bus)
                 .Include(cd => cd.Ticket)
                 .Include(cd => cd.Employee)
-                .Where(cd => cd.TourScheduleId == tourScheduleId && !cd.IsDeleted)
+                .Where(cd => cd.TourScheduleId == tourScheduleId && cd.IsActive && !cd.IsDeleted)
                 .ToListAsync();
         }
 
@@ -34,7 +34,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .Include(cd => cd.Bus)
                 .Include(cd => cd.Ticket)
                 .Include(cd => cd.Employee)
-                .Where(cd => cd.BusId == busId && !cd.IsDeleted)
+                .Where(cd => cd.BusId == busId && cd.IsActive && !cd.IsDeleted)
                 .ToListAsync();
         }
 
@@ -45,7 +45,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .Include(cd => cd.Bus)
                 .Include(cd => cd.Ticket)
                 .Include(cd => cd.Employee)
-                .Where(cd => cd.TicketId == ticketId && !cd.IsDeleted)
+                .Where(cd => cd.TicketId == ticketId && cd.IsActive && !cd.IsDeleted)
                 .ToListAsync();
         }
 
@@ -56,7 +56,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .Include(cd => cd.Bus)
                 .Include(cd => cd.Ticket)
                 .Include(cd => cd.Employee)
-                .Where(cd => cd.DistributionDate >= startDate && cd.DistributionDate <= endDate && !cd.IsDeleted)
+                .Where(cd => cd.DistributionDate >= startDate && cd.DistributionDate <= endDate && cd.IsActive && !cd.IsDeleted)
                 .ToListAsync();
         }
 
@@ -67,7 +67,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .Include(cd => cd.Bus)
                 .Include(cd => cd.Ticket)
                 .Include(cd => cd.Employee)
-                .Where(cd => cd.Status == status && !cd.IsDeleted)
+                .Where(cd => cd.Status == status && cd.IsActive && !cd.IsDeleted)
                 .ToListAsync();
         }
     }

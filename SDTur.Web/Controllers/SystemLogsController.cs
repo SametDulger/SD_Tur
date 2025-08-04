@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using SDTur.Web.Models.System.Logs;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
 {
+    [Authorize]
     public class SystemLogsController : Controller
     {
         private readonly IApiService _apiService;

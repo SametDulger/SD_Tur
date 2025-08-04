@@ -22,13 +22,6 @@ namespace SDTur.API.Controllers
             return Ok(users);
         }
 
-        [HttpGet("active")]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetActive()
-        {
-            var users = await _userService.GetActiveAsync();
-            return Ok(users);
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetById(int id)
         {
@@ -49,56 +42,33 @@ namespace SDTur.API.Controllers
             return Ok(user);
         }
 
-        [HttpGet("role/{role}")]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetByRole(string role)
-        {
-            var users = await _userService.GetByRoleAsync(role);
-            return Ok(users);
-        }
-
         [HttpPost]
         public async Task<ActionResult<UserDto>> Create(CreateUserDto createDto)
         {
-            try
-            {
-                var user = await _userService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var user = await _userService.CreateAsync(createDto);
+            if (user == null)
+                return BadRequest("Failed to create user");
+            return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<UserDto>> Update(int id, UpdateUserDto updateDto)
+        public async Task<IActionResult> Update(int id, UserDto userDto)
         {
-            if (id != updateDto.Id)
+            if (id != userDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var user = await _userService.UpdateAsync(updateDto);
-                return Ok(user);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var success = await _userService.UpdateAsync(userDto);
+            if (!success)
+                return BadRequest("Failed to update user");
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _userService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var success = await _userService.DeleteAsync(id);
+            if (!success)
+                return BadRequest("Failed to delete user");
+            return NoContent();
         }
     }
 } 

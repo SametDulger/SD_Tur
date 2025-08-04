@@ -13,13 +13,13 @@ namespace SDTur.Application.DTOs.Financial.AccountTransaction
         [Required]
         public decimal Amount { get; set; }
         [Required]
-        public string Currency { get; set; }
+        public string? Currency { get; set; }
         [Required]
         public int CurrencyId { get; set; }
         [Required]
-        public string TransactionType { get; set; }
-        public string Description { get; set; }
-        public string Reference { get; set; }
+        public string? TransactionType { get; set; }
+        public string? Description { get; set; }
+        public string? Reference { get; set; }
         [Required]
         public DateTime TransactionDate { get; set; }
     }

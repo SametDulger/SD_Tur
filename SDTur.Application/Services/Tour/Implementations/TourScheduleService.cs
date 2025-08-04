@@ -23,46 +23,76 @@ namespace SDTur.Application.Services.Tour.Implementations
             return _mapper.Map<IEnumerable<TourScheduleDto>>(tourSchedules);
         }
 
-        public async Task<TourScheduleDto> GetTourScheduleByIdAsync(int id)
+        public async Task<TourScheduleDetailDto?> GetByIdAsync(int id)
         {
-            var tourSchedule = await _unitOfWork.TourSchedules.GetTourScheduleWithDetailsAsync(id);
-            return _mapper.Map<TourScheduleDto>(tourSchedule);
+            try
+            {
+                var tourSchedule = await _unitOfWork.TourSchedules.GetScheduleWithDetailsAsync(id);
+                return tourSchedule != null ? _mapper.Map<TourScheduleDetailDto>(tourSchedule) : null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<TourScheduleDetailDto?> GetTourScheduleByIdAsync(int id)
+        {
+            return await GetByIdAsync(id);
+        }
+
+        public async Task<IEnumerable<TourScheduleDto>> GetByTourAsync(int tourId)
+        {
+            try
+            {
+                var tourSchedules = await _unitOfWork.TourSchedules.GetSchedulesByTourAsync(tourId);
+                return _mapper.Map<IEnumerable<TourScheduleDto>>(tourSchedules);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<TourScheduleDto>> GetTourSchedulesByTourAsync(int tourId)
         {
-            var tourSchedules = await _unitOfWork.TourSchedules.GetTourSchedulesByTourAsync(tourId);
-            return _mapper.Map<IEnumerable<TourScheduleDto>>(tourSchedules);
+            return await GetByTourAsync(tourId);
+        }
+
+        public async Task<IEnumerable<TourScheduleDto>> GetByDateAsync(DateTime date)
+        {
+            try
+            {
+                var tourSchedules = await _unitOfWork.TourSchedules.GetSchedulesByDateRangeAsync(date, date);
+                return _mapper.Map<IEnumerable<TourScheduleDto>>(tourSchedules);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<TourScheduleDto>> GetTourSchedulesByDateAsync(DateTime date)
         {
-            var tourSchedules = await _unitOfWork.TourSchedules.GetTourSchedulesByDateAsync(date);
-            return _mapper.Map<IEnumerable<TourScheduleDto>>(tourSchedules);
+            return await GetByDateAsync(date);
         }
 
-        public async Task<TourScheduleDto> CreateTourScheduleAsync(CreateTourScheduleDto createTourScheduleDto)
+        public async Task<TourScheduleDto?> CreateAsync(CreateTourScheduleDto createTourScheduleDto)
         {
-            var tourSchedule = _mapper.Map<TourSchedule>(createTourScheduleDto);
-            
-            var createdTourSchedule = await _unitOfWork.TourSchedules.AddAsync(tourSchedule);
+            var entity = _mapper.Map<TourSchedule>(createTourScheduleDto);
+            var created = await _unitOfWork.TourSchedules.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<TourScheduleDto>(createdTourSchedule);
+            return _mapper.Map<TourScheduleDto>(created);
         }
 
-        public async Task<TourScheduleDto> UpdateTourScheduleAsync(UpdateTourScheduleDto updateTourScheduleDto)
+        public async Task<TourScheduleDto?> UpdateAsync(UpdateTourScheduleDto updateTourScheduleDto)
         {
-            var existingTourSchedule = await _unitOfWork.TourSchedules.GetByIdAsync(updateTourScheduleDto.Id);
-            if (existingTourSchedule == null)
-                return null;
-
-            _mapper.Map(updateTourScheduleDto, existingTourSchedule);
-            
-            var updatedTourSchedule = await _unitOfWork.TourSchedules.UpdateAsync(existingTourSchedule);
+            var entity = await _unitOfWork.TourSchedules.GetByIdAsync(updateTourScheduleDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateTourScheduleDto, entity);
+            var updated = await _unitOfWork.TourSchedules.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<TourScheduleDto>(updatedTourSchedule);
+            return _mapper.Map<TourScheduleDto>(updated);
         }
 
         public async Task DeleteTourScheduleAsync(int id)

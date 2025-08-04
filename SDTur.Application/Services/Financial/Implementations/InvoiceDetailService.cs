@@ -23,36 +23,42 @@ namespace SDTur.Application.Services.Financial.Implementations
             return _mapper.Map<IEnumerable<InvoiceDetailDto>>(invoiceDetails);
         }
 
-        public async Task<InvoiceDetailDto> GetByIdAsync(int id)
+        public async Task<InvoiceDetailDto?> GetByIdAsync(int id)
         {
             var invoiceDetail = await _unitOfWork.InvoiceDetails.GetByIdAsync(id);
-            return _mapper.Map<InvoiceDetailDto>(invoiceDetail);
+            return invoiceDetail != null ? _mapper.Map<InvoiceDetailDto>(invoiceDetail) : null;
         }
 
         public async Task<IEnumerable<InvoiceDetailDto>> GetByInvoiceIdAsync(int invoiceId)
         {
-            var invoiceDetails = await _unitOfWork.InvoiceDetails.GetByInvoiceIdAsync(invoiceId);
-            return _mapper.Map<IEnumerable<InvoiceDetailDto>>(invoiceDetails);
+            try
+            {
+                var invoiceDetails = await _unitOfWork.InvoiceDetails.GetAllAsync();
+                var filteredDetails = invoiceDetails.Where(id => id.InvoiceId == invoiceId);
+                return _mapper.Map<IEnumerable<InvoiceDetailDto>>(filteredDetails);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public async Task<InvoiceDetailDto> CreateAsync(CreateInvoiceDetailDto createInvoiceDetailDto)
+        public async Task<InvoiceDetailDto?> CreateAsync(CreateInvoiceDetailDto createDto)
         {
-            var invoiceDetail = _mapper.Map<InvoiceDetail>(createInvoiceDetailDto);
-            await _unitOfWork.InvoiceDetails.AddAsync(invoiceDetail);
+            var entity = _mapper.Map<InvoiceDetail>(createDto);
+            var created = await _unitOfWork.InvoiceDetails.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            return _mapper.Map<InvoiceDetailDto>(invoiceDetail);
+            return _mapper.Map<InvoiceDetailDto>(created);
         }
 
-        public async Task<InvoiceDetailDto> UpdateAsync(UpdateInvoiceDetailDto updateInvoiceDetailDto)
+        public async Task<InvoiceDetailDto?> UpdateAsync(UpdateInvoiceDetailDto updateDto)
         {
-            var existingInvoiceDetail = await _unitOfWork.InvoiceDetails.GetByIdAsync(updateInvoiceDetailDto.Id);
-            if (existingInvoiceDetail == null)
-                return null;
-
-            _mapper.Map(updateInvoiceDetailDto, existingInvoiceDetail);
-            await _unitOfWork.InvoiceDetails.UpdateAsync(existingInvoiceDetail);
+            var entity = await _unitOfWork.InvoiceDetails.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.InvoiceDetails.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            return _mapper.Map<InvoiceDetailDto>(existingInvoiceDetail);
+            return _mapper.Map<InvoiceDetailDto>(updated);
         }
 
         public async Task<bool> DeleteAsync(int id)

@@ -8,11 +8,14 @@ namespace SDTur.Application.Services.Tour.Interfaces
     public interface ITourScheduleService
     {
         Task<IEnumerable<TourScheduleDto>> GetAllTourSchedulesAsync();
-        Task<TourScheduleDto> GetTourScheduleByIdAsync(int id);
+        Task<TourScheduleDetailDto?> GetByIdAsync(int id);
+        Task<TourScheduleDetailDto?> GetTourScheduleByIdAsync(int id);
+        Task<IEnumerable<TourScheduleDto>> GetByTourAsync(int tourId);
         Task<IEnumerable<TourScheduleDto>> GetTourSchedulesByTourAsync(int tourId);
+        Task<IEnumerable<TourScheduleDto>> GetByDateAsync(DateTime date);
         Task<IEnumerable<TourScheduleDto>> GetTourSchedulesByDateAsync(DateTime date);
-        Task<TourScheduleDto> CreateTourScheduleAsync(CreateTourScheduleDto createTourScheduleDto);
-        Task<TourScheduleDto> UpdateTourScheduleAsync(UpdateTourScheduleDto updateTourScheduleDto);
+        Task<TourScheduleDto?> CreateAsync(CreateTourScheduleDto createTourScheduleDto);
+        Task<TourScheduleDto?> UpdateAsync(UpdateTourScheduleDto updateTourScheduleDto);
         Task DeleteTourScheduleAsync(int id);
         Task CompleteTourScheduleAsync(int id);
     }

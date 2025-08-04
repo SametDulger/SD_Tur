@@ -40,23 +40,23 @@ namespace SDTur.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<InvoiceDetailDto>> Create(CreateInvoiceDetailDto createInvoiceDetailDto)
+        public async Task<ActionResult<InvoiceDetailDto>> Create(CreateInvoiceDetailDto createDto)
         {
-            var createdInvoiceDetail = await _invoiceDetailService.CreateAsync(createInvoiceDetailDto);
+            var createdInvoiceDetail = await _invoiceDetailService.CreateAsync(createDto);
+            if (createdInvoiceDetail == null)
+                return BadRequest("Failed to create invoice detail");
             return CreatedAtAction(nameof(GetById), new { id = createdInvoiceDetail.Id }, createdInvoiceDetail);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<InvoiceDetailDto>> Update(int id, UpdateInvoiceDetailDto updateInvoiceDetailDto)
+        public async Task<IActionResult> Update(int id, UpdateInvoiceDetailDto updateDto)
         {
-            if (id != updateInvoiceDetailDto.Id)
+            if (id != updateDto.Id)
                 return BadRequest();
-
-            var updatedInvoiceDetail = await _invoiceDetailService.UpdateAsync(updateInvoiceDetailDto);
+            var updatedInvoiceDetail = await _invoiceDetailService.UpdateAsync(updateDto);
             if (updatedInvoiceDetail == null)
                 return NotFound();
-
-            return Ok(updatedInvoiceDetail);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

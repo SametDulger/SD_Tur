@@ -13,17 +13,8 @@ namespace SDTur.Web.Models.System.Logs
         [Required]
         public string Action { get; set; } = string.Empty;
         
-        [Display(Name = "Kaynak")]
-        public string Source { get; set; } = string.Empty;
-        
-        [Display(Name = "Log Tarihi")]
-        public DateTime? LogDate { get; set; }
-        
         [Required]
         public string Message { get; set; } = string.Empty;
-        
-        [Display(Name = "Hata Detayı")]
-        public string Exception { get; set; } = string.Empty;
         
         public string Details { get; set; } = string.Empty;
         
@@ -31,8 +22,13 @@ namespace SDTur.Web.Models.System.Logs
         
         public string UserAgent { get; set; } = string.Empty;
         
-        public string UserId { get; set; } = string.Empty;
+        public int? UserId { get; set; }
         
         public int? EmployeeId { get; set; }
+        
+        // Additional properties for compatibility with views
+        public string Source { get; set; } = string.Empty;
+        public DateTime? LogDate { get; set; }
+        public string Exception { get; set; } = string.Empty;
     }
 } 

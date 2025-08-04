@@ -29,6 +29,7 @@ using SDTur.Application.DTOs.Tour.TourIncome;
 using SDTur.Application.DTOs.Tour.TourOperation;
 using SDTur.Application.DTOs.Tour.TourReport;
 using SDTur.Application.DTOs.Tour.TourSchedule;
+using SDTur.Application.DTOs.Tour.TourType;
 using SDTur.Core.Entities.Financial;
 using SDTur.Core.Entities.Master;
 using SDTur.Core.Entities.System;
@@ -44,6 +45,9 @@ namespace SDTur.Application.Mapping
             CreateMap<Tour, TourDto>();
             CreateMap<CreateTourDto, Tour>();
             CreateMap<UpdateTourDto, Tour>();
+
+            // TourType mappings
+            CreateMap<TourType, TourTypeDto>();
 
             // PassCompany mappings
             CreateMap<PassCompany, PassCompanyDto>();

@@ -47,22 +47,22 @@ namespace SDTur.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<EmployeeDto>> CreateEmployee(CreateEmployeeDto createEmployeeDto)
+        public async Task<ActionResult<EmployeeDto>> Create(CreateEmployeeDto createDto)
         {
-            var employee = await _employeeService.CreateEmployeeAsync(createEmployeeDto);
+            var employee = await _employeeService.CreateAsync(createDto);
+            if (employee == null)
+                return BadRequest("Failed to create employee");
             return CreatedAtAction(nameof(GetEmployee), new { id = employee.Id }, employee);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEmployee(int id, UpdateEmployeeDto updateEmployeeDto)
+        public async Task<IActionResult> Update(int id, UpdateEmployeeDto updateDto)
         {
-            if (id != updateEmployeeDto.Id)
+            if (id != updateDto.Id)
                 return BadRequest();
-
-            var employee = await _employeeService.UpdateEmployeeAsync(updateEmployeeDto);
+            var employee = await _employeeService.UpdateAsync(updateDto);
             if (employee == null)
                 return NotFound();
-
             return NoContent();
         }
 

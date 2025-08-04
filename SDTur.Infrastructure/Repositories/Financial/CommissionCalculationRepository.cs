@@ -21,7 +21,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
             return await _dbSet
                 .Include(cc => cc.Ticket)
                 .Include(cc => cc.Employee)
-                .Where(cc => cc.EmployeeId == employeeId && !cc.IsDeleted)
+                .Where(cc => cc.EmployeeId == employeeId && cc.IsActive && !cc.IsDeleted)
                 .ToListAsync();
         }
 
@@ -30,7 +30,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
             return await _dbSet
                 .Include(cc => cc.Ticket)
                 .Include(cc => cc.Employee)
-                .Where(cc => cc.TicketId == ticketId && !cc.IsDeleted)
+                .Where(cc => cc.TicketId == ticketId && cc.IsActive && !cc.IsDeleted)
                 .ToListAsync();
         }
 
@@ -39,7 +39,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
             return await _dbSet
                 .Include(cc => cc.Ticket)
                 .Include(cc => cc.Employee)
-                .Where(cc => cc.CalculationDate >= startDate && cc.CalculationDate <= endDate && !cc.IsDeleted)
+                .Where(cc => cc.CalculationDate >= startDate && cc.CalculationDate <= endDate && cc.IsActive && !cc.IsDeleted)
                 .ToListAsync();
         }
 
@@ -48,7 +48,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
             return await _dbSet
                 .Include(cc => cc.Ticket)
                 .Include(cc => cc.Employee)
-                .Where(cc => cc.Status == status && !cc.IsDeleted)
+                .Where(cc => cc.Status == status && cc.IsActive && !cc.IsDeleted)
                 .ToListAsync();
         }
 
@@ -58,7 +58,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
                 .Where(cc => cc.EmployeeId == employeeId && 
                             cc.CalculationDate >= startDate && 
                             cc.CalculationDate <= endDate && 
-                            !cc.IsDeleted)
+                            cc.IsActive && !cc.IsDeleted)
                 .SumAsync(cc => cc.CommissionAmount);
         }
     }

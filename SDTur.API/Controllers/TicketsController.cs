@@ -64,22 +64,22 @@ namespace SDTur.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TicketDto>> CreateTicket(CreateTicketDto createTicketDto)
+        public async Task<ActionResult<TicketDto>> Create(CreateTicketDto createDto)
         {
-            var ticket = await _ticketService.CreateTicketAsync(createTicketDto);
+            var ticket = await _ticketService.CreateAsync(createDto);
+            if (ticket == null)
+                return BadRequest("Failed to create ticket");
             return CreatedAtAction(nameof(GetTicket), new { id = ticket.Id }, ticket);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTicket(int id, UpdateTicketDto updateTicketDto)
+        public async Task<IActionResult> Update(int id, UpdateTicketDto updateDto)
         {
-            if (id != updateTicketDto.Id)
+            if (id != updateDto.Id)
                 return BadRequest();
-
-            var ticket = await _ticketService.UpdateTicketAsync(updateTicketDto);
+            var ticket = await _ticketService.UpdateAsync(updateDto);
             if (ticket == null)
                 return NotFound();
-
             return NoContent();
         }
 

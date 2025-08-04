@@ -29,10 +29,10 @@ namespace SDTur.Application.Services.Master.Implementations
             return _mapper.Map<IEnumerable<BusDto>>(buses);
         }
 
-        public async Task<BusDto> GetBusByIdAsync(int id)
+        public async Task<BusDto?> GetBusByIdAsync(int id)
         {
             var bus = await _unitOfWork.Buses.GetByIdAsync(id);
-            return _mapper.Map<BusDto>(bus);
+            return bus != null ? _mapper.Map<BusDto>(bus) : null;
         }
 
         public async Task<IEnumerable<BusDto>> GetAvailableBusesAsync()
@@ -41,29 +41,22 @@ namespace SDTur.Application.Services.Master.Implementations
             return _mapper.Map<IEnumerable<BusDto>>(buses);
         }
 
-        public async Task<BusDto> CreateBusAsync(CreateBusDto createBusDto)
+        public async Task<BusDto?> CreateAsync(CreateBusDto createDto)
         {
-            var bus = _mapper.Map<Bus>(createBusDto);
-            bus.IsActive = true;
-            
-            var createdBus = await _unitOfWork.Buses.AddAsync(bus);
+            var entity = _mapper.Map<Bus>(createDto);
+            var created = await _unitOfWork.Buses.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<BusDto>(createdBus);
+            return _mapper.Map<BusDto>(created);
         }
 
-        public async Task<BusDto> UpdateBusAsync(UpdateBusDto updateBusDto)
+        public async Task<BusDto?> UpdateAsync(UpdateBusDto updateDto)
         {
-            var existingBus = await _unitOfWork.Buses.GetByIdAsync(updateBusDto.Id);
-            if (existingBus == null)
-                return null;
-
-            _mapper.Map(updateBusDto, existingBus);
-            
-            var updatedBus = await _unitOfWork.Buses.UpdateAsync(existingBus);
+            var entity = await _unitOfWork.Buses.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.Buses.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<BusDto>(updatedBus);
+            return _mapper.Map<BusDto>(updated);
         }
 
         public async Task DeleteBusAsync(int id)

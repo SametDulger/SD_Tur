@@ -23,35 +23,28 @@ namespace SDTur.Application.Services.Tour.Implementations
             return _mapper.Map<IEnumerable<TourExpenseDto>>(tourExpenses);
         }
 
-        public async Task<TourExpenseDto> GetByIdAsync(int id)
+        public async Task<TourExpenseDto?> GetByIdAsync(int id)
         {
             var tourExpense = await _unitOfWork.TourExpenses.GetByIdAsync(id);
-            return _mapper.Map<TourExpenseDto>(tourExpense);
+            return tourExpense != null ? _mapper.Map<TourExpenseDto>(tourExpense) : null;
         }
 
-        public async Task<TourExpenseDto> CreateAsync(CreateTourExpenseDto createDto)
+        public async Task<TourExpenseDto?> CreateAsync(CreateTourExpenseDto createDto)
         {
-            var tourExpense = _mapper.Map<TourExpense>(createDto);
-            tourExpense.IsActive = true;
-            
-            await _unitOfWork.TourExpenses.AddAsync(tourExpense);
+            var entity = _mapper.Map<TourExpense>(createDto);
+            var created = await _unitOfWork.TourExpenses.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<TourExpenseDto>(tourExpense);
+            return _mapper.Map<TourExpenseDto>(created);
         }
 
-        public async Task<TourExpenseDto> UpdateAsync(UpdateTourExpenseDto updateDto)
+        public async Task<TourExpenseDto?> UpdateAsync(UpdateTourExpenseDto updateDto)
         {
-            var tourExpense = await _unitOfWork.TourExpenses.GetByIdAsync(updateDto.Id);
-            if (tourExpense == null)
-                throw new ArgumentException("Tur gideri bulunamadı");
-
-            _mapper.Map(updateDto, tourExpense);
-            
-            await _unitOfWork.TourExpenses.UpdateAsync(tourExpense);
+            var entity = await _unitOfWork.TourExpenses.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.TourExpenses.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<TourExpenseDto>(tourExpense);
+            return _mapper.Map<TourExpenseDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

@@ -19,9 +19,9 @@ namespace SDTur.Application.DTOs.Tour.BusAssignment
         public DateTime AssignmentDate { get; set; }
 
         [Required]
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
         public bool IsActive { get; set; }
     }

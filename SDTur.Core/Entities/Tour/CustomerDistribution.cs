@@ -11,14 +11,13 @@ namespace SDTur.Core.Entities.Tour
         public int TicketId { get; set; }
         public int EmployeeId { get; set; }
         public DateTime DistributionDate { get; set; }
-        public string Status { get; set; } // Assigned, Confirmed, Cancelled
-        public string Notes { get; set; }
-        public bool IsActive { get; set; } = true;
+        public string Status { get; set; } = string.Empty; // Assigned, Confirmed, Cancelled
+        public string Notes { get; set; } = string.Empty;
         
         // Navigation properties
-        public virtual TourSchedule TourSchedule { get; set; }
-        public virtual Bus Bus { get; set; }
-        public virtual Ticket Ticket { get; set; }
-        public virtual Employee Employee { get; set; }
+        public virtual TourSchedule TourSchedule { get; set; } = null!;
+        public virtual Bus Bus { get; set; } = null!;
+        public virtual Ticket Ticket { get; set; } = null!;
+        public virtual Employee Employee { get; set; } = null!;
     }
 } 

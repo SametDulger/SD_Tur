@@ -23,35 +23,28 @@ namespace SDTur.Application.Services.Master.Implementations
             return _mapper.Map<IEnumerable<PassAgreementDto>>(passAgreements);
         }
 
-        public async Task<PassAgreementDto> GetByIdAsync(int id)
+        public async Task<PassAgreementDto?> GetByIdAsync(int id)
         {
             var passAgreement = await _unitOfWork.PassAgreements.GetByIdAsync(id);
-            return _mapper.Map<PassAgreementDto>(passAgreement);
+            return passAgreement != null ? _mapper.Map<PassAgreementDto>(passAgreement) : null;
         }
 
-        public async Task<PassAgreementDto> CreateAsync(CreatePassAgreementDto createDto)
+        public async Task<PassAgreementDto?> CreateAsync(CreatePassAgreementDto createDto)
         {
-            var passAgreement = _mapper.Map<PassAgreement>(createDto);
-            passAgreement.IsActive = true;
-            
-            await _unitOfWork.PassAgreements.AddAsync(passAgreement);
+            var entity = _mapper.Map<PassAgreement>(createDto);
+            var created = await _unitOfWork.PassAgreements.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<PassAgreementDto>(passAgreement);
+            return _mapper.Map<PassAgreementDto>(created);
         }
 
-        public async Task<PassAgreementDto> UpdateAsync(UpdatePassAgreementDto updateDto)
+        public async Task<PassAgreementDto?> UpdateAsync(UpdatePassAgreementDto updateDto)
         {
-            var passAgreement = await _unitOfWork.PassAgreements.GetByIdAsync(updateDto.Id);
-            if (passAgreement == null)
-                throw new ArgumentException("Pas anlaşması bulunamadı");
-
-            _mapper.Map(updateDto, passAgreement);
-            
-            await _unitOfWork.PassAgreements.UpdateAsync(passAgreement);
+            var entity = await _unitOfWork.PassAgreements.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.PassAgreements.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<PassAgreementDto>(passAgreement);
+            return _mapper.Map<PassAgreementDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

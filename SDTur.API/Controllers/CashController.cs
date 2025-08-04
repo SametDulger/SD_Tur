@@ -55,15 +55,10 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<CashDto>> Create(CreateCashDto createDto)
         {
-            try
-            {
-                var cashTransaction = await _cashService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = cashTransaction.Id }, cashTransaction);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var cashTransaction = await _cashService.CreateAsync(createDto);
+            if (cashTransaction == null)
+                return BadRequest("Failed to create cash transaction");
+            return CreatedAtAction(nameof(GetById), new { id = cashTransaction.Id }, cashTransaction);
         }
 
         [HttpPut("{id}")]
@@ -71,15 +66,10 @@ namespace SDTur.API.Controllers
         {
             if (id != updateDto.Id)
                 return BadRequest();
-            try
-            {
-                var cashTransaction = await _cashService.UpdateAsync(updateDto);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var cashTransaction = await _cashService.UpdateAsync(updateDto);
+            if (cashTransaction == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

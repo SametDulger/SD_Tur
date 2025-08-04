@@ -29,34 +29,28 @@ namespace SDTur.Application.Services.Master.Implementations
             return _mapper.Map<IEnumerable<CurrencyDto>>(currencies.Where(c => c.IsActive));
         }
 
-        public async Task<CurrencyDto> GetByIdAsync(int id)
+        public async Task<CurrencyDto?> GetByIdAsync(int id)
         {
             var currency = await _unitOfWork.Currencies.GetByIdAsync(id);
-            return _mapper.Map<CurrencyDto>(currency);
+            return currency != null ? _mapper.Map<CurrencyDto>(currency) : null;
         }
 
-        public async Task<CurrencyDto> CreateAsync(CreateCurrencyDto createDto)
+        public async Task<CurrencyDto?> CreateAsync(CreateCurrencyDto createDto)
         {
-            var currency = _mapper.Map<Currency>(createDto);
-            currency.IsActive = true;
-            
-            await _unitOfWork.Currencies.AddAsync(currency);
+            var entity = _mapper.Map<Currency>(createDto);
+            var created = await _unitOfWork.Currencies.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<CurrencyDto>(currency);
+            return _mapper.Map<CurrencyDto>(created);
         }
 
-        public async Task<CurrencyDto> UpdateAsync(UpdateCurrencyDto updateDto)
+        public async Task<CurrencyDto?> UpdateAsync(UpdateCurrencyDto updateDto)
         {
-            var currency = await _unitOfWork.Currencies.GetByIdAsync(updateDto.Id);
-            if (currency == null)
-                return null;
-
-            _mapper.Map(updateDto, currency);
-            await _unitOfWork.Currencies.UpdateAsync(currency);
+            var entity = await _unitOfWork.Currencies.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.Currencies.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<CurrencyDto>(currency);
+            return _mapper.Map<CurrencyDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

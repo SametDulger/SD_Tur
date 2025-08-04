@@ -47,22 +47,22 @@ namespace SDTur.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<HotelDto>> CreateHotel(CreateHotelDto createHotelDto)
+        public async Task<ActionResult<HotelDto>> Create(CreateHotelDto createDto)
         {
-            var hotel = await _hotelService.CreateHotelAsync(createHotelDto);
+            var hotel = await _hotelService.CreateAsync(createDto);
+            if (hotel == null)
+                return BadRequest("Failed to create hotel");
             return CreatedAtAction(nameof(GetHotel), new { id = hotel.Id }, hotel);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateHotel(int id, UpdateHotelDto updateHotelDto)
+        public async Task<IActionResult> Update(int id, UpdateHotelDto updateDto)
         {
-            if (id != updateHotelDto.Id)
+            if (id != updateDto.Id)
                 return BadRequest();
-
-            var hotel = await _hotelService.UpdateHotelAsync(updateHotelDto);
+            var hotel = await _hotelService.UpdateAsync(updateDto);
             if (hotel == null)
                 return NotFound();
-
             return NoContent();
         }
 

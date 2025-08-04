@@ -12,16 +12,16 @@ namespace SDTur.Application.DTOs.Tour.TourOperation
         [Required]
         public int EmployeeId { get; set; }
         [Required]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         [Required]
         public decimal Amount { get; set; }
         [Required]
         public int CurrencyId { get; set; }
         [Required]
         public DateTime OperationDate { get; set; }
-        public string OperationType { get; set; }
-        public string Status { get; set; }
-        public string Notes { get; set; }
+        public string? OperationType { get; set; }
+        public string? Status { get; set; }
+        public string? Notes { get; set; }
         public bool IsActive { get; set; }
     }
 }

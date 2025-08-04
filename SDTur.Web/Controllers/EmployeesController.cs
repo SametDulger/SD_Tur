@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using SDTur.Web.Models.Master.People;
 using SDTur.Web.Models.Master.References;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
 {
+    [Authorize]
     public class EmployeesController : Controller
     {
         private readonly IApiService _apiService;

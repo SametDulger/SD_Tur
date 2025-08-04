@@ -23,10 +23,10 @@ namespace SDTur.Application.Services.Financial.Implementations
             return _mapper.Map<IEnumerable<CommissionCalculationDto>>(commissionCalculations);
         }
 
-        public async Task<CommissionCalculationDto> GetByIdAsync(int id)
+        public async Task<CommissionCalculationDto?> GetByIdAsync(int id)
         {
             var commissionCalculation = await _unitOfWork.CommissionCalculations.GetByIdAsync(id);
-            return _mapper.Map<CommissionCalculationDto>(commissionCalculation);
+            return commissionCalculation != null ? _mapper.Map<CommissionCalculationDto>(commissionCalculation) : null;
         }
 
         public async Task<IEnumerable<CommissionCalculationDto>> GetByEmployeeAsync(int employeeId)
@@ -59,29 +59,22 @@ namespace SDTur.Application.Services.Financial.Implementations
             return commissionCalculations.Sum(c => c.CommissionAmount);
         }
 
-        public async Task<CommissionCalculationDto> CreateAsync(CreateCommissionCalculationDto createDto)
+        public async Task<CommissionCalculationDto?> CreateAsync(CreateCommissionCalculationDto createDto)
         {
-            var commissionCalculation = _mapper.Map<CommissionCalculation>(createDto);
-            commissionCalculation.IsActive = true;
-            
-            await _unitOfWork.CommissionCalculations.AddAsync(commissionCalculation);
+            var entity = _mapper.Map<CommissionCalculation>(createDto);
+            var created = await _unitOfWork.CommissionCalculations.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<CommissionCalculationDto>(commissionCalculation);
+            return _mapper.Map<CommissionCalculationDto>(created);
         }
 
-        public async Task<CommissionCalculationDto> UpdateAsync(UpdateCommissionCalculationDto updateDto)
+        public async Task<CommissionCalculationDto?> UpdateAsync(UpdateCommissionCalculationDto updateDto)
         {
-            var existingCommissionCalculation = await _unitOfWork.CommissionCalculations.GetByIdAsync(updateDto.Id);
-            if (existingCommissionCalculation == null)
-                throw new ArgumentException("Commission calculation not found");
-            
-            _mapper.Map(updateDto, existingCommissionCalculation);
-            
-            await _unitOfWork.CommissionCalculations.UpdateAsync(existingCommissionCalculation);
+            var entity = await _unitOfWork.CommissionCalculations.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.CommissionCalculations.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<CommissionCalculationDto>(existingCommissionCalculation);
+            return _mapper.Map<CommissionCalculationDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

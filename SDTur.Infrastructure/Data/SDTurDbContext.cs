@@ -13,7 +13,17 @@ namespace SDTur.Infrastructure.Data
         {
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            
+            // Suppress PendingModelChangesWarning for seed data
+            optionsBuilder.ConfigureWarnings(warnings => warnings
+                .Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+        }
+
         public DbSet<Tour> Tours { get; set; }
+        public DbSet<TourType> TourTypes { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Region> Regions { get; set; }
@@ -196,6 +206,12 @@ namespace SDTur.Infrastructure.Data
                 .HasForeignKey(cd => cd.EmployeeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Tour>()
+                .HasOne(t => t.TourType)
+                .WithMany(tt => tt.Tours)
+                .HasForeignKey(t => t.TourTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Configure indexes
             modelBuilder.Entity<Ticket>()
                 .HasIndex(t => t.TicketNumber)
@@ -220,6 +236,7 @@ namespace SDTur.Infrastructure.Data
 
             // Configure soft delete filter
             modelBuilder.Entity<Tour>().HasQueryFilter(t => !t.IsDeleted);
+            modelBuilder.Entity<TourType>().HasQueryFilter(tt => !tt.IsDeleted);
             modelBuilder.Entity<Branch>().HasQueryFilter(b => !b.IsDeleted);
             modelBuilder.Entity<Employee>().HasQueryFilter(e => !e.IsDeleted);
             modelBuilder.Entity<Region>().HasQueryFilter(r => !r.IsDeleted);

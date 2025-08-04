@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using SDTur.Web.Models.Master.References;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
 {
+    [Authorize]
     public class CurrenciesController : Controller
     {
         private readonly IApiService _apiService;
@@ -56,8 +58,7 @@ namespace SDTur.Web.Controllers
                 Id = currency.Id,
                 Name = currency.Name,
                 Code = currency.Code,
-                Symbol = currency.Symbol,
-                IsActive = currency.IsActive
+                Symbol = currency.Symbol
             };
 
             return View(updateDto);

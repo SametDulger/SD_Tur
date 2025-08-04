@@ -6,9 +6,9 @@ namespace SDTur.Application.DTOs.Financial.ExchangeRate
     public class CreateExchangeRateDto
     {
         [Required]
-        public string FromCurrency { get; set; }
+        public string? FromCurrency { get; set; }
         [Required]
-        public string ToCurrency { get; set; }
+        public string? ToCurrency { get; set; }
         [Required]
         public int FromCurrencyId { get; set; }
         [Required]

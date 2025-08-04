@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using SDTur.Web.Models.Master.Locations;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
 {
+    [Authorize]
     public class RegionsController : Controller
     {
         private readonly IApiService _apiService;
@@ -35,7 +37,7 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,DistanceFromKemer,Order,IsActive")] RegionCreateViewModel RegionCreateViewModel)
+        public async Task<IActionResult> Create([Bind("Name,Description,Country,DistanceFromKemer,Order,IsActive")] RegionCreateViewModel RegionCreateViewModel)
         {
             if (ModelState.IsValid)
             {

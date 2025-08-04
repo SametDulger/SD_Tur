@@ -23,10 +23,10 @@ namespace SDTur.Application.Services.Tour.Implementations
             return _mapper.Map<IEnumerable<TourOperationDto>>(tourOperations);
         }
 
-        public async Task<TourOperationDto> GetByIdAsync(int id)
+        public async Task<TourOperationDto?> GetByIdAsync(int id)
         {
             var tourOperation = await _unitOfWork.TourOperations.GetByIdAsync(id);
-            return _mapper.Map<TourOperationDto>(tourOperation);
+            return tourOperation != null ? _mapper.Map<TourOperationDto>(tourOperation) : null;
         }
 
         public async Task<IEnumerable<TourOperationDto>> GetByTourScheduleAsync(int tourScheduleId)
@@ -47,29 +47,22 @@ namespace SDTur.Application.Services.Tour.Implementations
             return _mapper.Map<IEnumerable<TourOperationDto>>(tourOperations);
         }
 
-        public async Task<TourOperationDto> CreateAsync(CreateTourOperationDto createDto)
+        public async Task<TourOperationDto?> CreateAsync(CreateTourOperationDto createDto)
         {
-            var tourOperation = _mapper.Map<TourOperation>(createDto);
-            tourOperation.IsActive = true;
-            
-            await _unitOfWork.TourOperations.AddAsync(tourOperation);
+            var entity = _mapper.Map<TourOperation>(createDto);
+            var created = await _unitOfWork.TourOperations.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<TourOperationDto>(tourOperation);
+            return _mapper.Map<TourOperationDto>(created);
         }
 
-        public async Task<TourOperationDto> UpdateAsync(UpdateTourOperationDto updateDto)
+        public async Task<TourOperationDto?> UpdateAsync(UpdateTourOperationDto updateDto)
         {
-            var tourOperation = await _unitOfWork.TourOperations.GetByIdAsync(updateDto.Id);
-            if (tourOperation == null)
-                throw new ArgumentException("Tur operasyonu bulunamadı");
-            
-            _mapper.Map(updateDto, tourOperation);
-            
-            await _unitOfWork.TourOperations.UpdateAsync(tourOperation);
+            var entity = await _unitOfWork.TourOperations.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.TourOperations.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<TourOperationDto>(tourOperation);
+            return _mapper.Map<TourOperationDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

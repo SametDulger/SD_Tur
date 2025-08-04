@@ -21,7 +21,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
             return await _dbSet
                 .Include(to => to.TourSchedule)
                 .Include(to => to.Employee)
-                .Where(to => to.TourScheduleId == tourScheduleId && !to.IsDeleted)
+                .Where(to => to.TourScheduleId == tourScheduleId && to.IsActive && !to.IsDeleted)
                 .OrderBy(to => to.OperationDate)
                 .ToListAsync();
         }
@@ -31,7 +31,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
             return await _dbSet
                 .Include(to => to.TourSchedule)
                 .Include(to => to.Employee)
-                .Where(to => to.OperationType == operationType && !to.IsDeleted)
+                .Where(to => to.OperationType == operationType && to.IsActive && !to.IsDeleted)
                 .OrderBy(to => to.OperationDate)
                 .ToListAsync();
         }
@@ -41,19 +41,18 @@ namespace SDTur.Infrastructure.Repositories.Tour
             return await _dbSet
                 .Include(to => to.TourSchedule)
                 .Include(to => to.Employee)
-                .Where(to => to.Status == status && !to.IsDeleted)
+                .Where(to => to.Status == status && to.IsActive && !to.IsDeleted)
                 .OrderBy(to => to.OperationDate)
                 .ToListAsync();
         }
 
-        public async Task<TourOperation> GetWithDetailsAsync(int id)
+        public async Task<TourOperation?> GetTourOperationWithDetailsAsync(int id)
         {
             return await _dbSet
                 .Include(to => to.TourSchedule)
                 .Include(to => to.Bus)
                 .Include(to => to.Employee)
-                .Include(to => to.AssignedTickets)
-                .FirstOrDefaultAsync(to => to.Id == id);
+                .FirstOrDefaultAsync(to => to.Id == id && to.IsActive && !to.IsDeleted);
         }
 
         public async Task<IEnumerable<TourOperation>> GetOperationsByDateRangeAsync(DateTime startDate, DateTime endDate)
@@ -61,7 +60,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
             return await _dbSet
                 .Include(to => to.TourSchedule)
                 .Include(to => to.Employee)
-                .Where(to => to.OperationDate >= startDate && to.OperationDate <= endDate && !to.IsDeleted)
+                .Where(to => to.OperationDate >= startDate && to.OperationDate <= endDate && to.IsActive && !to.IsDeleted)
                 .OrderBy(to => to.OperationDate)
                 .ToListAsync();
         }
@@ -71,9 +70,18 @@ namespace SDTur.Infrastructure.Repositories.Tour
             return await _dbSet
                 .Include(to => to.TourSchedule)
                 .Include(to => to.Employee)
-                .Where(to => to.EmployeeId == employeeId && !to.IsDeleted)
+                .Where(to => to.EmployeeId == employeeId && to.IsActive && !to.IsDeleted)
                 .OrderByDescending(to => to.OperationDate)
                 .ToListAsync();
+        }
+
+        public async Task<TourOperation?> GetWithDetailsAsync(int id)
+        {
+            return await _dbSet
+                .Include(to => to.TourSchedule)
+                .Include(to => to.Bus)
+                .Include(to => to.Employee)
+                .FirstOrDefaultAsync(to => to.Id == id && to.IsActive && !to.IsDeleted);
         }
     }
 } 

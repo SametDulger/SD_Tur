@@ -42,46 +42,28 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<NationalityDto>> Create(CreateNationalityDto createDto)
         {
-            try
-            {
-                var nationality = await _nationalityService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = nationality.Id }, nationality);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var nationality = await _nationalityService.CreateAsync(createDto);
+            if (nationality == null)
+                return BadRequest("Failed to create nationality");
+            return CreatedAtAction(nameof(GetById), new { id = nationality.Id }, nationality);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<NationalityDto>> Update(int id, UpdateNationalityDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdateNationalityDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var nationality = await _nationalityService.UpdateAsync(updateDto);
-                return Ok(nationality);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var nationality = await _nationalityService.UpdateAsync(updateDto);
+            if (nationality == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _nationalityService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _nationalityService.DeleteAsync(id);
+            return NoContent();
         }
     }
 } 

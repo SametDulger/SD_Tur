@@ -69,32 +69,21 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<CommissionCalculationDto>> Create(CreateCommissionCalculationDto createDto)
         {
-            try
-            {
-                var commissionCalculation = await _commissionCalculationService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = commissionCalculation.Id }, commissionCalculation);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var commissionCalculation = await _commissionCalculationService.CreateAsync(createDto);
+            if (commissionCalculation == null)
+                return BadRequest("Failed to create commission calculation");
+            return CreatedAtAction(nameof(GetById), new { id = commissionCalculation.Id }, commissionCalculation);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CommissionCalculationDto>> Update(int id, UpdateCommissionCalculationDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdateCommissionCalculationDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var commissionCalculation = await _commissionCalculationService.UpdateAsync(updateDto);
-                return Ok(commissionCalculation);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var commissionCalculation = await _commissionCalculationService.UpdateAsync(updateDto);
+            if (commissionCalculation == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

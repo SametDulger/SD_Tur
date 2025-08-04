@@ -7,21 +7,20 @@ namespace SDTur.Core.Entities.System
     public class SystemLog : BaseEntity
     {
         public DateTime LogDate { get; set; }
-        public string LogLevel { get; set; } // Info, Warning, Error, Debug
-        public string Category { get; set; } // User, System, Security, Business
-        public string Action { get; set; } // Create, Update, Delete, Login, etc.
-        public string Message { get; set; }
-        public string Details { get; set; } // JSON formatında detaylı bilgi
-        public string IpAddress { get; set; }
-        public string UserAgent { get; set; }
-        public bool IsActive { get; set; } = true;
+        public string LogLevel { get; set; } = string.Empty; // Info, Warning, Error, Debug
+        public string Category { get; set; } = string.Empty; // User, System, Security, Business
+        public string Action { get; set; } = string.Empty; // Create, Update, Delete, Login, etc.
+        public string Message { get; set; } = string.Empty;
+        public string Details { get; set; } = string.Empty; // JSON formatında detaylı bilgi
+        public string IpAddress { get; set; } = string.Empty;
+        public string UserAgent { get; set; } = string.Empty;
         
         // Foreign keys
         public int? UserId { get; set; }
         public int? EmployeeId { get; set; }
         
         // Navigation properties
-        public virtual User User { get; set; }
-        public virtual Employee Employee { get; set; }
+        public virtual User? User { get; set; }
+        public virtual Employee? Employee { get; set; }
     }
 } 

@@ -18,14 +18,14 @@ namespace SDTur.Infrastructure.Repositories.Master
 
         public async Task<IEnumerable<Branch>> GetActiveBranchesAsync()
         {
-            return await _dbSet.Where(b => b.IsActive).ToListAsync();
+            return await _dbSet.Where(b => b.IsActive && !b.IsDeleted).ToListAsync();
         }
 
-        public async Task<Branch> GetBranchWithEmployeesAsync(int id)
+        public async Task<Branch?> GetBranchWithEmployeesAsync(int id)
         {
             return await _dbSet
                 .Include(b => b.Employees)
-                .FirstOrDefaultAsync(b => b.Id == id);
+                .FirstOrDefaultAsync(b => b.Id == id && b.IsActive && !b.IsDeleted);
         }
     }
 } 
