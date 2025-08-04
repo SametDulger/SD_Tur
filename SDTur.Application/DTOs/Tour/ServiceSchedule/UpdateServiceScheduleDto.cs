@@ -13,8 +13,11 @@ namespace SDTur.Application.DTOs.Tour.ServiceSchedule
         [Required(ErrorMessage = "Bölge seçimi zorunludur")]
         public int RegionId { get; set; }
 
+        [Required(ErrorMessage = "Servis tarihi zorunludur")]
+        public DateTime ServiceDate { get; set; }
+
         [Required(ErrorMessage = "Servis saati zorunludur")]
-        public TimeSpan ServiceTime { get; set; }
+        public string ServiceTime { get; set; } = string.Empty;
 
         public bool IsActive { get; set; }
     }

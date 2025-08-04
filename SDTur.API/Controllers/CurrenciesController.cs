@@ -42,46 +42,28 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<CurrencyDto>> Create(CreateCurrencyDto createDto)
         {
-            try
-            {
-                var currency = await _currencyService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = currency.Id }, currency);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var currency = await _currencyService.CreateAsync(createDto);
+            if (currency == null)
+                return BadRequest("Failed to create currency");
+            return CreatedAtAction(nameof(GetById), new { id = currency.Id }, currency);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CurrencyDto>> Update(int id, UpdateCurrencyDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdateCurrencyDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var currency = await _currencyService.UpdateAsync(updateDto);
-                return Ok(currency);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var currency = await _currencyService.UpdateAsync(updateDto);
+            if (currency == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _currencyService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _currencyService.DeleteAsync(id);
+            return NoContent();
         }
     }
 } 

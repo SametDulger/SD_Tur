@@ -13,6 +13,7 @@ namespace SDTur.Web.Models.Master.Pass
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
         
+        // Additional properties for compatibility with views
         [Display(Name = "Anlaşma Sayısı")]
         public int AgreementCount { get; set; }
         

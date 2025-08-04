@@ -70,24 +70,20 @@ namespace SDTur.API.Controllers
         public async Task<ActionResult<CustomerDistributionDto>> Create(CreateCustomerDistributionDto createDto)
         {
             var result = await _customerDistributionService.CreateAsync(createDto);
+            if (result == null)
+                return BadRequest("Failed to create customer distribution");
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CustomerDistributionDto>> Update(int id, UpdateCustomerDistributionDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdateCustomerDistributionDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var result = await _customerDistributionService.UpdateAsync(updateDto);
-                return Ok(result);
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            var result = await _customerDistributionService.UpdateAsync(updateDto);
+            if (result == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

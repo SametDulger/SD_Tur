@@ -8,6 +8,6 @@ namespace SDTur.Core.Interfaces.Master
     public interface IBranchRepository : IRepository<Branch>
     {
         Task<IEnumerable<Branch>> GetActiveBranchesAsync();
-        Task<Branch> GetBranchWithEmployeesAsync(int id);
+        Task<Branch?> GetBranchWithEmployeesAsync(int id);
     }
 } 

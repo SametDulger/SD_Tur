@@ -15,11 +15,24 @@ namespace SDTur.Application.DTOs.Master.Hotel
         public string? Address { get; set; }
         
         [Required]
+        public string? City { get; set; }
+        
+        [Required]
+        public string? Country { get; set; }
+        
+        [Required]
         public string? Phone { get; set; }
         
         [Required]
         [EmailAddress]
         public string? Email { get; set; }
+        
+        [Required]
+        public int StarRating { get; set; }
+        
+        public string? ContactPerson { get; set; }
+        
+        public int Rating { get; set; }
         
         [Required]
         public int RegionId { get; set; }

@@ -76,32 +76,21 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<SystemLogDto>> Create(CreateSystemLogDto createDto)
         {
-            try
-            {
-                var systemLog = await _systemLogService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = systemLog.Id }, systemLog);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var systemLog = await _systemLogService.CreateAsync(createDto);
+            if (systemLog == null)
+                return BadRequest("Failed to create system log");
+            return CreatedAtAction(nameof(GetById), new { id = systemLog.Id }, systemLog);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<SystemLogDto>> Update(int id, UpdateSystemLogDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdateSystemLogDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var systemLog = await _systemLogService.UpdateAsync(updateDto);
-                return Ok(systemLog);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var systemLog = await _systemLogService.UpdateAsync(updateDto);
+            if (systemLog == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

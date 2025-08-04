@@ -61,44 +61,10 @@
                             <div class="h6 mb-0">@Model.Name</div>
                         </div>
                         
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-graph-up me-1"></i>Döviz Kuru
-                            </label>
-                            <div class="h4 mb-0 text-success">@Model.ExchangeRate.ToString("N4")</div>
-                            <small class="text-muted">TL karşılığı</small>
-                        </div>
+
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-calendar me-1"></i>Son Güncelleme
-                            </label>
-                            <div class="h6 mb-0">@Model.LastUpdated.ToString("dd MMMM yyyy")</div>
-                            <small class="text-muted">@Model.LastUpdated.ToString("dddd, HH:mm")</small>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-muted">
-                                <i class="bi bi-toggle-on me-1"></i>Durum
-                            </label>
-                            <div>
-                                @if (Model.IsActive)
-                                {
-                                    <span class="badge bg-success fs-6">
-                                        <i class="bi bi-toggle-on me-1"></i>Aktif
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-secondary fs-6">
-                                        <i class="bi bi-toggle-off me-1"></i>Pasif
-                                    </span>
-                                }
-                            </div>
-                        </div>
-                    </div>
+
 
                     <form asp-action="Delete" method="post">
                         <input type="hidden" asp-for="Id" />

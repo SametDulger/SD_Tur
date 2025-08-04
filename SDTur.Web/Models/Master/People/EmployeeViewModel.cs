@@ -49,5 +49,8 @@ namespace SDTur.Web.Models.Master.People
         
         [Display(Name = "Ad Soyad")]
         public string FullName { get; set; } = string.Empty;
+        
+        // Additional property for view compatibility
+        public string Name => FullName;
     }
 } 

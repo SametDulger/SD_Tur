@@ -29,16 +29,16 @@ namespace SDTur.Application.Services.Financial.Implementations
             return _mapper.Map<IEnumerable<AccountDto>>(accounts);
         }
 
-        public async Task<AccountDto> GetByIdAsync(int id)
+        public async Task<AccountDto?> GetByIdAsync(int id)
         {
             var account = await _unitOfWork.Accounts.GetByIdAsync(id);
-            return _mapper.Map<AccountDto>(account);
+            return account != null ? _mapper.Map<AccountDto>(account) : null;
         }
 
-        public async Task<AccountDto> GetWithTransactionsAsync(int id)
+        public async Task<AccountDto?> GetWithTransactionsAsync(int id)
         {
             var account = await _unitOfWork.Accounts.GetAccountWithTransactionsAsync(id);
-            return _mapper.Map<AccountDto>(account);
+            return account != null ? _mapper.Map<AccountDto>(account) : null;
         }
 
         public async Task<IEnumerable<AccountDto>> GetByAccountTypeAsync(string accountType)
@@ -52,29 +52,22 @@ namespace SDTur.Application.Services.Financial.Implementations
             return await _unitOfWork.Accounts.GetAccountBalanceAsync(accountId);
         }
 
-        public async Task<AccountDto> CreateAsync(CreateAccountDto createDto)
+        public async Task<AccountDto?> CreateAsync(CreateAccountDto createDto)
         {
-            var account = _mapper.Map<Account>(createDto);
-            account.IsActive = true;
-            
-            await _unitOfWork.Accounts.AddAsync(account);
+            var entity = _mapper.Map<Account>(createDto);
+            var created = await _unitOfWork.Accounts.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<AccountDto>(account);
+            return _mapper.Map<AccountDto>(created);
         }
 
-        public async Task<AccountDto> UpdateAsync(UpdateAccountDto updateDto)
+        public async Task<AccountDto?> UpdateAsync(UpdateAccountDto updateDto)
         {
-            var account = await _unitOfWork.Accounts.GetByIdAsync(updateDto.Id);
-            if (account == null)
-                throw new ArgumentException("Cari hesap bulunamadı");
-            
-            _mapper.Map(updateDto, account);
-            
-            await _unitOfWork.Accounts.UpdateAsync(account);
+            var entity = await _unitOfWork.Accounts.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.Accounts.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<AccountDto>(account);
+            return _mapper.Map<AccountDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SDTur.Core.Entities.Financial;
+using SDTur.Core.Interfaces.Core;
 using SDTur.Core.Interfaces.Financial;
 using SDTur.Infrastructure.Data;
 using SDTur.Infrastructure.Repositories.Core;
@@ -12,8 +14,18 @@ namespace SDTur.Infrastructure.Repositories.Financial
 {
     public class InvoiceDetailRepository : Repository<InvoiceDetail>, IInvoiceDetailRepository
     {
-        public InvoiceDetailRepository(SDTurDbContext context) : base(context)
+        private readonly ILogger<InvoiceDetailRepository> _logger;
+
+        public InvoiceDetailRepository(SDTurDbContext context)
+            : base(context)
         {
+        }
+
+        public async Task<InvoiceDetail?> GetInvoiceDetailWithInvoiceAsync(int id)
+        {
+            return await _dbSet
+                .Include(x => x.Invoice)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<InvoiceDetail>> GetByInvoiceIdAsync(int invoiceId)

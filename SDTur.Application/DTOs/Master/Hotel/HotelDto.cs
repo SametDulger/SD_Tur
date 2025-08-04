@@ -10,6 +10,10 @@ namespace SDTur.Application.DTOs.Master.Hotel
         public string? Address { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
+        public int StarRating { get; set; }
+        public string? ContactPerson { get; set; }
+        public int Rating { get; set; }
+        public string? City { get; set; }
         public int RegionId { get; set; }
         public int Order { get; set; }
         public bool IsActive { get; set; }

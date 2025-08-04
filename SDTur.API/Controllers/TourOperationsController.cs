@@ -56,15 +56,10 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<TourOperationDto>> Create(CreateTourOperationDto createDto)
         {
-            try
-            {
-                var tourOperation = await _tourOperationService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = tourOperation.Id }, tourOperation);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var tourOperation = await _tourOperationService.CreateAsync(createDto);
+            if (tourOperation == null)
+                return BadRequest("Failed to create tour operation");
+            return CreatedAtAction(nameof(GetById), new { id = tourOperation.Id }, tourOperation);
         }
 
         [HttpPut("{id}")]
@@ -72,16 +67,10 @@ namespace SDTur.API.Controllers
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var tourOperation = await _tourOperationService.UpdateAsync(updateDto);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var tourOperation = await _tourOperationService.UpdateAsync(updateDto);
+            if (tourOperation == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

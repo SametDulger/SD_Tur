@@ -8,9 +8,9 @@ namespace SDTur.Application.Services.Master.Interfaces
     {
         Task<IEnumerable<CurrencyDto>> GetAllAsync();
         Task<IEnumerable<CurrencyDto>> GetActiveAsync();
-        Task<CurrencyDto> GetByIdAsync(int id);
-        Task<CurrencyDto> CreateAsync(CreateCurrencyDto createDto);
-        Task<CurrencyDto> UpdateAsync(UpdateCurrencyDto updateDto);
+        Task<CurrencyDto?> GetByIdAsync(int id);
+        Task<CurrencyDto?> CreateAsync(CreateCurrencyDto createDto);
+        Task<CurrencyDto?> UpdateAsync(UpdateCurrencyDto updateDto);
         Task DeleteAsync(int id);
     }
 } 

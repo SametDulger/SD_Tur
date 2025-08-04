@@ -6,11 +6,10 @@ namespace SDTur.Core.Entities.Financial
 {
     public class ExchangeRate : BaseEntity
     {
-        public string FromCurrency { get; set; }
-        public string ToCurrency { get; set; }
+        public string FromCurrency { get; set; } = string.Empty;
+        public string ToCurrency { get; set; } = string.Empty;
         public decimal Rate { get; set; }
         public DateTime RateDate { get; set; }
         public DateTime Date { get; set; }
-        public bool IsActive { get; set; } = true;
     }
 } 

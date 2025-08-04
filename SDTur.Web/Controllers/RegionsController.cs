@@ -37,7 +37,7 @@ namespace SDTur.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,DistanceFromKemer,Order,IsActive")] RegionCreateViewModel RegionCreateViewModel)
+        public async Task<IActionResult> Create([Bind("Name,Description,Country,DistanceFromKemer,Order,IsActive")] RegionCreateViewModel RegionCreateViewModel)
         {
             if (ModelState.IsValid)
             {

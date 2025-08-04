@@ -16,19 +16,19 @@ namespace SDTur.Infrastructure.Repositories.Financial
         {
         }
 
-        public async Task<Invoice> GetInvoiceWithDetailsAsync(int id)
+        public async Task<Invoice?> GetInvoiceWithDetailsAsync(int id)
         {
             return await _dbSet
                 .Include(i => i.PassCompany)
                 .Include(i => i.InvoiceDetails)
-                .FirstOrDefaultAsync(i => i.Id == id);
+                .FirstOrDefaultAsync(i => i.Id == id && i.IsActive && !i.IsDeleted);
         }
 
         public async Task<IEnumerable<Invoice>> GetInvoicesByPassCompanyAsync(int passCompanyId)
         {
             return await _dbSet
                 .Include(i => i.PassCompany)
-                .Where(i => i.PassCompanyId == passCompanyId && i.IsActive)
+                .Where(i => i.PassCompanyId == passCompanyId && i.IsActive && !i.IsDeleted)
                 .OrderByDescending(i => i.InvoiceDate)
                 .ToListAsync();
         }
@@ -37,7 +37,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
         {
             return await _dbSet
                 .Include(i => i.PassCompany)
-                .Where(i => i.InvoiceDate >= startDate && i.InvoiceDate <= endDate && i.IsActive)
+                .Where(i => i.InvoiceDate >= startDate && i.InvoiceDate <= endDate && i.IsActive && !i.IsDeleted)
                 .OrderByDescending(i => i.InvoiceDate)
                 .ToListAsync();
         }
@@ -46,7 +46,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
         {
             return await _dbSet
                 .Include(i => i.PassCompany)
-                .Where(i => i.Status == status && i.IsActive)
+                .Where(i => i.Status == status && i.IsActive && !i.IsDeleted)
                 .OrderByDescending(i => i.InvoiceDate)
                 .ToListAsync();
         }

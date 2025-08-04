@@ -64,32 +64,21 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<FinancialReportDto>> Create(CreateFinancialReportDto createDto)
         {
-            try
-            {
-                var financialReport = await _financialReportService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = financialReport.Id }, financialReport);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var financialReport = await _financialReportService.CreateAsync(createDto);
+            if (financialReport == null)
+                return BadRequest("Failed to create financial report");
+            return CreatedAtAction(nameof(GetById), new { id = financialReport.Id }, financialReport);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<FinancialReportDto>> Update(int id, UpdateFinancialReportDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdateFinancialReportDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var financialReport = await _financialReportService.UpdateAsync(updateDto);
-                return Ok(financialReport);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var financialReport = await _financialReportService.UpdateAsync(updateDto);
+            if (financialReport == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

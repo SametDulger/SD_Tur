@@ -66,15 +66,10 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<AccountDto>> Create(CreateAccountDto createDto)
         {
-            try
-            {
-                var account = await _accountService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = account.Id }, account);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var account = await _accountService.CreateAsync(createDto);
+            if (account == null)
+                return BadRequest("Failed to create account");
+            return CreatedAtAction(nameof(GetById), new { id = account.Id }, account);
         }
 
         [HttpPut("{id}")]
@@ -82,16 +77,10 @@ namespace SDTur.API.Controllers
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var account = await _accountService.UpdateAsync(updateDto);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var account = await _accountService.UpdateAsync(updateDto);
+            if (account == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

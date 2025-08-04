@@ -23,35 +23,28 @@ namespace SDTur.Application.Services.Tour.Implementations
             return _mapper.Map<IEnumerable<TourIncomeDto>>(tourIncomes);
         }
 
-        public async Task<TourIncomeDto> GetByIdAsync(int id)
+        public async Task<TourIncomeDto?> GetByIdAsync(int id)
         {
             var tourIncome = await _unitOfWork.TourIncomes.GetByIdAsync(id);
-            return _mapper.Map<TourIncomeDto>(tourIncome);
+            return tourIncome != null ? _mapper.Map<TourIncomeDto>(tourIncome) : null;
         }
 
-        public async Task<TourIncomeDto> CreateAsync(CreateTourIncomeDto createDto)
+        public async Task<TourIncomeDto?> CreateAsync(CreateTourIncomeDto createDto)
         {
-            var tourIncome = _mapper.Map<TourIncome>(createDto);
-            tourIncome.IsActive = true;
-            
-            await _unitOfWork.TourIncomes.AddAsync(tourIncome);
+            var entity = _mapper.Map<TourIncome>(createDto);
+            var created = await _unitOfWork.TourIncomes.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<TourIncomeDto>(tourIncome);
+            return _mapper.Map<TourIncomeDto>(created);
         }
 
-        public async Task<TourIncomeDto> UpdateAsync(UpdateTourIncomeDto updateDto)
+        public async Task<TourIncomeDto?> UpdateAsync(UpdateTourIncomeDto updateDto)
         {
-            var tourIncome = await _unitOfWork.TourIncomes.GetByIdAsync(updateDto.Id);
-            if (tourIncome == null)
-                throw new ArgumentException("Tur geliri bulunamadı");
-
-            _mapper.Map(updateDto, tourIncome);
-            
-            await _unitOfWork.TourIncomes.UpdateAsync(tourIncome);
+            var entity = await _unitOfWork.TourIncomes.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.TourIncomes.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<TourIncomeDto>(tourIncome);
+            return _mapper.Map<TourIncomeDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

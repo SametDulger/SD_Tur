@@ -29,10 +29,10 @@ namespace SDTur.Application.Services.Master.Implementations
             return _mapper.Map<IEnumerable<HotelDto>>(hotels.Where(h => h.IsActive));
         }
 
-        public async Task<HotelDto> GetHotelByIdAsync(int id)
+        public async Task<HotelDto?> GetHotelByIdAsync(int id)
         {
             var hotel = await _unitOfWork.Hotels.GetByIdAsync(id);
-            return _mapper.Map<HotelDto>(hotel);
+            return hotel != null ? _mapper.Map<HotelDto>(hotel) : null;
         }
 
         public async Task<IEnumerable<HotelDto>> GetHotelsByRegionAsync(int regionId)
@@ -41,28 +41,22 @@ namespace SDTur.Application.Services.Master.Implementations
             return _mapper.Map<IEnumerable<HotelDto>>(hotels.Where(h => h.RegionId == regionId));
         }
 
-        public async Task<HotelDto> CreateHotelAsync(CreateHotelDto createHotelDto)
+        public async Task<HotelDto?> CreateAsync(CreateHotelDto createDto)
         {
-            var hotel = _mapper.Map<Hotel>(createHotelDto);
-            hotel.IsActive = true;
-            
-            await _unitOfWork.Hotels.AddAsync(hotel);
+            var entity = _mapper.Map<Hotel>(createDto);
+            var created = await _unitOfWork.Hotels.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<HotelDto>(hotel);
+            return _mapper.Map<HotelDto>(created);
         }
 
-        public async Task<HotelDto> UpdateHotelAsync(UpdateHotelDto updateHotelDto)
+        public async Task<HotelDto?> UpdateAsync(UpdateHotelDto updateDto)
         {
-            var hotel = await _unitOfWork.Hotels.GetByIdAsync(updateHotelDto.Id);
-            if (hotel == null)
-                return null;
-
-            _mapper.Map(updateHotelDto, hotel);
-            await _unitOfWork.Hotels.UpdateAsync(hotel);
+            var entity = await _unitOfWork.Hotels.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.Hotels.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<HotelDto>(hotel);
+            return _mapper.Map<HotelDto>(updated);
         }
 
         public async Task DeleteHotelAsync(int id)

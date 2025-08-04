@@ -49,46 +49,28 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<PassAgreementDto>> Create(CreatePassAgreementDto createDto)
         {
-            try
-            {
-                var passAgreement = await _passAgreementService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = passAgreement.Id }, passAgreement);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var passAgreement = await _passAgreementService.CreateAsync(createDto);
+            if (passAgreement == null)
+                return BadRequest("Failed to create pass agreement");
+            return CreatedAtAction(nameof(GetById), new { id = passAgreement.Id }, passAgreement);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<PassAgreementDto>> Update(int id, UpdatePassAgreementDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdatePassAgreementDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var passAgreement = await _passAgreementService.UpdateAsync(updateDto);
-                return Ok(passAgreement);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var passAgreement = await _passAgreementService.UpdateAsync(updateDto);
+            if (passAgreement == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _passAgreementService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _passAgreementService.DeleteAsync(id);
+            return NoContent();
         }
     }
 } 

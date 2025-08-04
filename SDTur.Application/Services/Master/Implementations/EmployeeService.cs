@@ -29,10 +29,10 @@ namespace SDTur.Application.Services.Master.Implementations
             return _mapper.Map<IEnumerable<EmployeeDto>>(employees.Where(e => e.IsActive));
         }
 
-        public async Task<EmployeeDto> GetEmployeeByIdAsync(int id)
+        public async Task<EmployeeDto?> GetEmployeeByIdAsync(int id)
         {
             var employee = await _unitOfWork.Employees.GetByIdAsync(id);
-            return _mapper.Map<EmployeeDto>(employee);
+            return employee != null ? _mapper.Map<EmployeeDto>(employee) : null;
         }
 
         public async Task<IEnumerable<EmployeeDto>> GetEmployeesByBranchAsync(int branchId)
@@ -41,28 +41,22 @@ namespace SDTur.Application.Services.Master.Implementations
             return _mapper.Map<IEnumerable<EmployeeDto>>(employees.Where(e => e.BranchId == branchId));
         }
 
-        public async Task<EmployeeDto> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
+        public async Task<EmployeeDto?> CreateAsync(CreateEmployeeDto createDto)
         {
-            var employee = _mapper.Map<Employee>(createEmployeeDto);
-            employee.IsActive = true;
-            
-            await _unitOfWork.Employees.AddAsync(employee);
+            var entity = _mapper.Map<Employee>(createDto);
+            var created = await _unitOfWork.Employees.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<EmployeeDto>(employee);
+            return _mapper.Map<EmployeeDto>(created);
         }
 
-        public async Task<EmployeeDto> UpdateEmployeeAsync(UpdateEmployeeDto updateEmployeeDto)
+        public async Task<EmployeeDto?> UpdateAsync(UpdateEmployeeDto updateDto)
         {
-            var employee = await _unitOfWork.Employees.GetByIdAsync(updateEmployeeDto.Id);
-            if (employee == null)
-                return null;
-
-            _mapper.Map(updateEmployeeDto, employee);
-            await _unitOfWork.Employees.UpdateAsync(employee);
+            var entity = await _unitOfWork.Employees.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.Employees.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<EmployeeDto>(employee);
+            return _mapper.Map<EmployeeDto>(updated);
         }
 
         public async Task DeleteEmployeeAsync(int id)

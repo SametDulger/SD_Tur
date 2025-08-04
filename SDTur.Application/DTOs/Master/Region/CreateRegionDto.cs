@@ -10,6 +10,9 @@ namespace SDTur.Application.DTOs.Master.Region
         public string? Description { get; set; }
         
         [Required]
+        public string? Country { get; set; }
+        
+        [Required]
         public int DistanceFromKemer { get; set; }
         
         [Required]

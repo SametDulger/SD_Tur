@@ -56,46 +56,28 @@ namespace SDTur.API.Controllers
         [HttpPost]
         public async Task<ActionResult<AccountTransactionDto>> Create(CreateAccountTransactionDto createDto)
         {
-            try
-            {
-                var accountTransaction = await _accountTransactionService.CreateAsync(createDto);
-                return CreatedAtAction(nameof(GetById), new { id = accountTransaction.Id }, accountTransaction);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var accountTransaction = await _accountTransactionService.CreateAsync(createDto);
+            if (accountTransaction == null)
+                return BadRequest("Failed to create account transaction");
+            return CreatedAtAction(nameof(GetById), new { id = accountTransaction.Id }, accountTransaction);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<AccountTransactionDto>> Update(int id, UpdateAccountTransactionDto updateDto)
+        public async Task<IActionResult> Update(int id, UpdateAccountTransactionDto updateDto)
         {
             if (id != updateDto.Id)
                 return BadRequest();
-
-            try
-            {
-                var accountTransaction = await _accountTransactionService.UpdateAsync(updateDto);
-                return Ok(accountTransaction);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var accountTransaction = await _accountTransactionService.UpdateAsync(updateDto);
+            if (accountTransaction == null)
+                return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _accountTransactionService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _accountTransactionService.DeleteAsync(id);
+            return NoContent();
         }
     }
 } 

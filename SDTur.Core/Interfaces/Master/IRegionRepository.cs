@@ -8,6 +8,6 @@ namespace SDTur.Core.Interfaces.Master
     public interface IRegionRepository : IRepository<Region>
     {
         Task<IEnumerable<Region>> GetActiveRegionsAsync();
-        Task<Region> GetRegionWithHotelsAsync(int id);
+        Task<Region?> GetRegionWithHotelsAsync(int id);
     }
 } 

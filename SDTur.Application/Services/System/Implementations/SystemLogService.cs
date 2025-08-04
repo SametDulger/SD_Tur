@@ -23,10 +23,10 @@ namespace SDTur.Application.Services.System.Implementations
             return _mapper.Map<IEnumerable<SystemLogDto>>(systemLogs);
         }
 
-        public async Task<SystemLogDto> GetByIdAsync(int id)
+        public async Task<SystemLogDto?> GetByIdAsync(int id)
         {
             var systemLog = await _unitOfWork.SystemLogs.GetByIdAsync(id);
-            return _mapper.Map<SystemLogDto>(systemLog);
+            return systemLog != null ? _mapper.Map<SystemLogDto>(systemLog) : null;
         }
 
         public async Task<IEnumerable<SystemLogDto>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
@@ -65,29 +65,22 @@ namespace SDTur.Application.Services.System.Implementations
             return _mapper.Map<IEnumerable<SystemLogDto>>(systemLogs);
         }
 
-        public async Task<SystemLogDto> CreateAsync(CreateSystemLogDto createDto)
+        public async Task<SystemLogDto?> CreateAsync(CreateSystemLogDto createDto)
         {
-            var systemLog = _mapper.Map<SystemLog>(createDto);
-            systemLog.IsActive = true;
-            
-            await _unitOfWork.SystemLogs.AddAsync(systemLog);
+            var entity = _mapper.Map<SystemLog>(createDto);
+            var created = await _unitOfWork.SystemLogs.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<SystemLogDto>(systemLog);
+            return _mapper.Map<SystemLogDto>(created);
         }
 
-        public async Task<SystemLogDto> UpdateAsync(UpdateSystemLogDto updateDto)
+        public async Task<SystemLogDto?> UpdateAsync(UpdateSystemLogDto updateDto)
         {
-            var existingSystemLog = await _unitOfWork.SystemLogs.GetByIdAsync(updateDto.Id);
-            if (existingSystemLog == null)
-                throw new ArgumentException("System log not found");
-            
-            _mapper.Map(updateDto, existingSystemLog);
-            
-            await _unitOfWork.SystemLogs.UpdateAsync(existingSystemLog);
+            var entity = await _unitOfWork.SystemLogs.GetByIdAsync(updateDto.Id);
+            if (entity == null) return null;
+            _mapper.Map(updateDto, entity);
+            var updated = await _unitOfWork.SystemLogs.UpdateAsync(entity);
             await _unitOfWork.SaveChangesAsync();
-            
-            return _mapper.Map<SystemLogDto>(existingSystemLog);
+            return _mapper.Map<SystemLogDto>(updated);
         }
 
         public async Task DeleteAsync(int id)

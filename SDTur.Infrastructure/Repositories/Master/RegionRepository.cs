@@ -19,16 +19,16 @@ namespace SDTur.Infrastructure.Repositories.Master
         public async Task<IEnumerable<Region>> GetActiveRegionsAsync()
         {
             return await _dbSet
-                .Where(r => r.IsActive)
+                .Where(r => r.IsActive && !r.IsDeleted)
                 .OrderBy(r => r.Order)
                 .ToListAsync();
         }
 
-        public async Task<Region> GetRegionWithHotelsAsync(int id)
+        public async Task<Region?> GetRegionWithHotelsAsync(int id)
         {
             return await _dbSet
                 .Include(r => r.Hotels)
-                .FirstOrDefaultAsync(r => r.Id == id);
+                .FirstOrDefaultAsync(r => r.Id == id && r.IsActive && !r.IsDeleted);
         }
     }
 } 
