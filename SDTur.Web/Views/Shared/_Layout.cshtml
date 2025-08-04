@@ -114,10 +114,16 @@
                             <span class="d-none d-md-inline">Kullanıcı</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                            <li><a class="dropdown-item" asp-controller="Users" asp-action="Index"><i class="bi bi-person me-2"></i>Profil</a></li>
-                            <li><a class="dropdown-item" asp-controller="Users" asp-action="Index"><i class="bi bi-gear me-2"></i>Ayarlar</a></li>
+                            <li><a class="dropdown-item" asp-controller="Auth" asp-action="Profile"><i class="bi bi-person me-2"></i>Profil</a></li>
+                            <li><a class="dropdown-item" asp-controller="Auth" asp-action="ChangePassword"><i class="bi bi-key me-2"></i>Şifre Değiştir</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" asp-controller="Home" asp-action="Index"><i class="bi bi-box-arrow-right me-2"></i>Çıkış</a></li>
+                            <li>
+                                <form asp-controller="Auth" asp-action="Logout" method="post" style="display: inline;">
+                                    <button type="submit" class="dropdown-item" style="border: none; background: none; width: 100%; text-align: left;">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Çıkış
+                                    </button>
+                                </form>
+                            </li>
                         </ul>
                     </li>
                 </ul>

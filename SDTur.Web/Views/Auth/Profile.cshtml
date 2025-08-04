@@ -1,0 +1,167 @@
+@model SDTur.Web.Models.Auth.UserProfileViewModel
+
+@{
+    ViewData["Title"] = "Profil";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-person-circle me-2"></i>Kullanıcı Profili
+                </h1>
+                <div>
+                    <a asp-action="ChangePassword" asp-controller="Auth" class="btn btn-warning">
+                        <i class="bi bi-key me-2"></i>Şifre Değiştir
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-person me-2"></i>Profil Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Kullanıcı Adı</label>
+                            <p class="form-control-plaintext">@Model.Username</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Tam Ad</label>
+                            <p class="form-control-plaintext">@Model.FullName</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Ad</label>
+                            <p class="form-control-plaintext">@Model.FirstName</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Soyad</label>
+                            <p class="form-control-plaintext">@Model.LastName</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">E-posta</label>
+                            <p class="form-control-plaintext">
+                                @if (!string.IsNullOrEmpty(Model.Email))
+                                {
+                                    <a href="mailto:@Model.Email">@Model.Email</a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Belirtilmemiş</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Telefon</label>
+                            <p class="form-control-plaintext">
+                                @if (!string.IsNullOrEmpty(Model.Phone))
+                                {
+                                    <a href="tel:@Model.Phone">@Model.Phone</a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Belirtilmemiş</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Rol</label>
+                            <p class="form-control-plaintext">
+                                <span class="badge bg-info">@Model.Role</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Durum</label>
+                            <p class="form-control-plaintext">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success">Aktif</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Pasif</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Şube</label>
+                            <p class="form-control-plaintext">
+                                @if (!string.IsNullOrEmpty(Model.BranchName))
+                                {
+                                    @Model.BranchName
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Belirtilmemiş</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Çalışan</label>
+                            <p class="form-control-plaintext">
+                                @if (!string.IsNullOrEmpty(Model.EmployeeName))
+                                {
+                                    @Model.EmployeeName
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Belirtilmemiş</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Hızlı İşlemler
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-action="ChangePassword" asp-controller="Auth" class="btn btn-warning">
+                            <i class="bi bi-key me-2"></i>Şifre Değiştir
+                        </a>
+                        <a asp-action="Index" asp-controller="Home" class="btn btn-primary">
+                            <i class="bi bi-house me-2"></i>Ana Sayfa
+                        </a>
+                        <a asp-action="Index" asp-controller="Users" class="btn btn-secondary">
+                            <i class="bi bi-people me-2"></i>Kullanıcı Yönetimi
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mt-3">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-shield-check me-2"></i>Güvenlik
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info mb-0">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Güvenlik İpuçları:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>Güçlü şifre kullanın</li>
+                            <li>Şifrenizi düzenli değiştirin</li>
+                            <li>Oturumunuzu güvenli kapatın</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
