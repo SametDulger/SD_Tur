@@ -8,7 +8,7 @@ builder.Services.AddControllersWithViews();
 // HTTP Client for API communication
 builder.Services.AddHttpClient<IApiService, ApiService>(client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"] ?? "http://localhost:5000/");
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7001/");
 });
 
 var app = builder.Build();

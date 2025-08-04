@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SDTur.Web.Models.Tour.Core;
+using SDTur.Web.Models.Master.People;
 using SDTur.Web.Services;
 
 namespace SDTur.Web.Controllers
@@ -30,7 +31,9 @@ namespace SDTur.Web.Controllers
         public async Task<IActionResult> Create()
         {
             var tourSchedules = await _apiService.GetAsync<List<TourScheduleViewModel>>("api/tourschedules");
+            var employees = await _apiService.GetAsync<List<EmployeeViewModel>>("api/employees");
             ViewBag.TourSchedules = tourSchedules;
+            ViewBag.Employees = employees;
             return View();
         }
 
@@ -44,7 +47,9 @@ namespace SDTur.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             var tourSchedules = await _apiService.GetAsync<List<TourScheduleViewModel>>("api/tourschedules");
+            var employees = await _apiService.GetAsync<List<EmployeeViewModel>>("api/employees");
             ViewBag.TourSchedules = tourSchedules;
+            ViewBag.Employees = employees;
             return View(createDto);
         }
 
@@ -68,7 +73,9 @@ namespace SDTur.Web.Controllers
             };
 
             var tourSchedules = await _apiService.GetAsync<List<TourScheduleViewModel>>("api/tourschedules");
+            var employees = await _apiService.GetAsync<List<EmployeeViewModel>>("api/employees");
             ViewBag.TourSchedules = tourSchedules;
+            ViewBag.Employees = employees;
             return View(updateDto);
         }
 
@@ -87,7 +94,9 @@ namespace SDTur.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             var tourSchedules = await _apiService.GetAsync<List<TourScheduleViewModel>>("api/tourschedules");
+            var employees = await _apiService.GetAsync<List<EmployeeViewModel>>("api/employees");
             ViewBag.TourSchedules = tourSchedules;
+            ViewBag.Employees = employees;
             return View(updateDto);
         }
 

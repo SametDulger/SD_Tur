@@ -16,8 +16,9 @@ namespace SDTur.Web.Models.Master.Transport
         [Required]
         public int Capacity { get; set; }
         
+        [Required]
         [Display(Name = "Model Yılı")]
-        public int? Year { get; set; }
+        public int Year { get; set; }
         
         [Display(Name = "Son Bakım Tarihi")]
         public DateTime? LastMaintenance { get; set; }

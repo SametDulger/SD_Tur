@@ -5,18 +5,29 @@ namespace SDTur.Web.Models.Tour.Operations
     public class CustomerDistributionCreateViewModel
     {
         [Required]
-        public int TourId { get; set; }
+        public int TourScheduleId { get; set; }
+        
         [Required]
-        public int CustomerId { get; set; }
+        public int BusId { get; set; }
+        
         [Required]
-        public string DistributionType { get; set; } = string.Empty;
+        public int TicketId { get; set; }
+        
+        public int? EmployeeId { get; set; }
+        
         [Required]
         public DateTime DistributionDate { get; set; }
-        public string Description { get; set; } = string.Empty;
-        public bool IsCompleted { get; set; } = false;
         
-        // Additional properties for compatibility
-        public int TourScheduleId { get; set; }
+        [Required]
+        public string Status { get; set; } = string.Empty;
+        
+        public string Notes { get; set; } = string.Empty;
+        
+        public bool IsActive { get; set; } = true;
+        
+        // Additional properties for view compatibility
         public string CustomerType { get; set; } = string.Empty;
+        public string DistributionType { get; set; } = string.Empty;
+        public bool IsCompleted { get; set; } = false;
     }
 } 

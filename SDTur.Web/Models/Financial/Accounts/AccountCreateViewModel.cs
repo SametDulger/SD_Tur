@@ -29,15 +29,19 @@ namespace SDTur.Web.Models.Financial.Accounts
         [Display(Name = "Açıklama")]
         public string Description { get; set; } = string.Empty;
         
+        [Required]
         [Display(Name = "Para Birimi")]
-        public int? CurrencyId { get; set; }
+        public int CurrencyId { get; set; }
         
+        [Required]
         [Display(Name = "İletişim Kişisi")]
         public string ContactPerson { get; set; } = string.Empty;
         
+        [Required]
         [Display(Name = "Telefon")]
         public string Phone { get; set; } = string.Empty;
         
+        [Required]
         [Display(Name = "E-posta")]
         public string Email { get; set; } = string.Empty;
     }

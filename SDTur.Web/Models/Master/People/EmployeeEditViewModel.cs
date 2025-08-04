@@ -16,6 +16,7 @@ namespace SDTur.Web.Models.Master.People
         [Required]
         public string Email { get; set; } = string.Empty;
         
+        [Required]
         public string Phone { get; set; } = string.Empty;
         
         [Required]
@@ -24,10 +25,12 @@ namespace SDTur.Web.Models.Master.People
         [Required]
         public string Position { get; set; } = string.Empty;
         
-        public int? BranchId { get; set; }
+        [Required]
+        public int BranchId { get; set; }
         
+        [Required]
         [Display(Name = "Para Birimi")]
-        public int? CurrencyId { get; set; }
+        public int CurrencyId { get; set; }
         
         [Required]
         public decimal Salary { get; set; }
