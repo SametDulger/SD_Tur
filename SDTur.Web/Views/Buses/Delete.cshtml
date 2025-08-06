@@ -131,14 +131,31 @@
                         </div>
                     }
 
+                    <hr class="my-4">
+                    
                     <form asp-action="Delete" method="post" class="mt-4">
                         <input type="hidden" asp-for="Id" />
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="confirmDelete" required>
+                            <label class="form-check-label" for="confirmDelete">
+                                Otobüsün silineceğini ve bu işlemin geri alınamayacağını anlıyorum
+                            </label>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="confirmDataLoss" required>
+                            <label class="form-check-label" for="confirmDataLoss">
+                                Otobüse ait tüm verilerin kalıcı olarak silineceğini kabul ediyorum
+                            </label>
+                        </div>
+                        
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-secondary">
                                 <i class="bi bi-x-circle me-2"></i>İptal
                             </a>
-                            <button type="submit" class="btn btn-danger">
-                                <i class="bi bi-trash me-2"></i>Sil
+                            <button type="submit" class="btn btn-danger" id="deleteBtn" disabled>
+                                <i class="bi bi-trash me-2"></i>Otobüsü Sil
                             </button>
                         </div>
                     </form>

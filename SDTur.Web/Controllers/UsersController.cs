@@ -34,13 +34,15 @@ namespace SDTur.Web.Controllers
         public async Task<IActionResult> Create()
         {
             var branches = await _apiService.GetAsync<List<BranchViewModel>>("api/branches");
+            var roles = await _apiService.GetAsync<List<RoleViewModel>>("api/roles");
             ViewBag.Branches = branches;
+            ViewBag.Roles = roles;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Username,Password,FirstName,LastName,Email,Phone,EmployeeId,BranchId,Role,IsActive")] UserCreateViewModel UserCreateViewModel)
+        public async Task<IActionResult> Create([Bind("Username,Password,FirstName,LastName,Email,Phone,EmployeeId,BranchId,RoleId,IsActive")] UserCreateViewModel UserCreateViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -49,7 +51,9 @@ namespace SDTur.Web.Controllers
             }
             
             var branches = await _apiService.GetAsync<List<BranchViewModel>>("api/branches");
+            var roles = await _apiService.GetAsync<List<RoleViewModel>>("api/roles");
             ViewBag.Branches = branches;
+            ViewBag.Roles = roles;
             return View(UserCreateViewModel);
         }
 
@@ -60,7 +64,9 @@ namespace SDTur.Web.Controllers
                 return NotFound();
 
             var branches = await _apiService.GetAsync<List<BranchViewModel>>("api/branches");
+            var roles = await _apiService.GetAsync<List<RoleViewModel>>("api/roles");
             ViewBag.Branches = branches;
+            ViewBag.Roles = roles;
 
             var updateDto = new UserEditViewModel
             {
@@ -70,7 +76,7 @@ namespace SDTur.Web.Controllers
                 LastName = user.LastName,
                 Email = user.Email,
                 Phone = user.Phone,
-                Role = user.Role,
+                RoleId = user.RoleId, // Changed from Role to RoleId
                 IsActive = user.IsActive,
                 EmployeeId = user.EmployeeId,
                 BranchId = user.BranchId
@@ -94,7 +100,9 @@ namespace SDTur.Web.Controllers
             }
             
             var branches = await _apiService.GetAsync<List<BranchViewModel>>("api/branches");
+            var roles = await _apiService.GetAsync<List<RoleViewModel>>("api/roles");
             ViewBag.Branches = branches;
+            ViewBag.Roles = roles;
             return View(updateDto);
         }
 

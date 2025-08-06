@@ -6,7 +6,7 @@ namespace SDTur.Application.Services.System.Interfaces
     public interface IAuthService
     {
         Task<LoginResponseDto> LoginAsync(LoginDto loginDto);
-        Task<ChangePasswordResponseDto> ChangePasswordAsync(int userId, ChangePasswordDto changePasswordDto);
+        Task<bool> ChangePasswordAsync(int userId, ChangePasswordDto changePasswordDto);
         Task<string> GenerateTokenAsync(UserDto user);
         Task<string> GenerateRefreshTokenAsync();
         Task<bool> ValidateTokenAsync(string token);

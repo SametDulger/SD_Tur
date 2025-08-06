@@ -105,9 +105,12 @@ namespace SDTur.Infrastructure.Repositories.System
             return await _dbSet.Where(u => u.IsActive && !u.IsDeleted).ToListAsync();
         }
 
-        public async Task<IEnumerable<User>> GetUsersByRoleAsync(string role)
+        public async Task<IEnumerable<User>> GetUsersByRoleAsync(int roleId)
         {
-            return await _dbSet.Where(u => u.Role == role && u.IsActive && !u.IsDeleted).ToListAsync();
+            return await _dbSet
+                .Include(u => u.Role)
+                .Where(u => u.RoleId == roleId && u.IsActive && !u.IsDeleted)
+                .ToListAsync();
         }
 
         public async Task<User?> GetUserWithDetailsAsync(int id)

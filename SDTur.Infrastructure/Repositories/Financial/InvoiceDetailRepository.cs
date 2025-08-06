@@ -14,11 +14,12 @@ namespace SDTur.Infrastructure.Repositories.Financial
 {
     public class InvoiceDetailRepository : Repository<InvoiceDetail>, IInvoiceDetailRepository
     {
-        private readonly ILogger<InvoiceDetailRepository> _logger;
+        private readonly ILogger<InvoiceDetailRepository>? _logger;
 
-        public InvoiceDetailRepository(SDTurDbContext context)
+        public InvoiceDetailRepository(SDTurDbContext context, ILogger<InvoiceDetailRepository>? logger = null)
             : base(context)
         {
+            _logger = logger;
         }
 
         public async Task<InvoiceDetail?> GetInvoiceDetailWithInvoiceAsync(int id)

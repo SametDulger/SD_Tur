@@ -53,6 +53,9 @@ namespace SDTur.Infrastructure.Data
         public DbSet<TourReport> TourReports { get; set; }
         public DbSet<FinancialReport> FinancialReports { get; set; }
         public DbSet<SystemLog> SystemLogs { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -266,6 +269,9 @@ namespace SDTur.Infrastructure.Data
             modelBuilder.Entity<TourReport>().HasQueryFilter(tr => !tr.IsDeleted);
             modelBuilder.Entity<FinancialReport>().HasQueryFilter(fr => !fr.IsDeleted);
             modelBuilder.Entity<SystemLog>().HasQueryFilter(sl => !sl.IsDeleted);
+            modelBuilder.Entity<RefreshToken>().HasQueryFilter(rt => !rt.IsDeleted);
+            modelBuilder.Entity<Role>().HasQueryFilter(r => !r.IsDeleted);
+            modelBuilder.Entity<Permission>().HasQueryFilter(p => !p.IsDeleted);
 
             modelBuilder.Entity<CommissionCalculation>()
                 .HasOne(cc => cc.Employee)
@@ -284,6 +290,33 @@ namespace SDTur.Infrastructure.Data
                 .WithMany(ts => ts.CommissionCalculations)
                 .HasForeignKey(cc => cc.TourScheduleId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // RefreshToken relationships
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(rt => rt.User)
+                .WithMany()
+                .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Role-Permission many-to-many relationship
+            modelBuilder.Entity<Role>()
+                .HasMany(r => r.Permissions)
+                .WithMany(p => p.Roles)
+                .UsingEntity(j => j.ToTable("RolePermissions"));
+
+            // User-Role relationship
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Role)
+                .WithMany(r => r.Users)
+                .HasForeignKey(u => u.RoleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // User-RefreshToken relationship
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.RefreshTokens)
+                .WithOne(rt => rt.User)
+                .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Seed Data
             SDTur.Infrastructure.SeedData.SeedData.Seed(modelBuilder);

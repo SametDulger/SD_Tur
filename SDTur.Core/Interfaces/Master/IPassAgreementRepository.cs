@@ -9,6 +9,6 @@ namespace SDTur.Core.Interfaces.Master
     {
         Task<IEnumerable<PassAgreement>> GetAgreementsByPassCompanyAsync(int passCompanyId);
         Task<IEnumerable<PassAgreement>> GetAgreementsByTourAsync(int tourId);
-        Task<PassAgreement> GetAgreementByCompanyAndTourAsync(int passCompanyId, int tourId);
+        Task<PassAgreement?> GetAgreementByCompanyAndTourAsync(int passCompanyId, int tourId);
     }
 } 

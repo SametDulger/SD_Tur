@@ -151,6 +151,10 @@ namespace SDTur.Application.Mapping
             CreateMap<CreateUserDto, User>();
             CreateMap<UpdateUserDto, User>();
 
+            // Role mappings
+            CreateMap<Role, RoleDto>();
+            CreateMap<CreateRoleDto, Role>();
+
             // Invoice mappings
             CreateMap<Invoice, InvoiceDto>();
             CreateMap<CreateInvoiceDto, Invoice>();

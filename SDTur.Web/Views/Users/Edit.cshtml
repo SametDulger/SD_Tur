@@ -77,17 +77,20 @@
                             </div>
                             
                             <div class="col-md-6 mb-3">
-                                <label asp-for="Role" class="form-label fw-semibold">
+                                <label asp-for="RoleId" class="form-label fw-semibold">
                                     <i class="bi bi-shield me-1"></i>Rol <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="Role" class="form-select" required>
+                                <select asp-for="RoleId" class="form-select" required>
                                     <option value="">Rol seçiniz...</option>
-                                    <option value="Admin">Admin</option>
-                                    <option value="Manager">Manager</option>
-                                    <option value="User">User</option>
-                                    <option value="Guest">Guest</option>
+                                    @if (ViewBag.Roles != null)
+                                    {
+                                        @foreach (var role in ViewBag.Roles)
+                                        {
+                                            <option value="@role.Id">@role.Name</option>
+                                        }
+                                    }
                                 </select>
-                                <span asp-validation-for="Role" class="text-danger small"></span>
+                                <span asp-validation-for="RoleId" class="text-danger small"></span>
                             </div>
                         </div>
 

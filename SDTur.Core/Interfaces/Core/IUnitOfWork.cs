@@ -40,6 +40,9 @@ namespace SDTur.Core.Interfaces.Core
         IFinancialReportRepository FinancialReports { get; }
         ISystemLogRepository SystemLogs { get; }
         IInvoiceDetailRepository InvoiceDetails { get; }
+        IRefreshTokenRepository RefreshTokens { get; }
+        IRoleRepository Roles { get; }
+        IPermissionRepository Permissions { get; }
         
         Task<int> SaveChangesAsync();
     }

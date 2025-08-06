@@ -49,6 +49,9 @@ namespace SDTur.Infrastructure.UnitOfWork
         private IFinancialReportRepository? _financialReports;
         private ISystemLogRepository? _systemLogs;
         private IInvoiceDetailRepository? _invoiceDetails;
+        private IRefreshTokenRepository? _refreshTokens;
+        private IRoleRepository? _roles;
+        private IPermissionRepository? _permissions;
 
         public UnitOfWork(SDTurDbContext context, ILoggerFactory loggerFactory)
         {
@@ -86,6 +89,9 @@ namespace SDTur.Infrastructure.UnitOfWork
         public IFinancialReportRepository FinancialReports => _financialReports ??= new FinancialReportRepository(_context);
         public ISystemLogRepository SystemLogs => _systemLogs ??= new SystemLogRepository(_context);
         public IInvoiceDetailRepository InvoiceDetails => _invoiceDetails ??= new InvoiceDetailRepository(_context);
+        public IRefreshTokenRepository RefreshTokens => _refreshTokens ??= new RefreshTokenRepository(_context);
+        public IRoleRepository Roles => _roles ??= new RoleRepository(_context);
+        public IPermissionRepository Permissions => _permissions ??= new PermissionRepository(_context);
 
         public async Task<int> SaveChangesAsync()
         {

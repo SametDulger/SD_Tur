@@ -9,7 +9,7 @@ namespace SDTur.Core.Interfaces.Tour
         Task<IEnumerable<TourReport>> GetByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<TourReport>> GetByReportTypeAsync(string reportType);
         Task<IEnumerable<TourReport>> GetByStatusAsync(string status);
-        Task<TourReport> GetLatestByTourAsync(int tourId);
+        Task<TourReport?> GetLatestByTourAsync(int tourId);
         Task<IEnumerable<TourReport>> GetByEmployeeAsync(int employeeId);
     }
 } 

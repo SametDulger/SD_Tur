@@ -3,6 +3,7 @@ using SDTur.Application.DTOs.System.Report;
 using SDTur.Core.Entities.System;
 using SDTur.Core.Interfaces.Core;
 using SDTur.Application.Services.System.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace SDTur.Application.Services.System.Implementations
 {
@@ -10,11 +11,13 @@ namespace SDTur.Application.Services.System.Implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILogger<ReportService> _logger;
 
-        public ReportService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ReportService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<ReportService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<ReportDto>> GetAllAsync()
@@ -73,27 +76,71 @@ namespace SDTur.Application.Services.System.Implementations
 
         public async Task<string> GenerateReportAsync(string reportType, string parameters)
         {
-            // Burada rapor oluşturma mantığı implement edilecek
-            // PDF, Excel vb. formatlarda rapor oluşturulacak
-            var reportName = $"{reportType}_{DateTime.Now:yyyyMMdd_HHmmss}";
-            var filePath = $"/reports/{reportName}.pdf";
-            
-            var report = new Report
+            try
             {
-                ReportName = reportName,
-                ReportType = reportType,
-                ReportDate = DateTime.Now,
-                Parameters = parameters,
-                GeneratedBy = "System",
-                FilePath = filePath,
-                FileType = "PDF",
-                IsActive = true
-            };
+                _logger.LogInformation("Generating report: {ReportType} with parameters: {Parameters}", reportType, parameters);
+                
+                // Rapor adı ve dosya yolu oluştur
+                var reportName = $"{reportType}_{DateTime.Now:yyyyMMdd_HHmmss}";
+                var filePath = $"/reports/{reportName}.pdf";
+                
+                // Rapor verilerini hazırla (örnek implementasyon)
+                var reportData = await PrepareReportDataAsync(reportType, parameters);
+                
+                // Rapor dosyasını oluştur (gerçek implementasyon için PDF/Excel kütüphanesi kullanılmalı)
+                var success = await GenerateReportFileAsync(reportType, reportData, filePath);
+                
+                if (!success)
+                {
+                    _logger.LogError("Failed to generate report file: {ReportType}", reportType);
+                    throw new InvalidOperationException($"Rapor dosyası oluşturulamadı: {reportType}");
+                }
+                
+                // Rapor kaydını veritabanına ekle
+                var report = new Report
+                {
+                    ReportName = reportName,
+                    ReportType = reportType,
+                    ReportDate = DateTime.Now,
+                    Parameters = parameters,
+                    GeneratedBy = "System",
+                    FilePath = filePath,
+                    FileType = "PDF",
+                    IsActive = true
+                };
+                
+                await _unitOfWork.Reports.AddAsync(report);
+                await _unitOfWork.SaveChangesAsync();
+                
+                _logger.LogInformation("Report generated successfully: {ReportName} at {FilePath}", reportName, filePath);
+                return filePath;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating report: {ReportType}", reportType);
+                throw;
+            }
+        }
+        
+        private Task<object> PrepareReportDataAsync(string reportType, string parameters)
+        {
+            // Rapor tipine göre veri hazırlama mantığı
+            // Bu kısım gerçek business logic'e göre implement edilmeli
+            _logger.LogDebug("Preparing report data for: {ReportType}", reportType);
             
-            await _unitOfWork.Reports.AddAsync(report);
-            await _unitOfWork.SaveChangesAsync();
+            return Task.FromResult<object>(new { ReportType = reportType, Parameters = parameters, GeneratedAt = DateTime.Now });
+        }
+        
+        private async Task<bool> GenerateReportFileAsync(string reportType, object data, string filePath)
+        {
+            // Rapor dosyası oluşturma mantığı
+            // Gerçek implementasyon için iTextSharp, EPPlus vb. kütüphaneler kullanılmalı
+            _logger.LogDebug("Generating report file: {FilePath}", filePath);
             
-            return filePath;
+            // Simüle edilmiş dosya oluşturma
+            await Task.Delay(100); // Simüle edilmiş işlem süresi
+            
+            return true; // Başarılı simüle edildi
         }
     }
 } 

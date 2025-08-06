@@ -30,7 +30,7 @@ namespace SDTur.Application.DTOs.System.User
         public string? Phone { get; set; }
 
         [Required(ErrorMessage = "Rol zorunludur")]
-        public string? Role { get; set; }
+        public int RoleId { get; set; }
 
         public int? EmployeeId { get; set; }
         public int? BranchId { get; set; }

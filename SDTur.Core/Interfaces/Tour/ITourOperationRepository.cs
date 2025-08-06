@@ -8,6 +8,6 @@ namespace SDTur.Core.Interfaces.Tour
         Task<IEnumerable<TourOperation>> GetByTourScheduleAsync(int tourScheduleId);
         Task<IEnumerable<TourOperation>> GetByOperationTypeAsync(string operationType);
         Task<IEnumerable<TourOperation>> GetByStatusAsync(string status);
-        Task<TourOperation> GetWithDetailsAsync(int id);
+        Task<TourOperation?> GetWithDetailsAsync(int id);
     }
 } 

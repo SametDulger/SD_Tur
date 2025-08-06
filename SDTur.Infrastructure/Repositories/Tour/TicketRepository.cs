@@ -89,7 +89,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .Include(t => t.Tour)
                 .Include(t => t.Hotel)
                 .Include(t => t.PassCompany)
-                .Where(t => t.IsPassTicket && t.PassCompany.Name == companyName && t.IsActive && !t.IsDeleted)
+                .Where(t => t.IsPassTicket && t.PassCompany!.Name == companyName && t.IsActive && !t.IsDeleted)
                 .OrderByDescending(t => t.CreatedDate)
                 .ToListAsync();
         }
@@ -104,7 +104,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
             if (lastTicket == null)
                 return "TKT-0001";
 
-            var lastNumber = int.Parse(lastTicket.TicketNumber.Split('-')[1]);
+            var lastNumber = int.Parse(lastTicket.TicketNumber?.Split('-')[1] ?? "0");
             return $"TKT-{(lastNumber + 1):D4}";
         }
 
