@@ -208,7 +208,7 @@ namespace SDTur.Application.Services.System.Implementations
             }
         }
 
-        public async Task<ChangePasswordResponseDto> ChangePasswordAsync(int userId, ChangePasswordDto changePasswordDto)
+        public async Task<bool> ChangePasswordAsync(int userId, ChangePasswordDto changePasswordDto)
         {
             try
             {
@@ -217,32 +217,20 @@ namespace SDTur.Application.Services.System.Implementations
                 if (userId <= 0)
                 {
                     _logger.LogWarning("Invalid user ID for password change: {UserId}", userId);
-                    return new ChangePasswordResponseDto
-                    {
-                        Success = false,
-                        Message = "Geçersiz kullanıcı."
-                    };
+                    return false;
                 }
 
                 var user = await _userService.GetByIdAsync(userId);
                 if (user == null)
                 {
                     _logger.LogWarning("User not found for password change: {UserId}", userId);
-                    return new ChangePasswordResponseDto
-                    {
-                        Success = false,
-                        Message = "Kullanıcı bulunamadı."
-                    };
+                    return false;
                 }
 
                 if (!user.IsActive)
                 {
                     _logger.LogWarning("Password change attempt for inactive user: {UserId}", userId);
-                    return new ChangePasswordResponseDto
-                    {
-                        Success = false,
-                        Message = "Hesabınız aktif değil."
-                    };
+                    return false;
                 }
 
                 // Mevcut şifre kontrolü (BCrypt ile)
@@ -260,32 +248,20 @@ namespace SDTur.Application.Services.System.Implementations
                 if (!currentPasswordValid)
                 {
                     _logger.LogWarning("Password change attempt with wrong current password for user: {UserId}", userId);
-                    return new ChangePasswordResponseDto
-                    {
-                        Success = false,
-                        Message = "Mevcut şifre hatalı."
-                    };
+                    return false;
                 }
 
                 // Yeni şifre validasyonu
                 if (string.IsNullOrWhiteSpace(changePasswordDto.NewPassword) || changePasswordDto.NewPassword.Length < 6)
                 {
                     _logger.LogWarning("Password change attempt with invalid new password for user: {UserId}", userId);
-                    return new ChangePasswordResponseDto
-                    {
-                        Success = false,
-                        Message = "Yeni şifre en az 6 karakter olmalıdır."
-                    };
+                    return false;
                 }
 
                 if (changePasswordDto.NewPassword != changePasswordDto.ConfirmPassword)
                 {
                     _logger.LogWarning("Password change attempt with mismatched passwords for user: {UserId}", userId);
-                    return new ChangePasswordResponseDto
-                    {
-                        Success = false,
-                        Message = "Yeni şifreler eşleşmiyor."
-                    };
+                    return false;
                 }
 
                 // Yeni şifreyi BCrypt ile hash'le
@@ -295,30 +271,18 @@ namespace SDTur.Application.Services.System.Implementations
                 if (updateResult)
                 {
                     _logger.LogInformation("Password change successful for user: {UserId}", userId);
-                    return new ChangePasswordResponseDto
-                    {
-                        Success = true,
-                        Message = "Şifre başarıyla değiştirildi."
-                    };
+                    return true;
                 }
                 else
                 {
                     _logger.LogError("Failed to update password for user: {UserId}", userId);
-                    return new ChangePasswordResponseDto
-                    {
-                        Success = false,
-                        Message = "Şifre güncellenirken bir hata oluştu."
-                    };
+                    return false;
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception occurred during password change for user: {UserId}", userId);
-                return new ChangePasswordResponseDto
-                {
-                    Success = false,
-                    Message = "Şifre değiştirme sırasında bir hata oluştu."
-                };
+                return false;
             }
         }
 

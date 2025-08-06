@@ -47,7 +47,7 @@ namespace SDTur.Infrastructure.Repositories.Financial
                 .FirstOrDefaultAsync(fr => fr.Id == id);
         }
 
-        public async Task<FinancialReport> GetLatestByTypeAsync(string reportType)
+        public async Task<FinancialReport?> GetLatestByTypeAsync(string reportType)
         {
             return await _dbSet
                 .Where(fr => fr.ReportType == reportType && fr.IsActive)

@@ -7,8 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SDTur.API.Controllers
 {
+    /// <summary>
+    /// Kimlik doğrulama ve yetkilendirme işlemleri için API endpoint'leri
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Produces("application/json")]
+    [ApiExplorerSettings(GroupName = "Authentication")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -22,14 +27,28 @@ namespace SDTur.API.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// API'nin çalışıp çalışmadığını test eder
+        /// </summary>
+        /// <returns>API durumu ve zaman damgası</returns>
+        /// <response code="200">API başarıyla çalışıyor</response>
         [HttpGet("test")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Test()
         {
             _logger.LogInformation("API Test endpoint called");
             return Ok(new { message = "API is working!", timestamp = DateTime.UtcNow });
         }
 
+        /// <summary>
+        /// Veritabanındaki kullanıcıları kontrol eder (Debug amaçlı)
+        /// </summary>
+        /// <returns>Kullanıcı listesi ve sayısı</returns>
+        /// <response code="200">Kullanıcılar başarıyla listelendi</response>
+        /// <response code="500">Sunucu hatası</response>
         [HttpGet("check-users")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult CheckUsers()
         {
             try
@@ -64,7 +83,15 @@ namespace SDTur.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Kullanıcı şifrelerini kontrol eder (Debug amaçlı)
+        /// </summary>
+        /// <returns>Şifre detayları</returns>
+        /// <response code="200">Şifre detayları başarıyla alındı</response>
+        /// <response code="500">Sunucu hatası</response>
         [HttpGet("check-passwords")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult CheckPasswords()
         {
             try
@@ -102,165 +129,200 @@ namespace SDTur.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Şifre testi yapar (Debug amaçlı)
+        /// </summary>
+        /// <param name="loginDto">Giriş bilgileri</param>
+        /// <returns>Şifre doğrulama sonucu</returns>
+        /// <response code="200">Şifre doğrulama sonucu</response>
+        /// <response code="400">Geçersiz giriş bilgileri</response>
         [HttpPost("test-password")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> TestPassword([FromBody] LoginDto loginDto)
         {
             try
             {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == loginDto.Username && !u.IsDeleted);
-                if (user == null)
+                if (!ModelState.IsValid)
                 {
-                    return NotFound(new { message = "User not found" });
+                    return BadRequest(ModelState);
                 }
 
-                bool passwordValid = false;
-                try
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Username == loginDto.Username && !u.IsDeleted);
+
+                if (user == null)
                 {
-                    passwordValid = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password ?? "");
+                    return Ok(new
+                    {
+                        Success = false,
+                        Message = "Kullanıcı bulunamadı",
+                        Username = loginDto.Username,
+                        UserExists = false
+                    });
                 }
-                catch (BCrypt.Net.SaltParseException ex)
-                {
-                    // Eski plain text şifreler için fallback
-                    passwordValid = user.Password == loginDto.Password;
-                }
+
+                var isPasswordValid = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password);
 
                 return Ok(new
                 {
-                    Username = user.Username,
-                    PasswordHash = user.Password?.Substring(0, Math.Min(20, user.Password?.Length ?? 0)) + "...",
-                    PasswordValid = passwordValid,
+                    Success = isPasswordValid,
+                    Message = isPasswordValid ? "Şifre doğru" : "Şifre yanlış",
+                    Username = loginDto.Username,
+                    UserExists = true,
+                    UserId = user.Id,
+                    UserEmail = user.Email,
+                    UserRole = user.Role,
                     IsActive = user.IsActive,
-                    Message = passwordValid ? "Password is valid" : "Password is invalid"
+                    PasswordHash = user.Password,
+                    IsBCryptHash = user.Password.StartsWith("$2")
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error testing password");
+                _logger.LogError(ex, "Error testing password for user {Username}", loginDto.Username);
                 return StatusCode(500, new { message = "Error testing password", error = ex.Message });
             }
         }
 
+        /// <summary>
+        /// Kullanıcı girişi yapar
+        /// </summary>
+        /// <param name="loginDto">Giriş bilgileri</param>
+        /// <returns>JWT token ve kullanıcı bilgileri</returns>
+        /// <response code="200">Başarılı giriş</response>
+        /// <response code="400">Geçersiz giriş bilgileri</response>
+        /// <response code="401">Kimlik doğrulama başarısız</response>
         [HttpPost("login")]
+        [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             try
             {
-                _logger.LogInformation("API Login endpoint called with username: {Username}", loginDto.Username);
-
                 if (!ModelState.IsValid)
                 {
-                    _logger.LogWarning("ModelState is invalid for login request");
                     return BadRequest(ModelState);
                 }
 
                 var result = await _authService.LoginAsync(loginDto);
-                _logger.LogInformation("AuthService result: Success={Success}, Message={Message}", result.Success, result.Message);
+                if (result == null)
+                {
+                    return Unauthorized(new { message = "Geçersiz kullanıcı adı veya şifre" });
+                }
 
-                if (result.Success)
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return Unauthorized(result);
-                }
+                _logger.LogInformation("User {Username} logged in successfully", loginDto.Username);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception occurred during login for username: {Username}", loginDto.Username);
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, "Error during login for user {Username}", loginDto.Username);
+                return StatusCode(500, new { message = "Giriş sırasında hata oluştu", error = ex.Message });
             }
         }
 
+        /// <summary>
+        /// Kullanıcı çıkışı yapar
+        /// </summary>
+        /// <returns>Çıkış durumu</returns>
+        /// <response code="200">Başarılı çıkış</response>
+        /// <response code="401">Yetkilendirme gerekli</response>
         [HttpPost("logout")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Logout()
         {
             try
             {
                 var username = User.Identity?.Name;
-                _logger.LogInformation("Logout request for user: {Username}", username);
+                _logger.LogInformation("User {Username} logged out", username);
                 
-                // JWT token blacklist logic can be implemented here
-                return Ok(new { message = "Logout successful" });
+                return Ok(new { message = "Başarıyla çıkış yapıldı" });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception occurred during logout");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, "Error during logout");
+                return StatusCode(500, new { message = "Çıkış sırasında hata oluştu", error = ex.Message });
             }
         }
 
+        /// <summary>
+        /// Kullanıcı şifresini değiştirir
+        /// </summary>
+        /// <param name="changePasswordDto">Şifre değiştirme bilgileri</param>
+        /// <returns>Şifre değiştirme durumu</returns>
+        /// <response code="200">Şifre başarıyla değiştirildi</response>
+        /// <response code="400">Geçersiz bilgiler</response>
+        /// <response code="401">Yetkilendirme gerekli</response>
         [HttpPost("change-password")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
         {
             try
             {
-                _logger.LogInformation("API ChangePassword endpoint called");
-
                 if (!ModelState.IsValid)
                 {
-                    _logger.LogWarning("ModelState is invalid for change password request");
                     return BadRequest(ModelState);
                 }
 
-                // Extract user ID from JWT token
-                var userIdClaim = User.FindFirst("sub") ?? User.FindFirst("nameid");
-                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId) || userId == 0)
+                var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
+                if (userId == 0)
                 {
-                    _logger.LogWarning("UserId is 0, returning Unauthorized");
-                    return Unauthorized(new { message = "Invalid user" });
+                    return Unauthorized(new { message = "Kullanıcı kimliği bulunamadı" });
                 }
-
-                _logger.LogDebug("Extracted userId: {UserId}", userId);
-                _logger.LogDebug("Calling AuthService.ChangePasswordAsync with userId: {UserId}", userId);
 
                 var result = await _authService.ChangePasswordAsync(userId, changePasswordDto);
-                _logger.LogInformation("AuthService.ChangePasswordAsync result: {Result}", result);
+                if (!result)
+                {
+                    return BadRequest(new { message = "Mevcut şifre yanlış veya şifre değiştirme başarısız" });
+                }
 
-                if (result.Success)
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
+                _logger.LogInformation("Password changed successfully for user ID {UserId}", userId);
+                return Ok(new { message = "Şifre başarıyla değiştirildi" });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception occurred during password change");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, "Error changing password for user ID {UserId}", 
+                    User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+                return StatusCode(500, new { message = "Şifre değiştirme sırasında hata oluştu", error = ex.Message });
             }
         }
 
+        /// <summary>
+        /// Mevcut kullanıcı bilgilerini getirir
+        /// </summary>
+        /// <returns>Kullanıcı bilgileri</returns>
+        /// <response code="200">Kullanıcı bilgileri başarıyla alındı</response>
+        /// <response code="401">Yetkilendirme gerekli</response>
         [HttpGet("current-user")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetCurrentUser()
         {
             try
             {
-                var username = User.Identity?.Name;
-                var userId = User.FindFirst("sub")?.Value ?? User.FindFirst("nameid")?.Value;
-                var role = User.FindFirst("role")?.Value;
+                var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                var username = User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
+                var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
 
-                _logger.LogInformation("GetCurrentUser called for user: {Username}, Id: {UserId}, Role: {Role}", username, userId, role);
-
-                var userInfo = new
+                return Ok(new
                 {
-                    Id = userId,
+                    UserId = userId,
                     Username = username,
                     Role = role,
-                    Claims = User.Claims.Select(c => new { c.Type, c.Value })
-                };
-
-                return Ok(userInfo);
+                    IsAuthenticated = User.Identity?.IsAuthenticated ?? false
+                });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception occurred while getting current user");
-                return StatusCode(500, new { message = "Internal server error" });
+                _logger.LogError(ex, "Error getting current user");
+                return StatusCode(500, new { message = "Kullanıcı bilgileri alınırken hata oluştu", error = ex.Message });
             }
         }
     }

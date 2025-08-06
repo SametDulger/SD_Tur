@@ -1,0 +1,104 @@
+# GitHub Actions CI/CD Pipeline Configuration
+# 
+# Bu dosya otomatik olarak çalışmaz. Tetikleyici (on:) kısmı yorum satırındadır.
+# Aktif etmek için .github/workflows/ klasörüne taşıyıp tetikleyiciyi açın.
+# Kullanıcıya özel alanları (your-organization, your-api-url.com) kendinize göre düzenleyin.
+
+name: SDTur CI/CD Pipeline
+
+# Workflow tetikleyicileri (aktif etmek için yorum satırlarını kaldırın)
+# on:
+#   push:
+#     branches: [ main, develop ]
+#   pull_request:
+#     branches: [ main ]
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  SOLUTION_FILE: 'SDTur.sln'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.SOLUTION_FILE }}
+      
+    - name: Build
+      run: dotnet build ${{ env.SOLUTION_FILE }} --no-restore --configuration Release
+      
+    - name: Run tests
+      run: dotnet test ${{ env.SOLUTION_FILE }} --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" --results-directory ./coverage
+      
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/coverage.cobertura.xml
+        flags: unittests
+        name: codecov-umbrella
+        
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.projectKey=SDTur
+          -Dsonar.organization=your-organization
+          -Dsonar.sources=.
+          -Dsonar.tests=.
+          -Dsonar.cs.opencover.reportsPaths=./coverage/coverage.opencover.xml
+
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Run OWASP ZAP Scan
+      uses: zaproxy/action-full-scan@v0.8.0
+      with:
+        target: 'https://your-api-url.com'
+        
+    - name: Run Snyk Security Scan
+      uses: snyk/actions/dotnet@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --severity-threshold=high
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: [build-and-test, security-scan]
+    if: github.ref == 'refs/heads/develop'
+    environment: staging
+    
+    steps:
+    - name: Deploy to Staging
+      run: |
+        echo "Deploying to staging environment..."
+        # Staging deployment komutlarınızı buraya ekleyin
+        
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: [build-and-test, security-scan]
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+    - name: Deploy to Production
+      run: |
+        echo "Deploying to production environment..."
+        # Production deployment komutlarınızı buraya ekleyin 

@@ -112,7 +112,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Yönetici</h6>
-                        <h3 class="mb-0 fw-bold text-warning">@Model.Count(u => u.Role == "Manager")</h3>
+                        <h3 class="mb-0 fw-bold text-warning">@Model.Count(u => u.RoleName == "Manager")</h3>
                     </div>
                 </div>
             </div>
@@ -130,7 +130,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <h6 class="card-title text-muted mb-1">Admin</h6>
-                        <h3 class="mb-0 fw-bold text-info">@Model.Count(u => u.Role == "Admin")</h3>
+                        <h3 class="mb-0 fw-bold text-info">@Model.Count(u => u.RoleName == "Admin")</h3>
                     </div>
                 </div>
             </div>
@@ -198,8 +198,8 @@
                                 <td>@user.FullName</td>
                                 <td>@user.Email</td>
                                 <td>
-                                    <span class="badge bg-@(user.Role == "Admin" ? "danger" : user.Role == "Manager" ? "warning" : "secondary")">
-                                        @user.Role
+                                    <span class="badge bg-@(user.RoleName == "Admin" ? "danger" : user.RoleName == "Manager" ? "warning" : "secondary")">
+                                        @user.RoleName
                                     </span>
                                 </td>
                                 <td>@(user.BranchName ?? "-")</td>

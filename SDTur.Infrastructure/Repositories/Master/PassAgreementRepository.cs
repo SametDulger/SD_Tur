@@ -42,7 +42,7 @@ namespace SDTur.Infrastructure.Repositories.Master
                 .FirstOrDefaultAsync(pa => pa.Id == id);
         }
 
-        public async Task<PassAgreement> GetAgreementByCompanyAndTourAsync(int passCompanyId, int tourId)
+        public async Task<PassAgreement?> GetAgreementByCompanyAndTourAsync(int passCompanyId, int tourId)
         {
             return await _dbSet
                 .Include(pa => pa.PassCompany)

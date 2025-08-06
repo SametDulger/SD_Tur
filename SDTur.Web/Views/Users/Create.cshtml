@@ -94,6 +94,23 @@
                             </div>
                             
                             <div class="col-md-6">
+                                <label asp-for="RoleId" class="form-label">
+                                    <i class="bi bi-shield me-1"></i>Rol
+                                </label>
+                                <select asp-for="RoleId" class="form-select" required>
+                                    <option value="">Rol seçiniz</option>
+                                    @if (ViewBag.Roles != null)
+                                    {
+                                        @foreach (var role in ViewBag.Roles)
+                                        {
+                                            <option value="@role.Id">@role.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="RoleId" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
                                 <label asp-for="Phone" class="form-label">
                                     <i class="bi bi-telephone me-1"></i>Telefon
                                 </label>

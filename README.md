@@ -1,32 +1,33 @@
-# SDTur - Tur Şirketi Otomasyon Sistemi
+# SDTur - Tur Operasyon Yönetim Sistemi
 
-Turizm firmaları için geliştirilmiş, modern ve çok katmanlı bir otomasyon sistemidir.
 
-## 🚀 Özellikler
+## 🛠️ Teknoloji Stack'i
 
-- Tur yönetimi ve bilet satışı
-- İşletme ve çalışan yönetimi
-- Finansal işlemler ve raporlama
-- Şube ve otel yönetimi
+- **Backend**: .NET 9, Entity Framework Core, JWT, Serilog
+- **Frontend**: ASP.NET Core MVC, Bootstrap 5, Bootstrap Icons
+- **Database**: SQL Server
+- **Cache**: Redis
+- **Monitoring**: Application Insights
+- **Testing**: xUnit, Moq
 
-## 🛠️ Teknolojiler
 
-- .NET 9, ASP.NET Core MVC
-- Entity Framework Core, SQL Server
-- Bootstrap, jQuery
-- Clean Architecture
 
-## 📦 Kurulum
+## 🛠️ Kurulum
 
 Kurulum adımları için [SETUP.md](SETUP.md) dosyasını inceleyin.
 
+
+
 ## 🤝 Katkıda Bulunma
 
-1. Fork'layın
-2. Feature branch oluşturun
-3. Pull Request oluşturun
+1. Fork yapın
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Commit yapın (`git commit -m 'Add amazing feature'`)
+4. Push yapın (`git push origin feature/amazing-feature`)
+5. Pull Request oluşturun
 
-## 📄 Lisans
 
-MIT lisansı altında lisanslanmıştır.
 
+## 📝 Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.

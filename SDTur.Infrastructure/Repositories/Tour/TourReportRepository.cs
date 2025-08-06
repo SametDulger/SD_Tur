@@ -64,7 +64,7 @@ namespace SDTur.Infrastructure.Repositories.Tour
                 .FirstOrDefaultAsync(tr => tr.Id == id);
         }
 
-        public async Task<TourReport> GetLatestByTourAsync(int tourId)
+        public async Task<TourReport?> GetLatestByTourAsync(int tourId)
         {
             return await _dbSet
                 .Include(tr => tr.TourSchedule)
