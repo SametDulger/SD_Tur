@@ -28,7 +28,8 @@ cp SDTur.API/appsettings.example.json SDTur.API/appsettings.json
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\SQLEXPRESS;Database=SDTurDB;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true"
+    "DefaultConnection": "Server=(localdb)\\SQLEXPRESS;Database=SDTurDB;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true",
+    "Redis": "localhost:6379"
   },
   "JwtSettings": {
     "SecretKey": "SDTur-Super-Secret-Key-2024-With-At-Least-32-Characters-Long",
@@ -40,6 +41,20 @@ cp SDTur.API/appsettings.example.json SDTur.API/appsettings.json
     "AllowedOrigins": [
       "https://localhost:7276",
       "http://localhost:5018"
+    ]
+  },
+  "IpRateLimit": {
+    "EnableEndpointRateLimiting": true,
+    "GeneralRules": [
+      {"Endpoint": "*", "Period": "1s", "Limit": 10},
+      {"Endpoint": "*", "Period": "1m", "Limit": 100}
+    ]
+  },
+  "Serilog": {
+    "MinimumLevel": {"Default": "Information"},
+    "WriteTo": [
+      {"Name": "Console"},
+      {"Name": "File", "Args": {"path": "Logs/log-.txt"}}
     ]
   }
 }
@@ -62,13 +77,24 @@ cp SDTur.Web/appsettings.example.json SDTur.Web/appsettings.json
   "SessionSettings": {
     "IdleTimeout": 480,
     "CookieName": "SDTur.Session"
+  },
+  "SecuritySettings": {
+    "RequireHttps": true,
+    "HstsMaxAge": 365
+  },
+  "Serilog": {
+    "MinimumLevel": {"Default": "Information"},
+    "WriteTo": [
+      {"Name": "Console"},
+      {"Name": "File", "Args": {"path": "Logs/web-log-.txt"}}
+    ]
   }
 }
 ```
 
 ### 3. Veritabanı Migration ve Seed Data
 
-**İlk Kurulum (Yeni Proje):**
+**İlk Kurulum:**
 ```bash
 # Migration oluştur
 dotnet ef migrations add InitialCreate --project SDTur.Infrastructure --startup-project SDTur.API
@@ -79,14 +105,14 @@ dotnet ef database update --project SDTur.Infrastructure --startup-project SDTur
 
 **Mevcut Projeyi Güncelleme:**
 ```bash
-# Yeni migration oluştur (model değişiklikleri varsa)
+# Yeni migration oluştur
 dotnet ef migrations add UpdateModel --project SDTur.Infrastructure --startup-project SDTur.API
 
 # Veritabanını güncelle
 dotnet ef database update --project SDTur.Infrastructure --startup-project SDTur.API
 ```
 
-**Migration'ları Sıfırlama (Geliştirme Ortamı):**
+**Migration'ları Sıfırlama:**
 ```bash
 # Tüm migration'ları kaldır
 dotnet ef migrations remove --project SDTur.Infrastructure --startup-project SDTur.API
@@ -101,13 +127,16 @@ dotnet ef migrations add InitialCreate --project SDTur.Infrastructure --startup-
 dotnet ef database update --project SDTur.Infrastructure --startup-project SDTur.API
 ```
 
-**Seed Data Kontrolü:**
+### 4. Test Çalıştırma
 ```bash
-# API çalıştıktan sonra kullanıcıları kontrol et
-curl https://localhost:7001/api/auth/check-users
+# Tüm testleri çalıştır
+dotnet test
+
+# Belirli bir test projesini çalıştır
+dotnet test SDTur.Tests
 ```
 
-### 4. Uygulamaları Çalıştırın
+### 5. Uygulamaları Çalıştırın
 
 **API:**
 ```bash
@@ -131,8 +160,6 @@ dotnet run
 - **Manager:** manager / Manager123!
 - **Sales:** sales / Sales123!
 
-**Not:** Eğer port çakışması yaşarsanız, `Properties/launchSettings.json` dosyalarında port numaralarını değiştirebilirsiniz.
-
 ## 🔍 Sorun Giderme
 
 **Veritabanı Bağlantı Hatası:**
@@ -142,22 +169,13 @@ dotnet run
 
 **Migration Hatası:**
 - `appsettings.json` dosyasında connection string'i kontrol edin
-- Migration'ları sıfırlayın (yukarıdaki adımları takip edin)
-
-**Seed Data Hatası:**
-- API log'larını kontrol edin
-- `https://localhost:7001/api/auth/check-users` endpoint'ini ziyaret edin
-- Kullanıcı yoksa migration'ları tekrar çalıştırın
-
-**Port Çakışması:**
-- `launchSettings.json` dosyasında port numaralarını değiştirin
-
-**Login Hatası:**
-- API'nin çalıştığından emin olun
-- Kullanıcıların oluşturulduğunu kontrol edin
-- CORS ayarlarını kontrol edin
+- Migration'ları sıfırlayın
 
 **Build Hatası:**
 - Tüm projeleri temizleyin: `dotnet clean`
 - NuGet paketlerini geri yükleyin: `dotnet restore`
-- Projeyi yeniden build edin: `dotnet build` 
+- Projeyi yeniden build edin: `dotnet build`
+
+**Test Hatası:**
+- Test ortamı ayarlarını kontrol edin
+- Test veritabanı bağlantısını kontrol edin 

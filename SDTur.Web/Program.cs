@@ -62,7 +62,12 @@ builder.Services.AddHttpClient<IApiService, ApiService>(client =>
 })
 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
 {
-    ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
+    ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => 
+    {
+        // Development ortamında SSL sertifika doğrulamasını atla
+        // Production'da bu satırı kaldırın veya false döndürün
+        return builder.Environment.IsDevelopment();
+    }
 })
 .AddPolicyHandler(GetRetryPolicy(apiSettings));
 

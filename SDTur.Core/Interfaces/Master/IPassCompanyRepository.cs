@@ -8,6 +8,6 @@ namespace SDTur.Core.Interfaces.Master
     public interface IPassCompanyRepository : IRepository<PassCompany>
     {
         Task<IEnumerable<PassCompany>> GetActivePassCompaniesAsync();
-        Task<PassCompany> GetPassCompanyWithAgreementsAsync(int id);
+        Task<PassCompany?> GetPassCompanyWithAgreementsAsync(int id);
     }
 } 

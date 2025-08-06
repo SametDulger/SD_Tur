@@ -41,6 +41,10 @@ namespace SDTur.Infrastructure.SeedData
             // Seed Pass Companies
             SeedPassCompanies(modelBuilder);
             
+            // Seed Roles and Permissions
+            SeedRoles(modelBuilder);
+            SeedPermissions(modelBuilder);
+            
             // Seed Users
             SeedUsers(modelBuilder);
             
@@ -330,6 +334,106 @@ namespace SDTur.Infrastructure.SeedData
             );
         }
 
+        private static void SeedRoles(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Role>().HasData(
+                new Role {
+                    Id = 1,
+                    Name = "Admin",
+                    Description = "Sistem yöneticisi",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                },
+                new Role {
+                    Id = 2,
+                    Name = "Manager",
+                    Description = "Müdür",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                },
+                new Role {
+                    Id = 3,
+                    Name = "Sales",
+                    Description = "Satış temsilcisi",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                },
+                new Role {
+                    Id = 4,
+                    Name = "DataEntry",
+                    Description = "Veri girişi",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                },
+                new Role {
+                    Id = 5,
+                    Name = "Accounting",
+                    Description = "Muhasebe",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                },
+                new Role {
+                    Id = 6,
+                    Name = "Operations",
+                    Description = "Operasyon",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                }
+            );
+        }
+
+        private static void SeedPermissions(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Permission>().HasData(
+                new Permission {
+                    Id = 1,
+                    Name = "Tour.Read",
+                    Description = "Tur okuma izni",
+                    Resource = "Tour",
+                    Action = "Read",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                },
+                new Permission {
+                    Id = 2,
+                    Name = "Tour.Write",
+                    Description = "Tur yazma izni",
+                    Resource = "Tour",
+                    Action = "Write",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                },
+                new Permission {
+                    Id = 3,
+                    Name = "User.Read",
+                    Description = "Kullanıcı okuma izni",
+                    Resource = "User",
+                    Action = "Read",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                },
+                new Permission {
+                    Id = 4,
+                    Name = "User.Write",
+                    Description = "Kullanıcı yazma izni",
+                    Resource = "User",
+                    Action = "Write",
+                    IsActive = true,
+                    CreatedDate = new DateTime(2024, 1, 1),
+                    IsDeleted = false
+                }
+            );
+        }
+
         private static void SeedUsers(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasData(
@@ -343,7 +447,7 @@ namespace SDTur.Infrastructure.SeedData
                     Phone = "0532 000 00 01", 
                     EmployeeId = 1,
                     BranchId = 1,
-                    Role = "Admin",
+                    RoleId = 1,
                     IsActive = true, 
                     CreatedDate = new DateTime(2024, 1, 1),
                     IsDeleted = false
@@ -358,7 +462,7 @@ namespace SDTur.Infrastructure.SeedData
                     Phone = "0532 000 00 02", 
                     EmployeeId = 2,
                     BranchId = 2,
-                    Role = "Manager",
+                    RoleId = 2,
                     IsActive = true, 
                     CreatedDate = new DateTime(2024, 1, 1),
                     IsDeleted = false
@@ -373,7 +477,7 @@ namespace SDTur.Infrastructure.SeedData
                     Phone = "0532 000 00 03", 
                     EmployeeId = 3,
                     BranchId = 3,
-                    Role = "Sales",
+                    RoleId = 3,
                     IsActive = true, 
                     CreatedDate = new DateTime(2024, 1, 1),
                     IsDeleted = false
@@ -1245,7 +1349,7 @@ namespace SDTur.Infrastructure.SeedData
                         LastName = "User",
                         Email = "admin@sdtur.com",
                         Phone = "+90 555 123 4567",
-                        Role = "Admin",
+                        RoleId = 1,
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 1),
                         IsDeleted = false
@@ -1258,7 +1362,7 @@ namespace SDTur.Infrastructure.SeedData
                         LastName = "User",
                         Email = "manager@sdtur.com",
                         Phone = "+90 555 234 5678",
-                        Role = "Manager",
+                        RoleId = 2,
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 1),
                         IsDeleted = false
@@ -1271,7 +1375,7 @@ namespace SDTur.Infrastructure.SeedData
                         LastName = "User",
                         Email = "sales@sdtur.com",
                         Phone = "+90 555 345 6789",
-                        Role = "Sales",
+                        RoleId = 3,
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 1),
                         IsDeleted = false

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDTur.API", "SDTur.API\SDTu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDTur.Web", "SDTur.Web\SDTur.Web.csproj", "{B8D03B36-A227-4445-BF05-8389EC87FC6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDTur.Tests", "SDTur.Tests\SDTur.Tests.csproj", "{6B817557-FE75-430A-80BA-08983327752C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{B8D03B36-A227-4445-BF05-8389EC87FC6E}.Release|x64.Build.0 = Release|Any CPU
 		{B8D03B36-A227-4445-BF05-8389EC87FC6E}.Release|x86.ActiveCfg = Release|Any CPU
 		{B8D03B36-A227-4445-BF05-8389EC87FC6E}.Release|x86.Build.0 = Release|Any CPU
+		{6B817557-FE75-430A-80BA-08983327752C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B817557-FE75-430A-80BA-08983327752C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B817557-FE75-430A-80BA-08983327752C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6B817557-FE75-430A-80BA-08983327752C}.Debug|x64.Build.0 = Debug|Any CPU
+		{6B817557-FE75-430A-80BA-08983327752C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6B817557-FE75-430A-80BA-08983327752C}.Debug|x86.Build.0 = Debug|Any CPU
+		{6B817557-FE75-430A-80BA-08983327752C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B817557-FE75-430A-80BA-08983327752C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B817557-FE75-430A-80BA-08983327752C}.Release|x64.ActiveCfg = Release|Any CPU
+		{6B817557-FE75-430A-80BA-08983327752C}.Release|x64.Build.0 = Release|Any CPU
+		{6B817557-FE75-430A-80BA-08983327752C}.Release|x86.ActiveCfg = Release|Any CPU
+		{6B817557-FE75-430A-80BA-08983327752C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

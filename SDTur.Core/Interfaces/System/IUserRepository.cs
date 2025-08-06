@@ -8,6 +8,6 @@ namespace SDTur.Core.Interfaces.System
         Task<User?> GetUserByUsernameAsync(string username);
         Task<User?> GetUserWithDetailsAsync(int id);
         Task<IEnumerable<User>> GetActiveUsersAsync();
-        Task<IEnumerable<User>> GetUsersByRoleAsync(string role);
+        Task<IEnumerable<User>> GetUsersByRoleAsync(int roleId);
     }
 } 

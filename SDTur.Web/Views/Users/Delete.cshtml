@@ -72,7 +72,7 @@
                             </label>
                             <div>
                                 <span class="badge bg-info fs-6">
-                                    <i class="bi bi-shield me-1"></i>@Model.Role
+                                    <i class="bi bi-shield me-1"></i>@Model.RoleName
                                 </span>
                             </div>
                         </div>
@@ -155,14 +155,31 @@
                         </div>
                     }
 
+                    <hr class="my-4">
+                    
                     <form asp-action="Delete" method="post">
                         <input type="hidden" asp-for="Id" />
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="confirmDelete" required>
+                            <label class="form-check-label" for="confirmDelete">
+                                Kullanıcının silineceğini ve bu işlemin geri alınamayacağını anlıyorum
+                            </label>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="confirmDataLoss" required>
+                            <label class="form-check-label" for="confirmDataLoss">
+                                Kullanıcıya ait tüm verilerin kalıcı olarak silineceğini kabul ediyorum
+                            </label>
+                        </div>
+                        
                         <div class="d-flex justify-content-end gap-2">
                             <a asp-action="Index" class="btn btn-outline-secondary">
                                 <i class="bi bi-x-circle me-2"></i>İptal
                             </a>
-                            <button type="submit" class="btn btn-danger">
-                                <i class="bi bi-trash me-2"></i>Sil
+                            <button type="submit" class="btn btn-danger" id="deleteBtn" disabled>
+                                <i class="bi bi-trash me-2"></i>Kullanıcıyı Sil
                             </button>
                         </div>
                     </form>
@@ -194,3 +211,7 @@
         </div>
     </div>
 </div> 
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 
